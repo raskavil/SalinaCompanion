@@ -5,10 +5,11 @@ enum MapRequest {
     static func send<T>(_ responseParser: (VehicleResponse) -> T?) async throws -> [T] {
         let request = URLRequest(url: URL(string: "https://mapa.idsjmk.cz/api/vehicles.json")!)
         let session = URLSession(configuration: .default)
-        return (try await JSONDecoder().decode(MapResponse.self, from: session.data(for: request).0)).Vehicles.compactMap { $0.value.flatMap(responseParser) }
+        let data = try await session.data(for: request).0
+        return try JSONDecoder().decode(MapResponse.self, from: data).Vehicles.compactMap { $0.value.flatMap(responseParser) }
     }
     
-    struct VehicleResponse: Decodable {
+    struct VehicleResponse: Decodable, Equatable {
         let ID: Int
         let Lat: Double
         let Lng: Double
