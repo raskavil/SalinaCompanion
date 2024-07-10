@@ -62,4 +62,10 @@ public class StaticDataManager: StaticDataProvider {
     @Saved("timestamp") var timestamp: Date? = nil
     @Saved("stops") public var stops: [Stop] = []
     @Saved("aliases") public var aliases: [Alias] = []
+    
+    public init(timestamp: Date? = nil, stops: [Stop] = [], aliases: [Alias] = []) {
+        self.timestamp = timestamp
+        self.stops = stops
+        self.aliases = aliases
+    }
 }

@@ -8,9 +8,8 @@ public extension Vehicle {
             name: "38",
             type: .bus,
             position: .init(latitude: 49.198277, longitude: 16.573307),
-            bearing: .degrees(135),
-            color: .white,
-            backgroundColor: .init(red: 0, green: 128/255, blue: 51/255),
+            bearing: 135,
+            alias: .init(id: 12, lineName: "38", contentColorHex: "#FFFFFF", backgroundColorHex: "#AAAAAA"),
             isActive: true,
             delay: 0
         )

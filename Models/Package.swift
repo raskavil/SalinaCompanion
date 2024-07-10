@@ -7,5 +7,6 @@ let package = Package(
     name: "Models",
     platforms: [.iOS(.v16)],
     products: [.library(name: "Models", targets: ["Models"])],
-    targets: [.target(name: "Models")]
+    dependencies: [.package(url: "https://github.com/raskavil/SupportPackage", branch: "main")],
+    targets: [.target(name: "Models", dependencies: [.product(name: "SupportPackageViews", package: "SupportPackage")])]
 )

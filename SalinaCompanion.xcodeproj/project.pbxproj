@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C34C8752C3F023F00A22F27 /* NetworkingImplementation in Frameworks */ = {isa = PBXBuildFile; productRef = 2C34C8742C3F023F00A22F27 /* NetworkingImplementation */; };
+		2C34C8772C3F024400A22F27 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 2C34C8762C3F024400A22F27 /* Networking */; };
+		2C34C87A2C3F030100A22F27 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 2C34C8792C3F030100A22F27 /* Networking */; };
+		2C34C87C2C3F030100A22F27 /* NetworkingImplementation in Frameworks */ = {isa = PBXBuildFile; productRef = 2C34C87B2C3F030100A22F27 /* NetworkingImplementation */; };
 		2C62C47E2C3714AF004278A4 /* VehiclesMap+Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C62C47D2C3714AF004278A4 /* VehiclesMap+Model.swift */; };
 		2C99CD112C3EA6DE00EAAA74 /* SupportPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 2C99CD102C3EA6DE00EAAA74 /* SupportPackage */; };
 		2C99CD132C3EA6DE00EAAA74 /* SupportPackageViews in Frameworks */ = {isa = PBXBuildFile; productRef = 2C99CD122C3EA6DE00EAAA74 /* SupportPackageViews */; };
@@ -50,8 +54,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C34C87A2C3F030100A22F27 /* Networking in Frameworks */,
 				2CB1E04D2C37F47B003A19B2 /* Models in Frameworks */,
+				2C34C87C2C3F030100A22F27 /* NetworkingImplementation in Frameworks */,
 				2C99CD132C3EA6DE00EAAA74 /* SupportPackageViews in Frameworks */,
+				2C34C8752C3F023F00A22F27 /* NetworkingImplementation in Frameworks */,
+				2C34C8772C3F024400A22F27 /* Networking in Frameworks */,
 				2C99CD112C3EA6DE00EAAA74 /* SupportPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -150,6 +158,10 @@
 				2CB1E04C2C37F47B003A19B2 /* Models */,
 				2C99CD102C3EA6DE00EAAA74 /* SupportPackage */,
 				2C99CD122C3EA6DE00EAAA74 /* SupportPackageViews */,
+				2C34C8742C3F023F00A22F27 /* NetworkingImplementation */,
+				2C34C8762C3F024400A22F27 /* Networking */,
+				2C34C8792C3F030100A22F27 /* Networking */,
+				2C34C87B2C3F030100A22F27 /* NetworkingImplementation */,
 			);
 			productName = SalinaCompanion;
 			productReference = 2CB5AFFA2B6C0BDE004C1C64 /* SalinaCompanion.app */;
@@ -182,6 +194,7 @@
 			packageReferences = (
 				2CB1E04B2C37F47B003A19B2 /* XCLocalSwiftPackageReference "Models" */,
 				2C99CD0F2C3EA6DE00EAAA74 /* XCRemoteSwiftPackageReference "SupportPackage" */,
+				2C34C8782C3F030100A22F27 /* XCLocalSwiftPackageReference "Networking" */,
 			);
 			productRefGroup = 2CB5AFFB2B6C0BDE004C1C64 /* Products */;
 			projectDirPath = "";
@@ -446,6 +459,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		2C34C8782C3F030100A22F27 /* XCLocalSwiftPackageReference "Networking" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Networking;
+		};
 		2CB1E04B2C37F47B003A19B2 /* XCLocalSwiftPackageReference "Models" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Models;
@@ -464,6 +481,22 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2C34C8742C3F023F00A22F27 /* NetworkingImplementation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NetworkingImplementation;
+		};
+		2C34C8762C3F024400A22F27 /* Networking */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Networking;
+		};
+		2C34C8792C3F030100A22F27 /* Networking */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Networking;
+		};
+		2C34C87B2C3F030100A22F27 /* NetworkingImplementation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NetworkingImplementation;
+		};
 		2C99CD102C3EA6DE00EAAA74 /* SupportPackage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2C99CD0F2C3EA6DE00EAAA74 /* XCRemoteSwiftPackageReference "SupportPackage" */;
