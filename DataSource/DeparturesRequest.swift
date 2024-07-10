@@ -24,6 +24,8 @@ enum DeparturesRequest {
     
     struct DepartureResponse: Decodable {
         let LineName: String
+        let LineID: Int
+        let RouteID: Int
         let FinalStop: String
         let IsLowFloor: Bool
         let TimeMark: String

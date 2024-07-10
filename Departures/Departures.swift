@@ -74,8 +74,8 @@ extension Int {
     var vehicleIcon: Icon.Content {
         switch self {
             case 1...19:     return .system("tram.fill")
-            case 20...39:    return .system("bus.fill")
-            default:         return .system("bus.fill")
+            case 20...39:    return .system("bus")
+            default:         return .system("bus")
         }
     }
 }

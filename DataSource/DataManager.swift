@@ -3,7 +3,7 @@ import SwiftData
 
 class DataManager {
     
-    static let weekInterval = 0.0 //60.0 * 60 * 24 * 7
+    static let weekInterval = 0.0 // 60.0 * 60 * 24 * 7
     
     private var context: ModelContext?
     

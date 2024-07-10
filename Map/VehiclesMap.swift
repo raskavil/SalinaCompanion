@@ -6,102 +6,49 @@ import SupportPackageViews
 
 struct VehiclesMap: View {
     
-    private class Model: ObservableObject {
-        
-        @Published var displayedVehicles: [MapRequest.VehicleResponse] = []
-        @Published var selectedItem: Int?
-        @Published var loading = true
-        
-        var selectedVehicle: MapRequest.VehicleResponse? {
-            selectedItem.flatMap { item in vehicles.first(where: { $0.ID == item })}
-        }
-        
-        private var vehicles: [MapRequest.VehicleResponse] = []
-        private var mapPosition: MKMapRect?
-        private var timer = Timer()
-        private var cancellables: Set<AnyCancellable> = []
-        private var canUpdate = true
-        
-        init(mapPosition: AnyPublisher<MKMapRect, Never>) {
-            timer = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: true) { [weak self] _ in self?.updateVehicles() }
-        
-            mapPosition
-                .receive(on: RunLoop.main)
-                .sink { [weak self] _ in 
-                    self?.canUpdate = false
-                    self?.loading = true
-                }
-                .store(in: &cancellables)
-            
-            mapPosition
-                .debounce(for: 1.0, scheduler: RunLoop.main)
-                .sink { [weak self] mapPosition in
-                    guard let self else { return }
-                    self.mapPosition = mapPosition
-                    self.displayedVehicles = filteredVehicles
-                    self.canUpdate = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        self.loading = false
-                    }
-                }
-                .store(in: &cancellables)
-            
-            updateVehicles()
-        }
-        
-        private var filteredVehicles: [MapRequest.VehicleResponse] {
-            vehicles.filter { mapPosition?.contains(.init(CLLocationCoordinate2D(latitude: $0.Lat, longitude: $0.Lng))) ?? true }
-        }
-        
-        private func updateVehicles() {
-            Task(priority: .userInitiated) { [weak self] in
-                do {
-                    let vehicles = try await MapRequest.send { $0 }
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self else { return }
-                        self.vehicles = vehicles
-                        if self.canUpdate {
-                            self.displayedVehicles = self.filteredVehicles
-                        }
-                    }
-                } catch {
-                    
-                }
-            }
-        }
-    }
-    
+    @Namespace var namespace
     @Query var aliases: [LineAlias]
     @Query var stops: [Stop]
+    @State private var selectedVehicle: Int?
+    @State private var position: MapCameraPosition = .userLocation(
+        fallback: .region(
+            .init(
+                center: .init(latitude: 49.195061, longitude: 16.606836),
+                span: .init(latitudeDelta: 0.1, longitudeDelta: 0.1)
+            )
+        )
+    )
     @StateObject private var model: Model
     private let mapPosition: PassthroughSubject<MKMapRect, Never>
     
     var body: some View {
-        Map(
-            initialPosition: .userLocation(
-                fallback: .region(
-                    .init(
-                        center: .init(latitude: 49.195061, longitude: 16.606836),
-                        span: .init(latitudeDelta: 0.1, longitudeDelta: 0.1)
-                    )
-                )
+        content
+            .alert(
+                Text("Something went wrong"),
+                isPresented: .init(
+                    get: { model.numberOfErrors >= 3 },
+                    set: { value in
+                        if value == false {
+                            model.numberOfErrors = 0
+                        }
+                    }
+                ),
+                actions: {
+                    Button("OK", action: { model.numberOfErrors = 0 })
+                }
             )
-        ) {
+    }
+    
+    @ViewBuilder private var content: some View {
+        Map(position: $position) {
             ForEach(model.displayedVehicles, id: \.ID) { vehicle in
                 Annotation(
                     coordinate: .init(latitude: vehicle.Lat, longitude: vehicle.Lng),
-                    content: {
-                        Triangle()
-                            .frame(width: 24, height: 24)
-                            .foregroundStyle(aliases.color(
-                                for: vehicle.LineName,
-                                from: \.colorHex,
-                                fallback: .blue
-                            ))
-                            .rotationEffect(Angle(degrees: Double(vehicle.Bearing)))
-                    },
+                    content: { annotation(for: vehicle) },
                     label: {
-                        Text(vehicle.LineName)
+                        if model.displayedVehicles.count <= 30 {
+                            Text(vehicle.LineName)
+                        }
                     }
                 )
             }
@@ -110,41 +57,55 @@ struct VehiclesMap: View {
             mapPosition.send(context.rect)
         }
         .overlay(alignment: .bottom) {
-            selectedVehiclePrompt.animation(.easeInOut(duration: 0.2), value: UUID())
+            selectedVehiclePrompt
+                .animation(.easeInOut(duration: 0.2), value: selectedVehicle)
         }
-        .overlay(alignment: .topLeading) {
+        .overlay(alignment: .topTrailing) {
             if model.loading {
                 HStack(spacing: 4) {
                     ProgressView()
                     Text("Loading")
+                        .bold()
                 }
-                .padding(10)
-                .backgroundStyle(.ultraThinMaterial)
+                .padding(8)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+                .padding(.horizontal, 8)
             }
         }
     }
     
+    @ViewBuilder private func annotation(for vehicle: MapRequest.VehicleResponse) -> some View {
+        if model.displayedVehicles.count > 30 {
+            Circle()
+                .frame(width: 12, height: 12)
+                .foregroundStyle(aliases.color(for: vehicle.LineName, from: \.colorHex))
+        } else {
+            Circle()
+                .frame(width: 28, height: 28)
+                .foregroundStyle(aliases.color(for: vehicle.LineName, from: \.colorHex))
+                .overlay {
+                    Icon(vehicle.LineName.lineIcon, size: .small)
+                        .foregroundStyle(aliases.color(for: vehicle.LineName, from: \.textHex))
+                }
+                .overlay(alignment: .center) {
+                    Triangle()
+                        .foregroundStyle(aliases.color(for: vehicle.LineName, from: \.colorHex))
+                        .frame(width: 10, height: 6)
+                        .padding(.bottom, 36)
+                        .rotationEffect(Angle(degrees: Double(vehicle.Bearing)))
+                }
+                .onTapGesture {
+                    selectedVehicle = vehicle.ID
+                }
+        }
+    }
+    
     @ViewBuilder private var selectedVehiclePrompt: some View {
-        if let selectedVehicle = model.selectedVehicle {
+        if let selectedVehicle = model.displayedVehicles.first(where: { $0.ID == selectedVehicle }) {
             VStack {
-                HStack {
-                    Text(selectedVehicle.LineName, size: .large, weight: .bold)
-                        .foregroundStyle(aliases.color(for: selectedVehicle.LineName, from: \.textHex))
-                    Text(
-                        stops.first(where: { $0.id == selectedVehicle.FinalStopID })?.name ?? "",
-                        size: .large,
-                        weight: .medium
-                    )
-                    .foregroundStyle(aliases.color(for: selectedVehicle.LineName, from: \.textHex))
-                    Spacer()
-                }
-                .padding(4)
-                .background {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(aliases.color(for: selectedVehicle.LineName, from: \.colorHex, fallback: .blue))
-                }
+                VehicleDetail(vehicleRoute: .constant(.mock), close: { self.selectedVehicle = nil }, namespace: namespace)
             }
-            .padding(8)
+            .padding(16)
             .background {
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundStyle(.white)
@@ -180,6 +141,31 @@ struct Triangle: Shape {
     }
 }
 
-#Preview {
-    VehiclesMap()
+struct MapPreviews: PreviewProvider {
+    
+    static var dataManager: DataManager = .init()
+
+    static var previews: some View {
+        VehiclesMap()
+            .modelContainer(for: [Stop.self, Timestamp.self, LineAlias.self]) { result in
+                if case .success(let container) = result {
+                    Task.detached(priority: .userInitiated) {
+                        await dataManager.set(container)
+                    }
+                }
+            }
+    }
+}
+
+extension String {
+    
+    var lineIcon: Icon.Content? {
+        if let icon = Int(self)?.vehicleIcon {
+            return icon
+        } else if starts(with: "R") || starts(with: "S") {
+            return .system("tram")
+        } else {
+            return .system("bus")
+        }
+    }
 }
