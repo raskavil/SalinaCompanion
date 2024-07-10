@@ -1,0 +1,73 @@
+import Foundation
+import CoreLocation
+import SwiftUI
+
+public struct Vehicle: Codable {
+    public let id: Int
+    public let name: String
+    public let type: VehicleType
+    public let position: CLLocationCoordinate2D
+    public let bearing: Int
+    public let alias: Alias?
+    public let isActive: Bool
+    public let delay: Int
+    
+    public init(
+        id: Int,
+        name: String,
+        type: VehicleType,
+        position: CLLocationCoordinate2D,
+        bearing: Int,
+        alias: Alias?,
+        isActive: Bool,
+        delay: Int
+    ) {
+        self.id = id
+        self.name = name
+        self.type = type
+        self.position = position
+        self.bearing = bearing
+        self.alias = alias
+        self.isActive = isActive
+        self.delay = delay
+    }
+}
+
+public enum VehicleType: Codable {
+    case bus, train, tram, boat
+}
+
+public struct VehicleStop: Codable {
+    public let name: String
+    public let isServed: Bool
+    public let id: Int
+    public let time: Int
+    public let location: CLLocationCoordinate2D
+    public let path: [CLLocationCoordinate2D]
+    
+    public init(
+        id: Int,
+        name: String,
+        isServed: Bool,
+        time: Int,
+        location: CLLocationCoordinate2D,
+        path: [CLLocationCoordinate2D]
+    ) {
+        self.name = name
+        self.isServed = isServed
+        self.id = id
+        self.time = time
+        self.location = location
+        self.path = path
+    }
+}
+
+public struct VehicleRoute: Codable {
+    public let vehicle: Vehicle
+    public let stops: [VehicleStop]
+    
+    init(vehicle: Vehicle, stops: [VehicleStop]) {
+        self.vehicle = vehicle
+        self.stops = stops
+    }
+}

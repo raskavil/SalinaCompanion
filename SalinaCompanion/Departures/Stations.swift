@@ -122,7 +122,7 @@ extension String {
             icon: icon,
             style: .init(
                 contentColor: .white,
-                backgroundColor: .init(uiColor: .init(hexString: alias.colorHex)),
+                backgroundColor: .init(hexString: alias.colorHex),
                 borderColor: .clear
             )
         )
