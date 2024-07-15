@@ -1,7 +1,7 @@
 import Foundation
 import CoreLocation
 
-public struct Stop: Codable {
+public struct Stop: Codable, Identifiable {
     public let id: Int
     public let zone: Int
     public let name: String

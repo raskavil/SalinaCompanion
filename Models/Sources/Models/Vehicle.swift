@@ -8,9 +8,14 @@ public struct Vehicle: Codable {
     public let type: VehicleType
     public let position: CLLocationCoordinate2D
     public let bearing: Int
-    public let alias: Alias?
+    public let alias: Alias
     public let isActive: Bool
     public let delay: Int
+    public let lastStopId: Int
+    public let finalStopName: String
+    public let lineId: Int
+    public let routeId: Int
+    public let serviceId: Int
     
     public init(
         id: Int,
@@ -18,9 +23,14 @@ public struct Vehicle: Codable {
         type: VehicleType,
         position: CLLocationCoordinate2D,
         bearing: Int,
-        alias: Alias?,
+        alias: Alias,
         isActive: Bool,
-        delay: Int
+        delay: Int,
+        lastStopId: Int,
+        finalStopName: String,
+        lineId: Int,
+        routeId: Int,
+        serviceId: Int
     ) {
         self.id = id
         self.name = name
@@ -30,6 +40,11 @@ public struct Vehicle: Codable {
         self.alias = alias
         self.isActive = isActive
         self.delay = delay
+        self.lastStopId = lastStopId
+        self.finalStopName = finalStopName
+        self.lineId = lineId
+        self.routeId = routeId
+        self.serviceId = serviceId
     }
 }
 
@@ -39,7 +54,7 @@ public enum VehicleType: Codable {
 
 public struct VehicleStop: Codable {
     public let name: String
-    public let isServed: Bool
+    public var isServed: Bool
     public let id: Int
     public let time: Int
     public let location: CLLocationCoordinate2D
@@ -66,7 +81,7 @@ public struct VehicleRoute: Codable {
     public let vehicle: Vehicle
     public let stops: [VehicleStop]
     
-    init(vehicle: Vehicle, stops: [VehicleStop]) {
+    public init(vehicle: Vehicle, stops: [VehicleStop]) {
         self.vehicle = vehicle
         self.stops = stops
     }

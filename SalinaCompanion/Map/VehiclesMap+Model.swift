@@ -1,31 +1,49 @@
 import SwiftUI
 import MapKit
 import Combine
+import Models
+import Device
 
 extension VehiclesMap {
     
     class Model: ObservableObject {
         
-        @Published var displayedVehicles: [MapRequest.VehicleResponse] = [] {
+        @Published var displayedVehicles: [Vehicle] = [] {
             didSet {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     self.loading = false
                 }
             }
         }
-        @Published var selectedItem: Int?
         @Published var loading = true
         @Published var numberOfErrors: Int = 0
-        
-        var selectedVehicle: MapRequest.VehicleResponse? {
-            selectedItem.flatMap { item in vehicles.first(where: { $0.ID == item })}
+        @Published var displayedVehicle: VehicleDetail.Model? {
+            didSet {
+                if case .loading(let vehicle) = displayedVehicle {
+                    guard let vehiclesProvider else { return }
+                    Task {
+                        let route = try await vehiclesProvider.route(for: vehicle)
+                        DispatchQueue.main.async {
+                            self.displayedVehicle = .loaded(route)
+                        }
+                    }
+                }
+            }
         }
+        @Published var position: MapCameraPosition = .userLocation(
+            fallback: .region(.init(center: .brno, span: .init(latitudeDelta: 0.03, longitudeDelta: 0.03)))
+        )
         
-        private var vehicles: [MapRequest.VehicleResponse] = []
+        private var vehicles: [Vehicle] = []
         private var mapPosition: MKMapRect?
         private var timer = Timer()
         private var cancellables: Set<AnyCancellable> = []
         private var canUpdate = true
+        var vehiclesProvider: DynamicModelsProviding? {
+            didSet {
+                updateVehicles()
+            }
+        }
         
         init(mapPosition: AnyPublisher<MKMapRect, Never>) {
             timer = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: true) { [weak self] _ in self?.updateVehicles() }
@@ -47,19 +65,33 @@ extension VehiclesMap {
                     self.canUpdate = true
                 }
                 .store(in: &cancellables)
-            
-            updateVehicles()
         }
         
-        private var filteredVehicles: [MapRequest.VehicleResponse] {
-            vehicles.filter { mapPosition?.contains(.init(CLLocationCoordinate2D(latitude: $0.Lat, longitude: $0.Lng))) ?? true }
+        func subscribe(to provider: PermissionsProviding) {
+            provider.permissionsChanged
+                .receive(on: RunLoop.main)
+                .sink { [weak self] in
+                    self?.objectWillChange.send()
+                }
+                .store(in: &cancellables)
+        }
+        
+        func focusUserLocation() {
+            position = .userLocation(fallback: position)
+        }
+        
+        private var filteredVehicles: [Vehicle] {
+            vehicles.filter { mapPosition?.contains(.init($0.position)) ?? true }
         }
         
         private func updateVehicles() {
-            self.loading = true
+            guard let vehiclesProvider else { return }
+            DispatchQueue.main.async {
+                self.loading = true
+            }
             Task(priority: .userInitiated) { [weak self] in
                 do {
-                    let vehicles = try await MapRequest.send { $0 }
+                    let vehicles = try await vehiclesProvider.vehicles.filter(\.isActive)
                     DispatchQueue.main.async { [weak self] in
                         guard let self else { return }
                         self.numberOfErrors = 0
@@ -73,5 +105,12 @@ extension VehiclesMap {
                 }
             }
         }
+    }
+}
+
+extension CLLocationCoordinate2D {
+    
+    static var brno: Self {
+        .init(latitude: 49.195061, longitude: 16.606836)
     }
 }

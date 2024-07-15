@@ -2,11 +2,11 @@ import SwiftUI
 import SwiftData
 import SupportPackageViews
 
+/*
 struct Departures: View {
     
     @Environment(\.dismiss) var dismiss
     
-    @Query var aliases: [LineAlias]
     @State var posts: [DeparturesRequest.PostResponse] = []
     let stop: Stop
     
@@ -91,3 +91,4 @@ extension Int {
         )
     )
 }
+*/

@@ -18,8 +18,12 @@ enum MapRequest {
         let LineName: String
         let LastStopID: Int
         let FinalStopID: Int
-        let IsActive: Bool
+        let IsInactive: Bool
         let Delay: Int
+        let LineID: Int
+        let RouteID: Int
+        let ServiceId: Int
+        let FinalStopName: String
     }
     
     struct MapResponse: Decodable {

@@ -1,11 +1,11 @@
 import SwiftUI
 import SupportPackageViews
-import SwiftData
+import Models
 
 struct Stations: View {
     
-    @Query var stops: [Stop]
-    @Query var aliases: [LineAlias]
+    let stops: [Stop] = []
+    let aliases: [Alias] = []
     @State var term = ""
     @State var displayError = false
     
@@ -37,11 +37,7 @@ struct Stations: View {
                 LazyVStack(spacing: 8) {
                     if filteredStops.isEmpty == false {
                         ForEach(filteredStops) { stop in
-                            NavigationLink(
-                                destination: Departures(stop: stop)
-                            ) {
-                                StopCard(stop: stop, aliases: aliases)
-                            }
+                            StopCard(stop: stop, aliases: aliases)
                         }
                     } else {
                         ForEach(0...8, id: \.self) { _ in
@@ -62,7 +58,7 @@ struct Stations: View {
 struct StopCard: View {
     
     let stop: Stop
-    let aliases: [LineAlias]
+    let aliases: [Alias]
     
     var body: some View {
         HStack(spacing: 12) {
@@ -73,7 +69,7 @@ struct StopCard: View {
                         Text(stop.name, size: .large)
                             .fontWeight(.medium)
                             .lineLimit(1)
-                        Text("\(Int(stop.longitude)) m away", size: .small)
+                        Text("\(Int(stop.position.longitude)) m away", size: .small)
                     }
                     Spacer()
                 }
@@ -112,17 +108,17 @@ extension Array {
 
 extension String {
     
-    func lineBadge(with alias: LineAlias) -> Badge {
-        var icon = Int(self)?.vehicleIcon
-        if alias.alias.starts(with: "R") || alias.alias.starts(with: "S") {
+    func lineBadge(with alias: Alias) -> Badge {
+        var icon = Icon.Content.system("bus")
+        if alias.lineName.starts(with: "R") || alias.lineName.starts(with: "S") {
             icon = .system("tram")
         }
         return Badge(
-            text: alias.alias,
+            text: alias.lineName,
             icon: icon,
             style: .init(
                 contentColor: .white,
-                backgroundColor: .init(hexString: alias.colorHex),
+                backgroundColor: alias.backgroundColor,
                 borderColor: .clear
             )
         )

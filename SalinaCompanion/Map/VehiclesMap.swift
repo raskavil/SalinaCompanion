@@ -1,24 +1,15 @@
 import SwiftUI
-import SwiftData
 import Combine
 import MapKit
+import Models
 import SupportPackageViews
 
 struct VehiclesMap: View {
     
-    @Namespace var namespace
-    @Query var aliases: [LineAlias]
-    @Query var stops: [Stop]
-    @State private var selectedVehicle: Int?
-    @State private var position: MapCameraPosition = .userLocation(
-        fallback: .region(
-            .init(
-                center: .init(latitude: 49.195061, longitude: 16.606836),
-                span: .init(latitudeDelta: 0.1, longitudeDelta: 0.1)
-            )
-        )
-    )
     @StateObject private var model: Model
+    @Environment(\.dynamicDataProvider) private var dynamicDataProvider
+    @Environment(\.permissionsProvider) private var permissionsProvider
+
     private let mapPosition: PassthroughSubject<MKMapRect, Never>
     
     var body: some View {
@@ -37,28 +28,55 @@ struct VehiclesMap: View {
                     Button("OK", action: { model.numberOfErrors = 0 })
                 }
             )
+            .onAppear {
+                model.vehiclesProvider = dynamicDataProvider
+                model.subscribe(to: permissionsProvider)
+            }
     }
     
     @ViewBuilder private var content: some View {
-        Map(position: $position) {
-            ForEach(model.displayedVehicles, id: \.ID) { vehicle in
+        Map(position: $model.position) {
+            UserAnnotation()
+            ForEach(model.displayedVehicles, id: \.id) { vehicle in
                 Annotation(
-                    coordinate: .init(latitude: vehicle.Lat, longitude: vehicle.Lng),
-                    content: { annotation(for: vehicle) },
+                    coordinate: vehicle.position,
+                    content: { 
+                        annotation(for: vehicle)
+                            .if(model.displayedVehicle != nil) {
+                                $0.opacity(vehicle.id == model.displayedVehicle?.vehicle.id ? 1 : 0.5)
+                            }
+                    },
                     label: {
-                        if model.displayedVehicles.count <= 30 {
-                            Text(vehicle.LineName)
+                        if model.displayedVehicles.count <= 30 || vehicle.id == model.displayedVehicle?.vehicle.id {
+                            Text(vehicle.name)
                         }
                     }
                 )
+            }
+            if case .loaded(let vehicleRoute) = model.displayedVehicle {
+                MapPolyline(coordinates: vehicleRoute.stops.filter(\.isServed).flatMap(\.path))
+                    .stroke(vehicleRoute.vehicle.alias.backgroundColor.opacity(0.5), style: .init(
+                        lineWidth: 5,
+                        lineCap: .round,
+                        lineJoin: .round
+                    ))
+                MapPolyline(coordinates: vehicleRoute.stops.filter { $0.isServed == false }.flatMap(\.path))
+                    .stroke(vehicleRoute.vehicle.alias.backgroundColor, style: .init(
+                        lineWidth: 5,
+                        lineCap: .round,
+                        lineJoin: .round
+                    ))
             }
         }
         .onMapCameraChange { context in
             mapPosition.send(context.rect)
         }
+        .overlay(alignment: .bottomLeading) {
+            mapButtons
+        }
         .overlay(alignment: .bottom) {
             selectedVehiclePrompt
-                .animation(.easeInOut(duration: 0.2), value: selectedVehicle)
+                .animation(.easeInOut(duration: 0.2), value: model.displayedVehicle?.vehicle.id)
         }
         .overlay(alignment: .topTrailing) {
             if model.loading {
@@ -72,38 +90,69 @@ struct VehiclesMap: View {
                 .padding(.horizontal, 8)
             }
         }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                model.focusUserLocation()
+            }
+        }
     }
     
-    @ViewBuilder private func annotation(for vehicle: MapRequest.VehicleResponse) -> some View {
-        if model.displayedVehicles.count > 30 {
+    private var mapButtons: some View {
+        VStack(spacing: 10) {
+            Button(action: {}) {
+                Icon(.system("slider.horizontal.below.square.filled.and.square"))
+                    .padding(12)
+                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
+            }
+            Button(action: {
+                if permissionsProvider.features[.location] == .allowed {
+                    model.focusUserLocation()
+                } else {
+                    permissionsProvider.requestAuthorization(.location)
+                }
+            }) {
+                Icon(.system(permissionsProvider.features[.location] == .allowed ? "location" : "location.slash"))
+                    .foregroundStyle(permissionsProvider.features[.location] == .allowed
+                                     ? Color(uiColor: UIColor.tintColor)
+                                     : .secondary)
+                    .padding(12)
+                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
+            }
+        }
+        .padding(.bottom, 28)
+        .padding(.leading, 10)
+    }
+    
+    @ViewBuilder private func annotation(for vehicle: Vehicle) -> some View {
+        if model.displayedVehicles.count > 30 && vehicle.id != model.displayedVehicle?.vehicle.id {
             Circle()
                 .frame(width: 12, height: 12)
-                .foregroundStyle(aliases.color(for: vehicle.LineName, from: \.colorHex))
+                .foregroundStyle(vehicle.alias.backgroundColor)
         } else {
             Circle()
                 .frame(width: 28, height: 28)
-                .foregroundStyle(aliases.color(for: vehicle.LineName, from: \.colorHex))
+                .foregroundStyle(vehicle.alias.backgroundColor)
                 .overlay {
-                    Icon(vehicle.LineName.lineIcon, size: .small)
-                        .foregroundStyle(aliases.color(for: vehicle.LineName, from: \.textHex))
+                    Icon(vehicle.type.icon, size: .small)
+                        .foregroundStyle(vehicle.alias.contentColor)
                 }
                 .overlay(alignment: .center) {
                     Triangle()
-                        .foregroundStyle(aliases.color(for: vehicle.LineName, from: \.colorHex))
+                        .foregroundStyle(vehicle.alias.backgroundColor)
                         .frame(width: 10, height: 6)
                         .padding(.bottom, 36)
-                        .rotationEffect(Angle(degrees: Double(vehicle.Bearing)))
+                        .rotationEffect(Angle(degrees: Double(vehicle.bearing)))
                 }
                 .onTapGesture {
-                    selectedVehicle = vehicle.ID
+                    model.displayedVehicle = .loading(vehicle)
                 }
         }
     }
     
     @ViewBuilder private var selectedVehiclePrompt: some View {
-        if let selectedVehicle = model.displayedVehicles.first(where: { $0.ID == selectedVehicle }) {
+        if let displayedVehicle = model.displayedVehicle {
             VStack {
-                VehicleDetail(vehicleRoute: .constant(.mock), close: { self.selectedVehicle = nil }, namespace: namespace)
+                VehicleDetail(model: displayedVehicle, close: { model.displayedVehicle = nil })
             }
             .padding(16)
             .background {
@@ -113,7 +162,7 @@ struct VehiclesMap: View {
             }
             .gesture(DragGesture(minimumDistance: 20).onEnded({ gesture in
                 if gesture.translation.height > -20 {
-                    model.selectedItem = nil
+                    model.displayedVehicle = nil
                 }
             }))
             .padding(16)
@@ -143,29 +192,7 @@ struct Triangle: Shape {
 
 struct MapPreviews: PreviewProvider {
     
-    static var dataManager: DataManager = .init()
-
     static var previews: some View {
         VehiclesMap()
-            .modelContainer(for: [Stop.self, Timestamp.self, LineAlias.self]) { result in
-                if case .success(let container) = result {
-                    Task.detached(priority: .userInitiated) {
-                        await dataManager.set(container)
-                    }
-                }
-            }
-    }
-}
-
-extension String {
-    
-    var lineIcon: Icon.Content? {
-        if let icon = Int(self)?.vehicleIcon {
-            return icon
-        } else if starts(with: "R") || starts(with: "S") {
-            return .system("tram")
-        } else {
-            return .system("bus")
-        }
     }
 }

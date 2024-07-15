@@ -1,21 +1,20 @@
 import Foundation
-import Models
 import SwiftUI
 
-public protocol DynamicDataProvider {
+public protocol DynamicModelsProviding {
     var vehicles: [Vehicle] { get async throws }
     func route(for vehicle: Vehicle) async throws -> VehicleRoute
 }
 
 public extension EnvironmentValues {
     
-    var dynamicDataProvider: DynamicDataProvider {
+    var dynamicDataProvider: DynamicModelsProviding {
         get { self[DynamicDataProviderKey.self] }
         set { self[DynamicDataProviderKey.self] = newValue }
     }
 }
 
-private struct DynamicDataProviderMock: DynamicDataProvider {
+private struct DynamicDataProviderMock: DynamicModelsProviding {
     
     var vehicles: [Vehicle] { [] }
     func route(for vehicle: Vehicle) async throws -> VehicleRoute {
@@ -25,5 +24,5 @@ private struct DynamicDataProviderMock: DynamicDataProvider {
 
 private struct DynamicDataProviderKey: EnvironmentKey {
     
-    static let defaultValue: DynamicDataProvider = DynamicDataProviderMock()
+    static let defaultValue: DynamicModelsProviding = DynamicDataProviderMock()
 }

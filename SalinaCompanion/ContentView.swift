@@ -6,15 +6,10 @@ struct ContentView: View {
         case departures, map
     }
     
-    @State private var currentSelection: Selection = .departures
+    @State private var currentSelection: Selection = .map
     
     var body: some View {
         TabView {
-            Stations()
-                .tabItem {
-                    Label("Departures", systemImage: "bus.fill")
-                }
-                .tag(Selection.departures)
             VehiclesMap()
                 .tabItem {
                     Label("Map", systemImage: "map")

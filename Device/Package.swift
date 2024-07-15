@@ -4,20 +4,18 @@
 import PackageDescription
 
 let package = Package(
-    name: "Networking",
+    name: "Device",
     platforms: [.iOS(.v16)],
     products: [
-        .library(name: "Networking", targets: ["Networking"]),
-    ], 
+        .library(name: "Device", targets: ["Device"]),
+    ],
     dependencies: [
-        .package(path: "../Models"),
         .package(url: "https://github.com/raskavil/SupportPackage", branch: "main")
     ],
     targets: [
         .target(
-            name: "Networking",
+            name: "Device",
             dependencies: [
-                "Models",
                 "SupportPackage"
             ]
         )

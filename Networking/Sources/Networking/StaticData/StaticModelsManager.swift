@@ -1,9 +1,8 @@
 import Foundation
 import Models
-import Networking
 import SupportPackage
 
-public class StaticDataManager: StaticDataProvider {
+public class StaticModelsManager: StaticModelsProviding {
     
     private static let weekInterval = 60.0 * 60 * 24 * 7
     
@@ -11,7 +10,7 @@ public class StaticDataManager: StaticDataProvider {
         get async {
             guard
                 let timestamp,
-                timestamp.timeIntervalSinceNow < Self.weekInterval,
+                timestamp.date.timeIntervalSinceNow < Self.weekInterval,
                 stops.isEmpty == false,
                 aliases.isEmpty == false
             else {
@@ -55,17 +54,21 @@ public class StaticDataManager: StaticDataProvider {
             return false
         }
         
-        timestamp = .now
+        timestamp = .init(date: .now)
         return true
     }
     
-    @Saved("timestamp") var timestamp: Date? = nil
+    @Saved("timestamp") var timestamp: Timestamp? = nil
     @Saved("stops") public var stops: [Stop] = []
     @Saved("aliases") public var aliases: [Alias] = []
     
     public init(timestamp: Date? = nil, stops: [Stop] = [], aliases: [Alias] = []) {
-        self.timestamp = timestamp
+        self.timestamp = timestamp.map(Timestamp.init(date:))
         self.stops = stops
         self.aliases = aliases
     }
+}
+
+struct Timestamp: Codable {
+    let date: Date
 }

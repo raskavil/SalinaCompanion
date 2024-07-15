@@ -11,7 +11,12 @@ public extension Vehicle {
             bearing: 135,
             alias: .init(id: 12, lineName: "38", contentColorHex: "#FFFFFF", backgroundColorHex: "#AAAAAA"),
             isActive: true,
-            delay: 0
+            delay: 0,
+            lastStopId: 0,
+            finalStopName: "Psychiatrická léčebna",
+            lineId: 0,
+            routeId: 0,
+            serviceId: 0
         )
     }
 }

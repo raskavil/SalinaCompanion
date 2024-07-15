@@ -1,8 +1,7 @@
 import Foundation
-import Models
 import SwiftUI
 
-public protocol StaticDataProvider {
+public protocol StaticModelsProviding {
     var isUpToDate: Bool { get async }
     var stops: [Stop] { get }
     var aliases: [Alias] { get }
@@ -10,13 +9,13 @@ public protocol StaticDataProvider {
 
 public extension EnvironmentValues {
     
-    var staticDataProvider: StaticDataProvider {
+    var staticDataProvider: StaticModelsProviding {
         get { self[StaticDataProviderKey.self] }
         set { self[StaticDataProviderKey.self] = newValue }
     }
 }
 
-private struct StaticDataProviderMock: StaticDataProvider {
+private struct StaticDataProviderMock: StaticModelsProviding {
     
     var isUpToDate: Bool { true }
     var stops: [Stop] { [] }
@@ -25,5 +24,5 @@ private struct StaticDataProviderMock: StaticDataProvider {
 
 private struct StaticDataProviderKey: EnvironmentKey {
     
-    static let defaultValue: StaticDataProvider = StaticDataProviderMock()
+    static let defaultValue: StaticModelsProviding = StaticDataProviderMock()
 }
