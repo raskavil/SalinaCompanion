@@ -17,11 +17,11 @@
 		2CB5AFFE2B6C0BDE004C1C64 /* SalinaCompanionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB5AFFD2B6C0BDE004C1C64 /* SalinaCompanionApp.swift */; };
 		2CB5B0002B6C0BDE004C1C64 /* Stations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB5AFFF2B6C0BDE004C1C64 /* Stations.swift */; };
 		2CB5B0042B6C0BE0004C1C64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CB5B0032B6C0BE0004C1C64 /* Assets.xcassets */; };
-		2CDE90702B6C1DC9000AA67F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDE906F2B6C1DC9000AA67F /* ContentView.swift */; };
 		2CDE90832B6CDF1C000AA67F /* VehiclesMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDE90822B6CDF1C000AA67F /* VehiclesMap.swift */; };
 		2CDE90912B6D94B5000AA67F /* Departures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDE90902B6D94B5000AA67F /* Departures.swift */; };
 		2CFB30F02C441C21005BC031 /* Device in Frameworks */ = {isa = PBXBuildFile; productRef = 2CFB30EF2C441C21005BC031 /* Device */; };
 		2CFB30F32C454BF4005BC031 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2CFB30F22C454BF3005BC031 /* Settings.bundle */; };
+		2CFB30F52C464FF9005BC031 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFB30F42C464FF9005BC031 /* LoadingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,12 +34,12 @@
 		2CB5AFFF2B6C0BDE004C1C64 /* Stations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stations.swift; sourceTree = "<group>"; };
 		2CB5B0032B6C0BE0004C1C64 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2CB5B0052B6C0BE0004C1C64 /* SalinaCompanion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SalinaCompanion.entitlements; sourceTree = "<group>"; };
-		2CDE906F2B6C1DC9000AA67F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2CDE90822B6CDF1C000AA67F /* VehiclesMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehiclesMap.swift; sourceTree = "<group>"; };
 		2CDE90902B6D94B5000AA67F /* Departures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Departures.swift; sourceTree = "<group>"; };
 		2CFB30ED2C42B8F1005BC031 /* Device */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Device; sourceTree = "<group>"; };
 		2CFB30F12C453758005BC031 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2CFB30F22C454BF3005BC031 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		2CFB30F42C464FF9005BC031 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,7 +84,7 @@
 			children = (
 				2CFB30F12C453758005BC031 /* Info.plist */,
 				2CB5AFFD2B6C0BDE004C1C64 /* SalinaCompanionApp.swift */,
-				2CDE906F2B6C1DC9000AA67F /* ContentView.swift */,
+				2CFB30F42C464FF9005BC031 /* LoadingView.swift */,
 				2CDE906B2B6C1CF5000AA67F /* Departures */,
 				2CDE906C2B6C1D04000AA67F /* Map */,
 				2CB5B0032B6C0BE0004C1C64 /* Assets.xcassets */,
@@ -209,8 +209,8 @@
 				2CDE90912B6D94B5000AA67F /* Departures.swift in Sources */,
 				2CB1E0452C373D62003A19B2 /* VehicleDetail.swift in Sources */,
 				2CDE90832B6CDF1C000AA67F /* VehiclesMap.swift in Sources */,
+				2CFB30F52C464FF9005BC031 /* LoadingView.swift in Sources */,
 				2CB5AFFE2B6C0BDE004C1C64 /* SalinaCompanionApp.swift in Sources */,
-				2CDE90702B6C1DC9000AA67F /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

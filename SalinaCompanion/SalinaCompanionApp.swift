@@ -3,6 +3,7 @@ import SwiftData
 import Networking
 import Models
 import Device
+import MapKit
 
 @main
 struct SalinaCompanionApp: App {
@@ -15,23 +16,32 @@ struct SalinaCompanionApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if staticDataReady {
-                ContentView()
-            } else {
-                Color.white.ignoresSafeArea()
-                    .overlay {
-                        ProgressView()
-                            .progressViewStyle(.circular)
-                            .foregroundStyle(.black)
+            TabView {
+                content
+                    .tabItem {
+                        Label("Map", systemImage: "map")
                     }
-                    .task {
-                        staticDataReady = await staticDataProvider.isUpToDate
-                    }
+            }
+            .overlay {
+                LoadingView(isHidden: $staticDataReady)
+                    .ignoresSafeArea()
+            }
+            .task {
+                let value = await staticDataProvider.isUpToDate
+                DispatchQueue.main.async {
+                    staticDataReady = value
+                }
             }
         }
         .environment(\.dynamicDataProvider, dynamicDataProvider)
         .environment(\.staticDataProvider, staticDataProvider)
         .environment(\.permissionsProvider, permissionsProvider)
+    }
+    
+    @ViewBuilder var content: some View {
+        if staticDataReady {
+            VehiclesMap()
+        }
     }
     
     init() {
