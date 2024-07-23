@@ -21,6 +21,15 @@ extension VehiclesMap {
             didSet {
                 if case .loading(let vehicle) = displayedVehicle {
                     guard let vehiclesProvider else { return }
+                    position = .region(
+                        .init(
+                            center: .init(
+                                latitude: vehicle.position.latitude - 0.006,
+                                longitude: vehicle.position.longitude
+                            ),
+                            span: .init(latitudeDelta: 0.025, longitudeDelta: 0)
+                        )
+                    )
                     Task {
                         let route = try await vehiclesProvider.route(for: vehicle)
                         DispatchQueue.main.async {
@@ -93,7 +102,9 @@ extension VehiclesMap {
         }
         
         private var filteredVehicles: [Vehicle] {
-            vehicles.filter { mapPosition?.contains(.init($0.position)) ?? true }
+            vehicles
+                .filter { mapPosition?.contains(.init($0.position)) ?? true }
+                .filter(\.isActive)
         }
         
         private func updateVehicles() {

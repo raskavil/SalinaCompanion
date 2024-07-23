@@ -9,7 +9,8 @@ struct VehiclesMap: View {
     @StateObject private var model: Model
     @Environment(\.dynamicDataProvider) private var dynamicDataProvider
     @Environment(\.permissionsProvider) private var permissionsProvider
-
+    
+    @State private var blockVehicleSelection = false
     private let mapPosition: PassthroughSubject<MKMapRect, Never>
     
     var body: some View {
@@ -68,9 +69,19 @@ struct VehiclesMap: View {
             mapButtons
         }
         .overlay {
-            GeometryReader { proxy in
-                if let displayedVehicle = model.displayedVehicle {
-                    VehicleDetail(model: displayedVehicle, close: { model.displayedVehicle = nil })
+            if let displayedVehicle = model.displayedVehicle {
+                GeometryReader { proxy in
+                    VehicleDetail(
+                        model: displayedVehicle,
+                        close: {
+                            blockVehicleSelection = true
+                            withAnimation(.linear(duration: 0.25)) {
+                                model.displayedVehicle = nil
+                            } completion: {
+                                blockVehicleSelection = false
+                            }
+                        }
+                    )
                         .background {
                             UnevenRoundedRectangle(cornerRadii: .init(topLeading: 12, topTrailing: 12))
                                 .foregroundStyle(.white)
@@ -78,6 +89,7 @@ struct VehiclesMap: View {
                         .frame(height: proxy.size.height / 2)
                         .offset(y: proxy.size.height / 2)
                 }
+                .transition(.move(edge: .bottom))
             }
         }
         .overlay(alignment: .topTrailing) {
@@ -146,7 +158,11 @@ struct VehiclesMap: View {
                         .rotationEffect(Angle(degrees: Double(vehicle.bearing)))
                 }
                 .onTapGesture {
-                    model.displayedVehicle = .loading(vehicle)
+                    if blockVehicleSelection == false {
+                        withAnimation(.linear(duration: 0.25)) {
+                            model.displayedVehicle = .loading(vehicle)
+                        }
+                    }
                 }
         }
     }
@@ -171,9 +187,17 @@ struct Triangle: Shape {
     }
 }
 
+import Networking
+
 struct MapPreviews: PreviewProvider {
+    
+    static var stopsAndAliasesProvider: StaticModelsProviding = StaticModelsManager()
     
     static var previews: some View {
         VehiclesMap()
+            .task {
+                _ = await stopsAndAliasesProvider.isUpToDate
+            }
+            .environment(\.dynamicDataProvider, DynamicModelsManager(stopsAndAliasesProvider: stopsAndAliasesProvider))
     }
 }

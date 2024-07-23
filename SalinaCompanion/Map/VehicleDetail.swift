@@ -42,6 +42,7 @@ struct VehicleDetail: View {
         }
         .padding(.top, 14)
         .padding(.horizontal, 16)
+        .id(model.id)
     }
     
     private var closeButton: some View {
@@ -96,7 +97,6 @@ struct VehicleDetail: View {
                     if firstStop.isServed == true {
                         line(for: firstStop)
                             .foregroundStyle(Color.servedStop)
-                            .frame(height: 14)
                     }
                     
                     ScrollView(.vertical, showsIndicators: false) {
@@ -104,15 +104,22 @@ struct VehicleDetail: View {
                             ForEach(vehicleRoute.stops.filter { $0.isServed == false }, id: \.id) { stop in
                                 line(for: stop)
                                     .foregroundStyle(.black)
-                                    .frame(height: 14)
+                            }
+                            if let lastStop = vehicleRoute.stops.last, lastStop.isServed {
+                                line(for: lastStop)
+                                    .foregroundStyle(.black)
                             }
                         }
-                        .padding(.vertical, 2)
                     }
-                    .background(alignment: .leading) {
+                    .background(alignment: .topLeading) {
                         RoundedRectangle(cornerRadius: 8.0)
                             .frame(width: 16)
+                            .frame(
+                                maxHeight: 16 + 40 * Double(vehicleRoute.stops.filter { $0.isServed == false }.count - 1),
+                                alignment: .top
+                            )
                             .padding(.leading, 7)
+                            .padding(.top, 1)
                             .foregroundStyle(model.vehicle.alias.backgroundColor)
                     }
                     .overlay {
@@ -163,9 +170,9 @@ struct VehicleDetail: View {
         Path { path in
             path.move(to: .init(x: 0, y: 0))
             path.addLine(to: .init(x: 16, y: 0))
-            path.addLine(to: .init(x: 16, y: 8))
+            path.addLine(to: .init(x: 16, y: 10))
             path.addCurve(
-                to: .init(x: 0, y: 8),
+                to: .init(x: 0, y: 10),
                 control1: .init(x: 16, y: -2),
                 control2: .init(x: 0, y: -2)
             )
@@ -192,6 +199,7 @@ struct VehicleDetail: View {
                 .font(.system(size: 14))
                 .bold()
         }
+        .frame(height: 18)
     }
 }
 
