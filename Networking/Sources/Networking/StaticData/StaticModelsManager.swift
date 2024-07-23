@@ -61,6 +61,12 @@ public class StaticModelsManager: StaticModelsProviding {
     @Saved("timestamp") var timestamp: Timestamp? = nil
     @Saved("stops") public var stops: [Stop] = []
     @Saved("aliases") public var aliases: [Alias] = []
+    public var filteredLines: [Int] {
+        get { UserDefaults.standard.array(forKey: Self.filteredLinesKey) as? [Int] ?? [] }
+        set { UserDefaults.standard.setValue(newValue, forKey: Self.filteredLinesKey) }
+    }
+    
+    private static let filteredLinesKey = "SalinaCompanion.filteredLines"
     
     public init(timestamp: Date? = nil, stops: [Stop] = [], aliases: [Alias] = []) {
         self.timestamp = timestamp.map(Timestamp.init(date:))
