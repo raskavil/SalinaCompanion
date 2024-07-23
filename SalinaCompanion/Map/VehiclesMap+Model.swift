@@ -33,6 +33,18 @@ extension VehiclesMap {
         @Published var position: MapCameraPosition = .userLocation(
             fallback: .region(.init(center: .brno, span: .init(latitudeDelta: 0.03, longitudeDelta: 0.03)))
         )
+        var alertPresentedBiding: Binding<Bool> {
+            .init(
+                get: { [weak self] in
+                    self.map { $0.numberOfErrors >= 3 } ?? false
+                },
+                set: { [weak self] value in
+                    if value == false {
+                        self?.numberOfErrors = 0
+                    }
+                }
+            )
+        }
         
         private var vehicles: [Vehicle] = []
         private var mapPosition: MKMapRect?

@@ -9,9 +9,9 @@ public extension Vehicle {
             type: .bus,
             position: .init(latitude: 49.198277, longitude: 16.573307),
             bearing: 135,
-            alias: .init(id: 12, lineName: "38", contentColorHex: "#FFFFFF", backgroundColorHex: "#AAAAAA"),
+            alias: .init(id: 12, lineName: "38", contentColorHex: "#FFFFFF", backgroundColorHex: "#AF37B5"),
             isActive: true,
-            delay: 0,
+            delay: 3,
             lastStopId: 0,
             finalStopName: "Psychiatrická léčebna",
             lineId: 0,
@@ -38,7 +38,40 @@ public extension VehicleRoute {
                 .init(
                     id: 1366,
                     name: "Marie Pujmanové",
-                    isServed: true,
+                    isServed: false,
+                    time: 671,
+                    location: .init(latitude: 49.199468, longitude: 16.570483),
+                    path: [
+                        .init(latitude: 49.199468, longitude: 16.570483),
+                        .init(latitude: 49.19849, longitude: 16.57251)
+                    ]
+                ),
+                .init(
+                    id: 165,
+                    name: "Marie Pujmanové 1",
+                    isServed: false,
+                    time: 671,
+                    location: .init(latitude: 49.199468, longitude: 16.570483),
+                    path: [
+                        .init(latitude: 49.199468, longitude: 16.570483),
+                        .init(latitude: 49.19849, longitude: 16.57251)
+                    ]
+                ),
+                .init(
+                    id: 1254,
+                    name: "Marie Pujmanové 2",
+                    isServed: false,
+                    time: 671,
+                    location: .init(latitude: 49.199468, longitude: 16.570483),
+                    path: [
+                        .init(latitude: 49.199468, longitude: 16.570483),
+                        .init(latitude: 49.19849, longitude: 16.57251)
+                    ]
+                ),
+                .init(
+                    id: 1367,
+                    name: "Marie Pujmanové 3",
+                    isServed: false,
                     time: 671,
                     location: .init(latitude: 49.199468, longitude: 16.570483),
                     path: [
@@ -49,7 +82,7 @@ public extension VehicleRoute {
                 .init(
                     id: 1433,
                     name: "Neumannova",
-                    isServed: true,
+                    isServed: false,
                     time: 672,
                     location: .init(latitude: 49.196459, longitude: 16.578249),
                     path: [

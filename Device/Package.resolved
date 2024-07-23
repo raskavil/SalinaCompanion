@@ -1,0 +1,15 @@
+{
+  "originHash" : "5089becdd03f98c6bb96b845577a32b2ffb5f91eacc764eff75c987f1d982732",
+  "pins" : [
+    {
+      "identity" : "supportpackage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/raskavil/SupportPackage",
+      "state" : {
+        "branch" : "main",
+        "revision" : "639581351ab8fef05b7413984a3b8e072b492cb1"
+      }
+    }
+  ],
+  "version" : 3
+}

@@ -16,14 +16,7 @@ struct VehiclesMap: View {
         content
             .alert(
                 Text("Something went wrong"),
-                isPresented: .init(
-                    get: { model.numberOfErrors >= 3 },
-                    set: { value in
-                        if value == false {
-                            model.numberOfErrors = 0
-                        }
-                    }
-                ),
+                isPresented: model.alertPresentedBiding,
                 actions: {
                     Button("OK", action: { model.numberOfErrors = 0 })
                 }
@@ -74,9 +67,18 @@ struct VehiclesMap: View {
         .overlay(alignment: .bottomLeading) {
             mapButtons
         }
-        .overlay(alignment: .bottom) {
-            selectedVehiclePrompt
-                .animation(.easeInOut(duration: 0.2), value: model.displayedVehicle?.vehicle.id)
+        .overlay {
+            GeometryReader { proxy in
+                if let displayedVehicle = model.displayedVehicle {
+                    VehicleDetail(model: displayedVehicle, close: { model.displayedVehicle = nil })
+                        .background {
+                            UnevenRoundedRectangle(cornerRadii: .init(topLeading: 12, topTrailing: 12))
+                                .foregroundStyle(.white)
+                        }
+                        .frame(height: proxy.size.height / 2)
+                        .offset(y: proxy.size.height / 2)
+                }
+            }
         }
         .overlay(alignment: .topTrailing) {
             if model.loading {
@@ -146,27 +148,6 @@ struct VehiclesMap: View {
                 .onTapGesture {
                     model.displayedVehicle = .loading(vehicle)
                 }
-        }
-    }
-    
-    @ViewBuilder private var selectedVehiclePrompt: some View {
-        if let displayedVehicle = model.displayedVehicle {
-            VStack {
-                VehicleDetail(model: displayedVehicle, close: { model.displayedVehicle = nil })
-            }
-            .padding(16)
-            .background {
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(.white)
-                    .shadow(radius: 4)
-            }
-            .gesture(DragGesture(minimumDistance: 20).onEnded({ gesture in
-                if gesture.translation.height > -20 {
-                    model.displayedVehicle = nil
-                }
-            }))
-            .padding(16)
-            .transition(.move(edge: .bottom))
         }
     }
     
