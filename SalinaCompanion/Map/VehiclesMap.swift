@@ -26,6 +26,13 @@ struct VehiclesMap: View {
                 model.vehiclesProvider = dynamicDataProvider
                 model.subscribe(to: permissionsProvider)
             }
+            .sheet(isPresented: $model.filtersPresented) {
+                MapFilter(
+                    vehicles: model.filtersData,
+                    filteredAliases: $model.filteredLines,
+                    close: { model.filtersPresented.toggle() }
+                )
+            }
     }
     
     @ViewBuilder private var content: some View {
@@ -113,7 +120,9 @@ struct VehiclesMap: View {
     
     private var mapButtons: some View {
         VStack(spacing: 10) {
-            Button(action: {}) {
+            Button(action: {
+                model.filtersPresented.toggle()
+            }) {
                 Icon(.system("slider.horizontal.below.square.filled.and.square"))
                     .padding(12)
                     .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))

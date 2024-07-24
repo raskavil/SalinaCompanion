@@ -1,5 +1,5 @@
 {
-  "originHash" : "05a8dda82ab1df166b15225e00e17d3ba13ff138917137315c03caa6808c44c4",
+  "originHash" : "114ced59a5927c21d6bab0349ca2a15805df1bd61f6f22b97136087c3988ae4e",
   "pins" : [
     {
       "identity" : "supportpackage",
@@ -7,7 +7,7 @@
       "location" : "https://github.com/raskavil/SupportPackage",
       "state" : {
         "branch" : "main",
-        "revision" : "639581351ab8fef05b7413984a3b8e072b492cb1"
+        "revision" : "28ee7dcac56ff60a1048b99307f898e53fb37a38"
       }
     }
   ],

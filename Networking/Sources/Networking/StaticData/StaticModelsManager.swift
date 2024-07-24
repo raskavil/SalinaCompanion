@@ -61,8 +61,8 @@ public class StaticModelsManager: StaticModelsProviding {
     @Saved("timestamp") var timestamp: Timestamp? = nil
     @Saved("stops") public var stops: [Stop] = []
     @Saved("aliases") public var aliases: [Alias] = []
-    public var filteredLines: [Int] {
-        get { UserDefaults.standard.array(forKey: Self.filteredLinesKey) as? [Int] ?? [] }
+    public var filteredLines: Set<Int> {
+        get { UserDefaults.standard.value(forKey: Self.filteredLinesKey) as? Set<Int> ?? [] }
         set { UserDefaults.standard.setValue(newValue, forKey: Self.filteredLinesKey) }
     }
     

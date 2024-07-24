@@ -75,9 +75,10 @@ private extension String {
     var vehicleType: VehicleType {
         if let lineNumber = Int(self) {
             return switch lineNumber {
-                case 1...19:    .tram
-                case 20...39:   .bus
-                default:        .bus
+            case 1...19:    .tram
+            case 20...39:   .trolleybus
+            case 100:       .boat
+            default:        .bus
             }
         } else if starts(with: "R") || starts(with: "S") {
             return .train

@@ -48,8 +48,10 @@ public struct Vehicle: Codable {
     }
 }
 
-public enum VehicleType: Codable {
-    case bus, train, tram, boat
+public enum VehicleType: Codable, Identifiable, Hashable {
+    case bus, trolleybus, train, tram, boat
+    
+    public var id: Self { self }
 }
 
 public struct VehicleStop: Codable {

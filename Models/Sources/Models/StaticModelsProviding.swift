@@ -5,7 +5,7 @@ public protocol StaticModelsProviding {
     var isUpToDate: Bool { get async }
     var stops: [Stop] { get }
     var aliases: [Alias] { get }
-    var filteredLines: [Int] { get set }
+    var filteredLines: Set<Int> { get set }
 }
 
 public extension EnvironmentValues {
@@ -21,7 +21,7 @@ private struct StaticDataProviderMock: StaticModelsProviding {
     var isUpToDate: Bool { true }
     var stops: [Stop] { [] }
     var aliases: [Alias] { [] }
-    var filteredLines: [Int] = []
+    var filteredLines: Set<Int> = []
 }
 
 private struct StaticDataProviderKey: EnvironmentKey {

@@ -42,6 +42,27 @@ extension VehiclesMap {
         @Published var position: MapCameraPosition = .userLocation(
             fallback: .region(.init(center: .brno, span: .init(latitudeDelta: 0.03, longitudeDelta: 0.03)))
         )
+        
+        @Published var filtersPresented = false {
+            didSet {
+                if !filtersPresented {
+                    updateVehicles()
+                }
+            }
+        }
+        @Published var filteredLines: Set<Int> = []
+
+        var filtersData: [VehicleType: [Alias]] {
+            let filteredVehicles: [Vehicle] = vehicles.uniqueValues(equationFunction: { $0.alias.id == $1.alias.id })
+            return [
+                .boat: filteredVehicles.filter { $0.type == .boat }.map(\.alias),
+                .train: filteredVehicles.filter { $0.type == .train }.map(\.alias),
+                .bus: filteredVehicles.filter { $0.type == .bus }.map(\.alias),
+                .tram: filteredVehicles.filter { $0.type == .tram }.map(\.alias),
+                .trolleybus: filteredVehicles.filter { $0.type == .trolleybus }.map(\.alias)
+            ]
+        }
+        
         var alertPresentedBiding: Binding<Bool> {
             .init(
                 get: { [weak self] in
@@ -60,9 +81,15 @@ extension VehiclesMap {
         private var timer = Timer()
         private var cancellables: Set<AnyCancellable> = []
         private var canUpdate = true
+        
         var vehiclesProvider: DynamicModelsProviding? {
             didSet {
                 updateVehicles()
+            }
+        }
+        var filtersProvider: StaticModelsProviding? {
+            didSet {
+                filteredLines = filtersProvider?.filteredLines ?? []
             }
         }
         
@@ -104,6 +131,7 @@ extension VehiclesMap {
         private var filteredVehicles: [Vehicle] {
             vehicles
                 .filter { mapPosition?.contains(.init($0.position)) ?? true }
+                .filter { filteredLines.contains($0.alias.id) != true }
                 .filter(\.isActive)
         }
         

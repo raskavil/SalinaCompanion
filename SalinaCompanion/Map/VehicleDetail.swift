@@ -221,10 +221,10 @@ extension VehicleType {
     
     var icon: Icon.Content {
         switch self {
-        case .bus:      return .system("bus")
-        case .tram:     return .system("tram.fill")
-        case .train:    return .system("tram")
-        case .boat:     return .system("boat")
+        case .bus, .trolleybus: return .system("bus")
+        case .tram:             return .system("tram.fill")
+        case .train:            return .system("tram")
+        case .boat:             return .system("boat")
         }
     }
 }
