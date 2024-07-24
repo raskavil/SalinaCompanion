@@ -4,6 +4,7 @@ import SwiftUI
 public protocol DynamicModelsProviding {
     var vehicles: [Vehicle] { get async throws }
     func route(for vehicle: Vehicle) async throws -> VehicleRoute
+    func departures(for stop: Stop) async throws -> [Post]
 }
 
 public extension EnvironmentValues {
@@ -19,6 +20,9 @@ private struct DynamicDataProviderMock: DynamicModelsProviding {
     var vehicles: [Vehicle] { [] }
     func route(for vehicle: Vehicle) async throws -> VehicleRoute {
         .mock
+    }
+    func departures(for stop: Stop) async throws -> [Post] {
+        []
     }
 }
 

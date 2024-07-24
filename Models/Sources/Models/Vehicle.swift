@@ -5,7 +5,6 @@ import SwiftUI
 public struct Vehicle: Codable {
     public let id: Int
     public let name: String
-    public let type: VehicleType
     public let position: CLLocationCoordinate2D
     public let bearing: Int
     public let alias: Alias
@@ -20,7 +19,6 @@ public struct Vehicle: Codable {
     public init(
         id: Int,
         name: String,
-        type: VehicleType,
         position: CLLocationCoordinate2D,
         bearing: Int,
         alias: Alias,
@@ -34,7 +32,6 @@ public struct Vehicle: Codable {
     ) {
         self.id = id
         self.name = name
-        self.type = type
         self.position = position
         self.bearing = bearing
         self.alias = alias

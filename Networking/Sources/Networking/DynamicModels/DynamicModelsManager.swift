@@ -12,7 +12,6 @@ public class DynamicModelsManager: DynamicModelsProviding {
                 Vehicle(
                     id: vehicle.ID,
                     name: vehicle.LineName,
-                    type: vehicle.LineName.vehicleType,
                     position: .init(latitude: vehicle.Lat, longitude: vehicle.Lng),
                     bearing: vehicle.Bearing,
                     alias: aliases.first(where: { $0.lineName == vehicle.LineName })
@@ -65,26 +64,29 @@ public class DynamicModelsManager: DynamicModelsProviding {
         )
     }
     
+    public func departures(for stop: Stop) async throws -> [Post] {
+        let aliases = stopsAndAliasesProvider.aliases
+        return try await DeparturesRequest(stopId: stop.id).send { post in
+            Post(
+                name: post.Name,
+                id: post.PostID,
+                departures: post.Departures.compactMap { departure in
+                    guard let value = departure.value, let alias = aliases.first(where: { $0.id == value.LineId }) else {
+                        return nil
+                    }
+                    return Departure(
+                        lineId: value.LineId,
+                        alias: alias,
+                        routeId: value.RouteId,
+                        finalStopName: value.FinalStop,
+                        time: value.TimeMark
+                    )
+                }
+            )
+        }
+    }
+    
     public init(stopsAndAliasesProvider: StaticModelsProviding) {
         self.stopsAndAliasesProvider = stopsAndAliasesProvider
     }
 }
-
-private extension String {
-    
-    var vehicleType: VehicleType {
-        if let lineNumber = Int(self) {
-            return switch lineNumber {
-            case 1...19:    .tram
-            case 20...39:   .trolleybus
-            case 100:       .boat
-            default:        .bus
-            }
-        } else if starts(with: "R") || starts(with: "S") {
-            return .train
-        } else {
-            return .bus
-        }
-    }
-}
-
