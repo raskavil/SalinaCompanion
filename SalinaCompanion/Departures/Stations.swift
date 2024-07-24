@@ -4,29 +4,31 @@ import Models
 
 struct Stations: View {
     
-    let stops: [Stop] = []
-    let aliases: [Alias] = []
+    @Environment(\.staticDataProvider) var staticDataProvider
     @State var term = ""
-    @State var displayError = false
+    @State var displayError: Bool?
     
     var filteredStops: [Stop] {
-        stops.filter {
+        staticDataProvider.stops.filter {
             guard term.isEmpty == false else {
                 return true
             }
             return $0.name.starts(with: term)
         }
     }
-
+    
     var body: some View {
         NavigationStack {
             content
                 .navigationTitle("Departures")
         }
+        .task {
+            displayError = await !staticDataProvider.isUpToDate
+        }
     }
     
     @ViewBuilder private var content: some View {
-        if displayError {
+        if displayError == true {
             VStack(alignment: .center, spacing: 8) {
                 Text("Something went wrong", weight: .medium)
                 Text("There has been a problem loading public transport stops please try again later")
@@ -35,21 +37,17 @@ struct Stations: View {
         } else {
             ScrollView(.vertical) {
                 LazyVStack(spacing: 8) {
-                    if filteredStops.isEmpty == false {
-                        ForEach(filteredStops) { stop in
-                            StopCard(stop: stop, aliases: aliases)
-                        }
-                    } else {
-                        ForEach(0...8, id: \.self) { _ in
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(height: 96)
-                                .foregroundStyle(Color(white: 0.7))
+                    ForEach(filteredStops) { stop in
+                        StopCard(stop: stop, aliases: staticDataProvider.aliases)
+                        if stop.id != filteredStops.last?.id {
+                            Rectangle()
+                                .frame(height: 1)
+                                .foregroundStyle(Color(white: 0.8))
                         }
                     }
                 }
-                .disabled(stops.isEmpty)
+                .disabled(staticDataProvider.stops.isEmpty)
                 .searchable(text: $term)
-                .padding(.horizontal, 16)
             }
         }
     }
@@ -63,38 +61,35 @@ struct StopCard: View {
     var body: some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 8) {
-                HStack(spacing: 12) {
-                    Icon(.system("bus"))
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(stop.name, size: .large)
-                            .fontWeight(.medium)
-                            .lineLimit(1)
-                        Text("\(Int(stop.position.longitude)) m away", size: .small)
-                    }
-                    Spacer()
-                }
-                VStack(alignment: .leading, spacing: 4) {
-                    ForEach(Array(stop.lines.chunked(into: 5).enumerated()), id: \.offset) { _, chunk in
-                        HStack(spacing: 4) {
-                            ForEach(chunk, id: \.self) { line in
-                                if let lineId = Int(line), let alias = aliases.first(where: { $0.id == lineId }) {
-                                    line.lineBadge(with: alias)
-                                        .fixedSize()
-                                }
+                SwiftUI.Text(stop.name)
+                    .font(.system(size: 14, weight: .semibold))
+                    .lineLimit(1)
+                SwiftUI.Text("\(Int(stop.position.longitude)) m away")
+                    .font(.system(size: 10))
+                VCollection(horizontalSpacing: 4, verticalSpacing: 4) {
+                    ForEach(stop.lines, id: \.self) { line in
+                        if let lineId = Int(line), let alias = aliases.first(where: { $0.id == lineId }) {
+                            HStack(spacing: 4) {
+                                Icon(alias.vehicleType.icon, size: .small)
+                                    .foregroundStyle(alias.contentColor)
+                                SwiftUI.Text(alias.lineName)
+                                    .font(.system(size: 14, weight: .bold))
+                                    .foregroundStyle(alias.contentColor)
+                            }
+                            .padding(4)
+                            .background {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .foregroundStyle(alias.backgroundColor)
                             }
                         }
                     }
+                    
                 }
             }
             Icon(.system("chevron.forward"), size: .small)
         }
         .padding(.vertical, 8)
-        .padding(.horizontal, 16)
-        .background {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(Color.white)
-                .shadow(radius: 2.0)
-        }
+        .padding(.horizontal, 12)
     }
 }
 
@@ -117,7 +112,7 @@ extension String {
             text: alias.lineName,
             icon: icon,
             style: .init(
-                contentColor: .white,
+                contentColor: alias.contentColor,
                 backgroundColor: alias.backgroundColor,
                 borderColor: .clear
             )
@@ -125,8 +120,14 @@ extension String {
     }
 }
 
-#Preview {
-    PreviewWrapper {
+import Networking
+
+struct StationPreview: PreviewProvider {
+    
+    static let modelsManager = StaticModelsManager()
+    
+    static var previews: some View {
         Stations()
+            .environment(\.staticDataProvider, modelsManager)
     }
 }
