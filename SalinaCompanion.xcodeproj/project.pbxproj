@@ -15,7 +15,7 @@
 		2CB1E0452C373D62003A19B2 /* VehicleDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB1E0442C373D62003A19B2 /* VehicleDetail.swift */; };
 		2CB1E04D2C37F47B003A19B2 /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = 2CB1E04C2C37F47B003A19B2 /* Models */; };
 		2CB5AFFE2B6C0BDE004C1C64 /* SalinaCompanionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB5AFFD2B6C0BDE004C1C64 /* SalinaCompanionApp.swift */; };
-		2CB5B0002B6C0BDE004C1C64 /* Stations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB5AFFF2B6C0BDE004C1C64 /* Stations.swift */; };
+		2CB5B0002B6C0BDE004C1C64 /* Stops.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB5AFFF2B6C0BDE004C1C64 /* Stops.swift */; };
 		2CB5B0042B6C0BE0004C1C64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CB5B0032B6C0BE0004C1C64 /* Assets.xcassets */; };
 		2CDE90832B6CDF1C000AA67F /* VehiclesMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDE90822B6CDF1C000AA67F /* VehiclesMap.swift */; };
 		2CDE90912B6D94B5000AA67F /* Departures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDE90902B6D94B5000AA67F /* Departures.swift */; };
@@ -32,7 +32,7 @@
 		2CB1E0462C37E872003A19B2 /* Models */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Models; sourceTree = "<group>"; };
 		2CB5AFFA2B6C0BDE004C1C64 /* SalinaCompanion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SalinaCompanion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CB5AFFD2B6C0BDE004C1C64 /* SalinaCompanionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalinaCompanionApp.swift; sourceTree = "<group>"; };
-		2CB5AFFF2B6C0BDE004C1C64 /* Stations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stations.swift; sourceTree = "<group>"; };
+		2CB5AFFF2B6C0BDE004C1C64 /* Stops.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stops.swift; sourceTree = "<group>"; };
 		2CB5B0032B6C0BE0004C1C64 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2CB5B0052B6C0BE0004C1C64 /* SalinaCompanion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SalinaCompanion.entitlements; sourceTree = "<group>"; };
 		2CDE90822B6CDF1C000AA67F /* VehiclesMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehiclesMap.swift; sourceTree = "<group>"; };
@@ -106,7 +106,7 @@
 		2CDE906B2B6C1CF5000AA67F /* Departures */ = {
 			isa = PBXGroup;
 			children = (
-				2CB5AFFF2B6C0BDE004C1C64 /* Stations.swift */,
+				2CB5AFFF2B6C0BDE004C1C64 /* Stops.swift */,
 				2CDE90902B6D94B5000AA67F /* Departures.swift */,
 			);
 			path = Departures;
@@ -207,7 +207,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CB5B0002B6C0BDE004C1C64 /* Stations.swift in Sources */,
+				2CB5B0002B6C0BDE004C1C64 /* Stops.swift in Sources */,
 				2C62C47E2C3714AF004278A4 /* VehiclesMap+Model.swift in Sources */,
 				2CDE90912B6D94B5000AA67F /* Departures.swift in Sources */,
 				2CB1E0452C373D62003A19B2 /* VehicleDetail.swift in Sources */,
@@ -342,7 +342,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SalinaCompanion/SalinaCompanion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2024072401;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 57C78B97UA;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -351,6 +351,7 @@
 				INFOPLIST_FILE = SalinaCompanion/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Šalinapka";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Poloha je nutná pro nastavení pozice uživatele na mapě.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -361,6 +362,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -384,7 +386,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SalinaCompanion/SalinaCompanion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2024072401;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 57C78B97UA;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -393,6 +395,7 @@
 				INFOPLIST_FILE = SalinaCompanion/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Šalinapka";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Poloha je nutná pro nastavení pozice uživatele na mapě.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -403,6 +406,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";

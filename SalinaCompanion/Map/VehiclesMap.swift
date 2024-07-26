@@ -156,7 +156,7 @@ struct VehiclesMap: View {
                 .frame(width: 28, height: 28)
                 .foregroundStyle(vehicle.alias.backgroundColor)
                 .overlay {
-                    Icon(vehicle.type.icon, size: .small)
+                    Icon(vehicle.alias.vehicleType.icon, size: .small)
                         .foregroundStyle(vehicle.alias.contentColor)
                 }
                 .overlay(alignment: .center) {

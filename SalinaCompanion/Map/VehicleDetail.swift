@@ -63,7 +63,7 @@ struct VehicleDetail: View {
     private var vehicleHeader: some View {
         HStack {
             HStack(alignment: .center, spacing: 4) {
-                Icon(model.vehicle.type.icon, size: .small)
+                Icon(model.vehicle.alias.vehicleType.icon, size: .small)
                 SwiftUI.Text(model.vehicle.name)
                     .bold()
                     .font(.subheadline)
@@ -224,7 +224,7 @@ extension VehicleType {
         case .bus, .trolleybus: return .system("bus")
         case .tram:             return .system("tram.fill")
         case .train:            return .system("tram")
-        case .boat:             return .system("boat")
+        case .boat:             return .system("ferry.fill")
         }
     }
 }

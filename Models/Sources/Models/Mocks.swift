@@ -6,7 +6,6 @@ public extension Vehicle {
         .init(
             id: 6705,
             name: "38",
-            type: .bus,
             position: .init(latitude: 49.198277, longitude: 16.573307),
             bearing: 135,
             alias: .init(id: 12, lineName: "38", contentColorHex: "#FFFFFF", backgroundColorHex: "#AF37B5"),

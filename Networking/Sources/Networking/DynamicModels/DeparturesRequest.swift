@@ -6,10 +6,11 @@ struct DeparturesRequest {
     let stopId: Int
     
     func send<T>(_ responseParser: (PostResponse) -> T?) async throws -> [T] {
-        var components = URLComponents(string: "https://mapa.idsjmk.cz/api/routepath")
+        var components = URLComponents(string: "https://mapa.idsjmk.cz/api/departures")
         components?.queryItems = [.init(name: "stopid", value: "\(stopId)")]
         let session = URLSession(configuration: .default)
         let data = try await session.data(for: URLRequest(url: components!.url!)).0
+        print(String(data: data, encoding: .utf8))
         return try JSONDecoder()
             .decode(DeparturesResponse.self, from: data)
             .PostList

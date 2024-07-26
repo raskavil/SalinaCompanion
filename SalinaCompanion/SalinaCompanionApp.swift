@@ -17,9 +17,13 @@ struct SalinaCompanionApp: App {
     var body: some Scene {
         WindowGroup {
             TabView {
-                content
+                vehicles
                     .tabItem {
                         Label("Map", systemImage: "map")
+                    }
+                Stops()
+                    .tabItem {
+                        Label("Departures", systemImage: "list.bullet.rectangle")
                     }
             }
             .overlay {
@@ -38,16 +42,16 @@ struct SalinaCompanionApp: App {
         .environment(\.permissionsProvider, permissionsProvider)
     }
     
-    @ViewBuilder var content: some View {
+    @ViewBuilder var vehicles: some View {
         if staticDataReady {
             VehiclesMap()
         }
     }
     
     init() {
-        Font.registerDesignFonts()
-        UINavigationBar.appearance().largeTitleTextAttributes = UIFont(name: "SourceSans3-Bold", size: 34).map { [.font: $0]}
-        UITabBarItem.appearance().setTitleTextAttributes(UIFont(name: "SourceSans3-Medium", size: 12).map { [.font: $0] }, for: [])
+//        Font.registerDesignFonts()
+//        UINavigationBar.appearance().largeTitleTextAttributes = UIFont(name: "SourceSans3-Bold", size: 34).map { [.font: $0]}
+//        UITabBarItem.appearance().setTitleTextAttributes(UIFont(name: "SourceSans3-Medium", size: 12).map { [.font: $0] }, for: [])
         staticDataProvider = StaticModelsManager()
         dynamicDataProvider = DynamicModelsManager(stopsAndAliasesProvider: staticDataProvider)
         permissionsProvider = PermissionsManager()

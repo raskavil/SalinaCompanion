@@ -2,11 +2,11 @@ import SwiftUI
 import SupportPackageViews
 import Models
 
-struct Stations: View {
+struct Stops: View {
     
     @Environment(\.staticDataProvider) var staticDataProvider
     @State var term = ""
-    @State var displayError: Bool?
+    @State private var isLoaded: Bool = false
     
     var filteredStops: [Stop] {
         staticDataProvider.stops.filter {
@@ -20,25 +20,25 @@ struct Stations: View {
     var body: some View {
         NavigationStack {
             content
+                .navigationBarTitleDisplayMode(.large)
                 .navigationTitle("Departures")
         }
         .task {
-            displayError = await !staticDataProvider.isUpToDate
+            isLoaded = await staticDataProvider.isUpToDate
         }
     }
     
     @ViewBuilder private var content: some View {
-        if displayError == true {
-            VStack(alignment: .center, spacing: 8) {
-                Text("Something went wrong", weight: .medium)
-                Text("There has been a problem loading public transport stops please try again later")
-                    .multilineTextAlignment(.center)
-            }
-        } else {
+        if isLoaded {
             ScrollView(.vertical) {
                 LazyVStack(spacing: 8) {
                     ForEach(filteredStops) { stop in
-                        StopCard(stop: stop, aliases: staticDataProvider.aliases)
+                        NavigationLink {
+                            Departures(stop: stop)
+                        } label: {
+                            StopCard(stop: stop, aliases: staticDataProvider.aliases)
+                        }
+                        .foregroundStyle(.black)
                         if stop.id != filteredStops.last?.id {
                             Rectangle()
                                 .frame(height: 1)
@@ -62,7 +62,7 @@ struct StopCard: View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 8) {
                 SwiftUI.Text(stop.name)
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.system(size: 16, weight: .semibold))
                     .lineLimit(1)
                 SwiftUI.Text("\(Int(stop.position.longitude)) m away")
                     .font(.system(size: 10))
@@ -127,7 +127,8 @@ struct StationPreview: PreviewProvider {
     static let modelsManager = StaticModelsManager()
     
     static var previews: some View {
-        Stations()
+        Stops()
             .environment(\.staticDataProvider, modelsManager)
+            .environment(\.dynamicDataProvider, DynamicModelsManager(stopsAndAliasesProvider: modelsManager))
     }
 }

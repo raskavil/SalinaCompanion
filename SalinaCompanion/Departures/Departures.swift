@@ -1,94 +1,132 @@
 import SwiftUI
-import SwiftData
 import SupportPackageViews
+import Models
 
-/*
 struct Departures: View {
     
-    @Environment(\.dismiss) var dismiss
-    
-    @State var posts: [DeparturesRequest.PostResponse] = []
+    @Environment(\.dynamicDataProvider) var departuresProvider
+    @State var posts: [Post] = []
+    @State var routeBeingLoaded: Int?
     let stop: Stop
     
     var body: some View {
-        VStack {
-            HStack {
-                Button(action: { dismiss() }) {
-                    Icon(.system("chevron.backward"))
-                }
-                Spacer()
-                Text(stop.name, size: .large, weight: .medium)
-                Spacer()
-            }
-            .background(Color.white)
-            ScrollView {
-                VStack(alignment: .leading, spacing: 8) {
-                    ForEach(posts, id: \.PostID) { post in
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Nástupiště \(post.PostID) - " + post.Name, size: .large, weight: .medium)
-                            ForEach(Array(post.Departures.enumerated()), id: \.offset) { _, departure in
-                                HStack {
-                                    aliases
-                                        .first(where: { $0.alias == departure.LineName})
-                                        .map { departure.LineName.lineBadge(with: $0) }
-                                    Text(departure.FinalStop)
-                                    Spacer()
-                                    Text(departure.TimeMark, weight: .medium)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 8) {
+                ForEach(posts) { post in
+                    if post.id == posts.first?.id {
+                        Rectangle()
+                            .foregroundStyle(Color(white: 0.8))
+                            .frame(height: 0.5)
+                    }
+                    VStack(alignment: .leading, spacing: 4) {
+                        SwiftUI.Text("Zastávka " + post.name)
+                            .font(.system(size: 16, weight: .semibold))
+                            .padding(.bottom, 6)
+                        ForEach(Array(post.departures.enumerated()), id: \.offset) { index, departure in
+                            HStack {
+                                HStack(spacing: 4) {
+                                    Icon(departure.alias.vehicleType.icon, size: .small)
+                                        .foregroundStyle(departure.alias.contentColor)
+                                    SwiftUI.Text(departure.alias.lineName)
+                                        .font(.system(size: 14, weight: .bold))
+                                        .foregroundStyle(departure.alias.contentColor)
+                                }
+                                .padding(4)
+                                .frame(minWidth: 45, minHeight: 30, alignment: .center)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .foregroundStyle(departure.alias.backgroundColor)
+                                }
+                                .frame(minWidth: 55, alignment: .leading)
+                                
+                                SwiftUI.Text(departure.finalStopName)
+                                    .font(.system(size: 14, weight: .medium))
+                                    .minimumScaleFactor(0.7)
+                                    .lineLimit(1)
+                                Spacer()
+                                
+                                SwiftUI.Text(departure.time)
+                                    .font(.system(size: 14, weight: .medium))
+                                
+                                if routeBeingLoaded == departure.routeId {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle())
+                                        .frame(width: 28)
+                                } else {
+                                    Button(action: {
+                                        routeBeingLoaded = departure.routeId
+                                    }) {
+                                        Circle()
+                                            .frame(width: 28, height: 28)
+                                            .foregroundStyle(Color(white: 0.95))
+                                            .overlay {
+                                                Image(systemName: "location.circle")
+                                                    .foregroundStyle(departure.alias.backgroundColor)
+                                            }
+                                    }
                                 }
                             }
                         }
-                        .padding(16)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .foregroundStyle(Color.white)
-                                .shadow(radius: 2.0)
-                        )
                     }
-                    Spacer()
+                    .padding(12)
+                    Rectangle()
+                        .foregroundStyle(Color(white: 0.8))
+                        .frame(height: 0.5)
                 }
-                .padding(16)
+                Spacer()
             }
         }
-        .navigationBarBackButtonHidden()
+        .navigationTitle(stop.name)
+        .navigationBarTitleDisplayMode(.inline)
         .task {
             Task {
-                posts = try await DeparturesRequest.send(stopId: stop.id, { $0 })
+                do {
+                    posts = try await departuresProvider.departures(for: stop)
+                    print(posts)
+                } catch {
+                    print(error)
+                }
             }
         }
     }
 }
 
-extension [LineAlias] {
+import Networking
+
+struct DeparturesPreviews: PreviewProvider {
     
-    func color(for lineName: String, from keypath: KeyPath<LineAlias, String>, fallback: Color = .primary) -> Color {
-        guard let alias = first(where: { $0.alias == lineName }) else {
-            return fallback
+    private struct LoadingWrapper: View {
+        @Environment(\.staticDataProvider) var staticDataProvider
+        @State var loaded = false
+        
+        var body: some View {
+            VStack {
+                if loaded {
+                    NavigationStack {
+                        Departures(
+                            stop: .init(
+                                id: 1146,
+                                zone: 101,
+                                name: "Chrlice, nádraží",
+                                position: .init(),
+                                lines: []
+                            )
+                        )
+                    }
+                }
+            }
+            .task {
+                loaded = await staticDataProvider.isUpToDate
+            }
         }
-        return .init(uiColor: .init(hexString: alias[keyPath: keypath]))
+    }
+    
+    static var staticDataProvider = StaticModelsManager()
+    
+    static var previews: some View {
+        LoadingWrapper()
+            .environment(\.staticDataProvider, staticDataProvider)
+            .environment(\.dynamicDataProvider, DynamicModelsManager(stopsAndAliasesProvider: staticDataProvider))
     }
     
 }
-
-extension Int {
-    
-    var vehicleIcon: Icon.Content {
-        switch self {
-            case 1...19:     return .system("tram.fill")
-            case 20...39:    return .system("bus")
-            default:         return .system("bus")
-        }
-    }
-}
-
-#Preview {
-    Departures(
-        stop: .init(
-            id: 1291,
-            name: "Krásného",
-            longitude: 0,
-            latitude: 0,
-            lines: ["8", "10"]
-        )
-    )
-}
-*/

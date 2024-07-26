@@ -53,13 +53,13 @@ extension VehiclesMap {
         @Published var filteredLines: Set<Int> = []
 
         var filtersData: [VehicleType: [Alias]] {
-            let filteredVehicles: [Vehicle] = vehicles.uniqueValues(equationFunction: { $0.alias.id == $1.alias.id })
+            let filteredVehicles = vehicles.map(\.alias).uniqueValues(equationFunction: { $0.id == $1.id })
             return [
-                .boat: filteredVehicles.filter { $0.type == .boat }.map(\.alias),
-                .train: filteredVehicles.filter { $0.type == .train }.map(\.alias),
-                .bus: filteredVehicles.filter { $0.type == .bus }.map(\.alias),
-                .tram: filteredVehicles.filter { $0.type == .tram }.map(\.alias),
-                .trolleybus: filteredVehicles.filter { $0.type == .trolleybus }.map(\.alias)
+                .boat: filteredVehicles.filter { $0.vehicleType == .boat },
+                .train: filteredVehicles.filter { $0.vehicleType == .train },
+                .bus: filteredVehicles.filter { $0.vehicleType == .bus },
+                .tram: filteredVehicles.filter { $0.vehicleType == .tram },
+                .trolleybus: filteredVehicles.filter { $0.vehicleType == .trolleybus }
             ]
         }
         
