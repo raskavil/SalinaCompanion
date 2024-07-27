@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2C34C8772C3F024400A22F27 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 2C34C8762C3F024400A22F27 /* Networking */; };
 		2C34C87A2C3F030100A22F27 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 2C34C8792C3F030100A22F27 /* Networking */; };
+		2C40B41D2C53BBC70075F4DB /* VehicleMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C40B41C2C53BBC60075F4DB /* VehicleMarker.swift */; };
 		2C62C47E2C3714AF004278A4 /* VehiclesMap+Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C62C47D2C3714AF004278A4 /* VehiclesMap+Model.swift */; };
 		2C99CD112C3EA6DE00EAAA74 /* SupportPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 2C99CD102C3EA6DE00EAAA74 /* SupportPackage */; };
 		2C99CD132C3EA6DE00EAAA74 /* SupportPackageViews in Frameworks */ = {isa = PBXBuildFile; productRef = 2C99CD122C3EA6DE00EAAA74 /* SupportPackageViews */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C40B41C2C53BBC60075F4DB /* VehicleMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMarker.swift; sourceTree = "<group>"; };
 		2C62C47D2C3714AF004278A4 /* VehiclesMap+Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VehiclesMap+Model.swift"; sourceTree = "<group>"; };
 		2C99CD0E2C3E920800EAAA74 /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Networking; sourceTree = "<group>"; };
 		2CB1E0442C373D62003A19B2 /* VehicleDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleDetail.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				2CDE90822B6CDF1C000AA67F /* VehiclesMap.swift */,
+				2C40B41C2C53BBC60075F4DB /* VehicleMarker.swift */,
 				2C62C47D2C3714AF004278A4 /* VehiclesMap+Model.swift */,
 				2CB1E0442C373D62003A19B2 /* VehicleDetail.swift */,
 				2CEBB3832C4FE8380037A28F /* MapFilter.swift */,
@@ -213,6 +216,7 @@
 				2CB1E0452C373D62003A19B2 /* VehicleDetail.swift in Sources */,
 				2CDE90832B6CDF1C000AA67F /* VehiclesMap.swift in Sources */,
 				2CFB30F52C464FF9005BC031 /* LoadingView.swift in Sources */,
+				2C40B41D2C53BBC70075F4DB /* VehicleMarker.swift in Sources */,
 				2CEBB3842C4FE8380037A28F /* MapFilter.swift in Sources */,
 				2CB5AFFE2B6C0BDE004C1C64 /* SalinaCompanionApp.swift in Sources */,
 			);

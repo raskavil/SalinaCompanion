@@ -8,8 +8,9 @@ struct Stops: View {
     @State var term = ""
     @State private var isLoaded: Bool = false
     
+    @State private var localStops: [Stop] = []
     var filteredStops: [Stop] {
-        staticDataProvider.stops.filter {
+        localStops.filter {
             guard term.isEmpty == false else {
                 return true
             }
@@ -25,6 +26,7 @@ struct Stops: View {
         }
         .task {
             isLoaded = await staticDataProvider.isUpToDate
+            localStops = staticDataProvider.stops
         }
     }
     

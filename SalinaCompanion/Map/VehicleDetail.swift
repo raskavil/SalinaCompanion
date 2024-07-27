@@ -22,6 +22,7 @@ struct VehicleDetail: View {
     }
     
     let model: Model
+    var displayMap: Bool = false
     let close: () -> Void
     
     var body: some View {
@@ -32,6 +33,40 @@ struct VehicleDetail: View {
                     .bold()
                 Spacer()
                 closeButton
+            }
+            
+            if displayMap {
+                Map(
+                    initialPosition: .region(
+                        .init(
+                            center: model.vehicle.position,
+                            span: .init(latitudeDelta: 0.0125, longitudeDelta: 0)
+                        )
+                    )
+                ) {
+                    Annotation(
+                        coordinate: model.vehicle.position,
+                        content: {
+                            VehicleMarker(vehicle: model.vehicle)
+                        },
+                        label: {}
+                    )
+                    if case .loaded(let vehicleRoute) = model {
+                        MapPolyline(coordinates: vehicleRoute.stops.filter(\.isServed).flatMap(\.path))
+                            .stroke(vehicleRoute.vehicle.alias.backgroundColor.opacity(0.5), style: .init(
+                                lineWidth: 5,
+                                lineCap: .round,
+                                lineJoin: .round
+                            ))
+                        MapPolyline(coordinates: vehicleRoute.stops.filter { $0.isServed == false }.flatMap(\.path))
+                            .stroke(vehicleRoute.vehicle.alias.backgroundColor, style: .init(
+                                lineWidth: 5,
+                                lineCap: .round,
+                                lineJoin: .round
+                            ))
+                    }
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 12))
             }
             
             vehicleHeader
@@ -239,18 +274,9 @@ extension Int {
 struct VehicleDetailPreviews: PreviewProvider {
     
     static var previews: some View {
-        Color.blue.overlay {
-            GeometryReader { proxy in
-                VehicleDetail(model: .loaded(.mock), close: {})
-                    .background {
-                        UnevenRoundedRectangle(cornerRadii: .init(topLeading: 12, topTrailing: 12))
-                            .foregroundStyle(.white)
-                    }
-                    .frame(height: proxy.size.height / 2)
-                    .offset(y: proxy.size.height / 2)
-                    
-            }
-        }
+        Color.blue.sheet(isPresented: .constant(true), content: {
+            VehicleDetail(model: .loaded(.mock), displayMap: true, close: {})
+        })
     }
 }
 

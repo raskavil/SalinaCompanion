@@ -152,20 +152,7 @@ struct VehiclesMap: View {
                 .frame(width: 12, height: 12)
                 .foregroundStyle(vehicle.alias.backgroundColor)
         } else {
-            Circle()
-                .frame(width: 28, height: 28)
-                .foregroundStyle(vehicle.alias.backgroundColor)
-                .overlay {
-                    Icon(vehicle.alias.vehicleType.icon, size: .small)
-                        .foregroundStyle(vehicle.alias.contentColor)
-                }
-                .overlay(alignment: .center) {
-                    Triangle()
-                        .foregroundStyle(vehicle.alias.backgroundColor)
-                        .frame(width: 10, height: 6)
-                        .padding(.bottom, 36)
-                        .rotationEffect(Angle(degrees: Double(vehicle.bearing)))
-                }
+            VehicleMarker(vehicle: vehicle)
                 .onTapGesture {
                     if blockVehicleSelection == false {
                         withAnimation(.linear(duration: 0.25)) {
