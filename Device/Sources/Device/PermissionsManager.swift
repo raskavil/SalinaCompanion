@@ -2,7 +2,7 @@ import CoreLocation
 import SwiftUI
 import Combine
 
-public class PermissionsManager: NSObject, PermissionsProviding, CLLocationManagerDelegate {
+public class PermissionsManager: NSObject, PermissionsProviding, CLLocationManagerDelegate, LocationProviding {
     
     public var features: [DeviceFeature: AuthorizationStatus] {
         [.location: locationManager.authorizationStatus.authorizationStatus]
@@ -10,6 +10,10 @@ public class PermissionsManager: NSObject, PermissionsProviding, CLLocationManag
     
     public var permissionsChanged: AnyPublisher<Void, Never> {
         permissionsChangedPassthrough.eraseToAnyPublisher()
+    }
+    
+    public var location: CLLocation? {
+        locationManager.location
     }
 
     private let permissionsChangedPassthrough = PassthroughSubject<Void, Never>()

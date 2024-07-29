@@ -16,10 +16,10 @@ struct VehiclesMap: View {
     var body: some View {
         content
             .alert(
-                Text("Something went wrong"),
+                Text("error.something_went_wrong"),
                 isPresented: model.alertPresentedBiding,
                 actions: {
-                    Button("OK", action: { model.numberOfErrors = 0 })
+                    Button("error.ok", action: { model.numberOfErrors = 0 })
                 }
             )
             .onAppear {
@@ -76,10 +76,10 @@ struct VehiclesMap: View {
             mapButtons
         }
         .overlay {
-            if let displayedVehicle = model.displayedVehicle {
+            if model.displayedVehicle != nil {
                 GeometryReader { proxy in
                     VehicleDetail(
-                        model: displayedVehicle,
+                        model: $model.displayedVehicle,
                         close: {
                             blockVehicleSelection = true
                             withAnimation(.linear(duration: 0.25)) {
@@ -103,8 +103,9 @@ struct VehiclesMap: View {
             if model.loading {
                 HStack(spacing: 4) {
                     ProgressView()
-                    Text("Loading")
+                    SwiftUI.Text("loading")
                         .bold()
+                        .font(.system(size: 13))
                 }
                 .padding(8)
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))

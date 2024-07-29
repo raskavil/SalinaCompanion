@@ -1,32 +1,36 @@
 import SwiftUI
 import SupportPackageViews
 import Models
+import CoreLocation
+import MapKit
 
 struct Stops: View {
     
+    @Environment(\.locationProvider) var locationProvider
     @Environment(\.staticDataProvider) var staticDataProvider
     @State var term = ""
     @State private var isLoaded: Bool = false
     
     @State private var localStops: [Stop] = []
     var filteredStops: [Stop] {
-        localStops.filter {
-            guard term.isEmpty == false else {
-                return true
-            }
-            return $0.name.starts(with: term)
-        }
+        term.isEmpty == false ? localStops.filter { $0.name.starts(with: term) } : localStops
     }
     
     var body: some View {
         NavigationStack {
             content
                 .navigationBarTitleDisplayMode(.large)
-                .navigationTitle("Departures")
+                .navigationTitle("departures.title")
         }
         .task {
             isLoaded = await staticDataProvider.isUpToDate
-            localStops = staticDataProvider.stops
+            localStops = (
+                locationProvider.location.map { user in
+                    staticDataProvider.stops.sorted { lhs, rhs in
+                        lhs.position.location.distance(from: user) < rhs.position.location.distance(from: user)
+                    }
+                } ?? staticDataProvider.stops
+            ).filter { $0.lines.isEmpty == false }
         }
     }
     
@@ -51,11 +55,16 @@ struct Stops: View {
                 .disabled(staticDataProvider.stops.isEmpty)
                 .searchable(text: $term)
             }
+        } else {
+            ProgressView()
+                .progressViewStyle(.circular)
         }
     }
 }
 
 struct StopCard: View {
+    
+    @Environment(\.locationProvider) var locationProvider
     
     let stop: Stop
     let aliases: [Alias]
@@ -66,8 +75,13 @@ struct StopCard: View {
                 SwiftUI.Text(stop.name)
                     .font(.system(size: 16, weight: .semibold))
                     .lineLimit(1)
-                SwiftUI.Text("\(Int(stop.position.longitude)) m away")
+                if let location = locationProvider.location {
+                    SwiftUI.Text(
+                        MKDistanceFormatter().string(fromDistance: stop.position.location.distance(from: location))
+                        + .init(localized: "stop.distance.away")
+                    )
                     .font(.system(size: 10))
+                }
                 VCollection(horizontalSpacing: 4, verticalSpacing: 4) {
                     ForEach(stop.lines, id: \.self) { line in
                         if let lineId = Int(line), let alias = aliases.first(where: { $0.id == lineId }) {
@@ -103,22 +117,10 @@ extension Array {
     }
 }
 
-extension String {
+extension CLLocationCoordinate2D {
     
-    func lineBadge(with alias: Alias) -> Badge {
-        var icon = Icon.Content.system("bus")
-        if alias.lineName.starts(with: "R") || alias.lineName.starts(with: "S") {
-            icon = .system("tram")
-        }
-        return Badge(
-            text: alias.lineName,
-            icon: icon,
-            style: .init(
-                contentColor: alias.contentColor,
-                backgroundColor: alias.backgroundColor,
-                borderColor: .clear
-            )
-        )
+    var location: CLLocation {
+        .init(latitude: latitude, longitude: longitude)
     }
 }
 

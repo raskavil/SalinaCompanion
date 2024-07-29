@@ -21,63 +21,64 @@ struct VehicleDetail: View {
         }
     }
     
-    let model: Model
+    @Binding var model: Model?
     var displayMap: Bool = false
     let close: () -> Void
     
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .bottom) {
-                SwiftUI.Text("Detail vozidla")
-                    .font(.title3)
-                    .bold()
-                Spacer()
-                closeButton
-            }
-            
-            if displayMap {
-                Map(
-                    initialPosition: .region(
-                        .init(
-                            center: model.vehicle.position,
-                            span: .init(latitudeDelta: 0.0125, longitudeDelta: 0)
-                        )
-                    )
-                ) {
-                    Annotation(
-                        coordinate: model.vehicle.position,
-                        content: {
-                            VehicleMarker(vehicle: model.vehicle)
-                        },
-                        label: {}
-                    )
-                    if case .loaded(let vehicleRoute) = model {
-                        MapPolyline(coordinates: vehicleRoute.stops.filter(\.isServed).flatMap(\.path))
-                            .stroke(vehicleRoute.vehicle.alias.backgroundColor.opacity(0.5), style: .init(
-                                lineWidth: 5,
-                                lineCap: .round,
-                                lineJoin: .round
-                            ))
-                        MapPolyline(coordinates: vehicleRoute.stops.filter { $0.isServed == false }.flatMap(\.path))
-                            .stroke(vehicleRoute.vehicle.alias.backgroundColor, style: .init(
-                                lineWidth: 5,
-                                lineCap: .round,
-                                lineJoin: .round
-                            ))
-                    }
+    @ViewBuilder var body: some View {
+        if let model {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(alignment: .bottom) {
+                    SwiftUI.Text("vehicle_detail.title")
+                        .font(.title3)
+                        .bold()
+                    Spacer()
+                    closeButton
                 }
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                
+                if displayMap {
+                    Map(
+                        initialPosition: .region(
+                            .init(
+                                center: model.vehicle.position,
+                                span: .init(latitudeDelta: 0.0125, longitudeDelta: 0)
+                            )
+                        )
+                    ) {
+                        Annotation(
+                            coordinate: model.vehicle.position,
+                            content: {
+                                VehicleMarker(vehicle: model.vehicle)
+                            },
+                            label: {}
+                        )
+                        if case .loaded(let vehicleRoute) = model {
+                            MapPolyline(coordinates: vehicleRoute.stops.filter(\.isServed).flatMap(\.path))
+                                .stroke(vehicleRoute.vehicle.alias.backgroundColor.opacity(0.5), style: .init(
+                                    lineWidth: 5,
+                                    lineCap: .round,
+                                    lineJoin: .round
+                                ))
+                            MapPolyline(coordinates: vehicleRoute.stops.filter { $0.isServed == false }.flatMap(\.path))
+                                .stroke(vehicleRoute.vehicle.alias.backgroundColor, style: .init(
+                                    lineWidth: 5,
+                                    lineCap: .round,
+                                    lineJoin: .round
+                                ))
+                        }
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                }
+                
+                vehicleHeader(model)
+                
+                route(model)
+                
+                Spacer()
             }
-            
-            vehicleHeader
-            
-            route
-            
-            Spacer()
+            .padding(.top, 14)
+            .padding(.horizontal, 16)
         }
-        .padding(.top, 14)
-        .padding(.horizontal, 16)
-        .id(model.id)
     }
     
     private var closeButton: some View {
@@ -95,7 +96,7 @@ struct VehicleDetail: View {
         }
     }
     
-    private var vehicleHeader: some View {
+    private func vehicleHeader(_ model: Model) -> some View {
         HStack {
             HStack(alignment: .center, spacing: 4) {
                 Icon(model.vehicle.alias.vehicleType.icon, size: .small)
@@ -116,14 +117,14 @@ struct VehicleDetail: View {
                 .minimumScaleFactor(0.7)
             Spacer()
             if model.vehicle.delay > 0 {
-                SwiftUI.Text("Zpoždění \(model.vehicle.delay) min")
+                SwiftUI.Text("vehicle_detail.delay.\(model.vehicle.delay)")
                     .font(.system(size: 10))
                     .foregroundStyle(Color(hexString: "#E10000"))
             }
         }
     }
     
-    @ViewBuilder private var route: some View {
+    @ViewBuilder private func route(_ model: Model) -> some View {
         if case .loaded(let vehicleRoute) = model {
             
             if let firstStop = vehicleRoute.stops.first {
@@ -189,15 +190,17 @@ struct VehicleDetail: View {
                 }
             } else {
                 VStack {
-                    SwiftUI.Text("Jízdní řád nenalezen!")
-                        .font(.headline)
+                    SwiftUI.Text("vehicle_detail.timetable_not_found")
+                        .font(.system(size: 14))
                 }
                 .padding(.vertical, 8)
                 .padding(.horizontal, 12)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             
         } else {
             ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
     
@@ -267,7 +270,9 @@ extension VehicleType {
 extension Int {
     
     var timeText: String {
-        "\(Int(self / 60)):\(self % 60)"
+        let hours = (self / 60) >= 10 ? "\(self / 60)" : "0\(self / 60)"
+        let minutes = (self % 60) >= 10 ? "\(self % 60)" : "0\(self % 60)"
+        return hours + ":" + minutes
     }
 }
 
@@ -275,7 +280,7 @@ struct VehicleDetailPreviews: PreviewProvider {
     
     static var previews: some View {
         Color.blue.sheet(isPresented: .constant(true), content: {
-            VehicleDetail(model: .loaded(.mock), displayMap: true, close: {})
+            VehicleDetail(model: .constant(.loaded(.mock)), displayMap: true, close: {})
         })
     }
 }

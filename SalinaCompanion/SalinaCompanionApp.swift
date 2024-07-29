@@ -10,7 +10,7 @@ struct SalinaCompanionApp: App {
     
     private let staticDataProvider: StaticModelsProviding
     private let dynamicDataProvider: DynamicModelsProviding
-    private let permissionsProvider: PermissionsProviding
+    private let permissionsProvider: PermissionsProviding & LocationProviding
     
     @State var staticDataReady = false
 
@@ -19,11 +19,11 @@ struct SalinaCompanionApp: App {
             TabView {
                 vehicles
                     .tabItem {
-                        Label("Map", systemImage: "map")
+                        Label("map.title", systemImage: "map")
                     }
                 Stops()
                     .tabItem {
-                        Label("Departures", systemImage: "list.bullet.rectangle")
+                        Label("departures.title", systemImage: "list.bullet.rectangle")
                     }
             }
             .overlay {
@@ -40,6 +40,7 @@ struct SalinaCompanionApp: App {
         .environment(\.dynamicDataProvider, dynamicDataProvider)
         .environment(\.staticDataProvider, staticDataProvider)
         .environment(\.permissionsProvider, permissionsProvider)
+        .environment(\.locationProvider, permissionsProvider)
     }
     
     @ViewBuilder var vehicles: some View {

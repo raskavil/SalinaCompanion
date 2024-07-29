@@ -10,7 +10,6 @@ struct DeparturesRequest {
         components?.queryItems = [.init(name: "stopid", value: "\(stopId)")]
         let session = URLSession(configuration: .default)
         let data = try await session.data(for: URLRequest(url: components!.url!)).0
-        print(String(data: data, encoding: .utf8))
         return try JSONDecoder()
             .decode(DeparturesResponse.self, from: data)
             .PostList

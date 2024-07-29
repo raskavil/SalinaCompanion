@@ -11,6 +11,7 @@
 		2C34C87A2C3F030100A22F27 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 2C34C8792C3F030100A22F27 /* Networking */; };
 		2C40B41D2C53BBC70075F4DB /* VehicleMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C40B41C2C53BBC60075F4DB /* VehicleMarker.swift */; };
 		2C62C47E2C3714AF004278A4 /* VehiclesMap+Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C62C47D2C3714AF004278A4 /* VehiclesMap+Model.swift */; };
+		2C7965132C57EA3C003E1897 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2C7965122C57EA3C003E1897 /* Localizable.xcstrings */; };
 		2C99CD112C3EA6DE00EAAA74 /* SupportPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 2C99CD102C3EA6DE00EAAA74 /* SupportPackage */; };
 		2C99CD132C3EA6DE00EAAA74 /* SupportPackageViews in Frameworks */ = {isa = PBXBuildFile; productRef = 2C99CD122C3EA6DE00EAAA74 /* SupportPackageViews */; };
 		2CB1E0452C373D62003A19B2 /* VehicleDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB1E0442C373D62003A19B2 /* VehicleDetail.swift */; };
@@ -29,6 +30,7 @@
 /* Begin PBXFileReference section */
 		2C40B41C2C53BBC60075F4DB /* VehicleMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMarker.swift; sourceTree = "<group>"; };
 		2C62C47D2C3714AF004278A4 /* VehiclesMap+Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VehiclesMap+Model.swift"; sourceTree = "<group>"; };
+		2C7965122C57EA3C003E1897 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		2C99CD0E2C3E920800EAAA74 /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Networking; sourceTree = "<group>"; };
 		2CB1E0442C373D62003A19B2 /* VehicleDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleDetail.swift; sourceTree = "<group>"; };
 		2CB1E0462C37E872003A19B2 /* Models */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Models; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 				2CB5B0032B6C0BE0004C1C64 /* Assets.xcassets */,
 				2CB5B0052B6C0BE0004C1C64 /* SalinaCompanion.entitlements */,
 				2CFB30F22C454BF3005BC031 /* Settings.bundle */,
+				2C7965122C57EA3C003E1897 /* Localizable.xcstrings */,
 			);
 			path = SalinaCompanion;
 			sourceTree = "<group>";
@@ -176,6 +179,7 @@
 			knownRegions = (
 				en,
 				Base,
+				cs,
 			);
 			mainGroup = 2CB5AFF12B6C0BDE004C1C64;
 			packageReferences = (
@@ -200,6 +204,7 @@
 			files = (
 				2CFB30F32C454BF4005BC031 /* Settings.bundle in Resources */,
 				2CB5B0042B6C0BE0004C1C64 /* Assets.xcassets in Resources */,
+				2C7965132C57EA3C003E1897 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,7 +351,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SalinaCompanion/SalinaCompanion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024072401;
+				CURRENT_PROJECT_VERSION = 2024072901;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 57C78B97UA;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -390,7 +395,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SalinaCompanion/SalinaCompanion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024072401;
+				CURRENT_PROJECT_VERSION = 2024072901;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 57C78B97UA;
 				ENABLE_HARDENED_RUNTIME = YES;

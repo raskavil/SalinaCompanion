@@ -4,10 +4,10 @@ import Models
 
 struct Departures: View {
     
-    @Observable
-    class Model {
-        var vehicleDetail: VehicleDetail.Model?
-        var connectionToLoad: (routeId: Int, lineId: Int)? {
+    class Model: ObservableObject {
+
+        @Published var vehicleDetail: VehicleDetail.Model?
+        @Published var connectionToLoad: (routeId: Int, lineId: Int)? {
             didSet {
                 task?.cancel()
                 task = .init(operation: { [weak self] in
@@ -17,24 +17,28 @@ struct Departures: View {
                             $0.routeId == self?.connectionToLoad?.routeId && $0.lineId == self?.connectionToLoad?.lineId
                         }) {
                             try Task.checkCancellation()
-                            self?.vehicleDetail = .loading(vehicle)
+                            DispatchQueue.main.async { [weak self] in
+                                self?.vehicleDetail = .loading(vehicle)
+                            }
                             self?.connectionToLoad = nil
                             Task { [weak self] in
                                 let route = try await self?.departuresProvider?.route(for: vehicle)
                                 if let route, route.vehicle.id == self?.vehicleDetail?.vehicle.id {
-                                    self?.vehicleDetail = .loaded(route)
+                                    DispatchQueue.main.async { [weak self] in
+                                        self?.vehicleDetail = .loaded(route)
+                                    }
                                 }
                             }
                         }
                     } catch {
                         print("Error loading")
                     }
-                    
                 })
             }
         }
-        var posts: [Post] = []
-        
+        @Published var posts: [Post]?
+
+        let stop: Stop
         var departuresProvider: DynamicModelsProviding? {
             didSet {
                 startUpdating()
@@ -43,7 +47,6 @@ struct Departures: View {
         
         private var timer: Timer?
         private var task: Task<Void, Never>?
-        let stop: Stop
         
         init(stop: Stop) {
             self.stop = stop
@@ -55,7 +58,10 @@ struct Departures: View {
             timer = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: true) { [weak self] timer in
                 Task { [weak self] in
                     if let stop = self?.stop {
-                        self?.posts = try await departuresProvider.departures(for: stop)
+                        let posts = try await departuresProvider.departures(for: stop)
+                        DispatchQueue.main.async { [weak self] in
+                            self?.posts = posts
+                        }
                     }
                 }
                 
@@ -65,48 +71,62 @@ struct Departures: View {
                         if let vehicle = vehicles.first(where: {
                             $0.id == vehicleDetail.vehicle.id && $0.routeId == vehicleDetail.vehicle.routeId
                         }) {
-                            switch vehicleDetail {
-                                case .loading:
+                            if case .loading = vehicleDetail {
+                                DispatchQueue.main.async { [weak self] in
                                     self?.vehicleDetail = .loading(vehicle)
-                                    self?.vehicleDetail = .loaded(try await departuresProvider.route(for: vehicle))
-                                case .loaded:
-                                    self?.vehicleDetail = .loaded(try await departuresProvider.route(for: vehicle))
+                                }
+                            }
+                            let route = try await departuresProvider.route(for: vehicle)
+                            DispatchQueue.main.async { [weak self] in
+                                self?.vehicleDetail = .loaded(route)
                             }
                         }
                     }
                 }
             }
+            
+            timer?.fire()
         }
     }
     
     @Environment(\.dynamicDataProvider) var departuresProvider
-    @State private var model: Model
+    @StateObject private var model: Model
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 8) {
-                ForEach(model.posts, content: post)
-                Spacer()
+            if let posts = model.posts {
+                VStack(alignment: .leading, spacing: 8) {
+                    if posts.isEmpty == false {
+                        ForEach(posts, content: post)
+                        Spacer()
+                    } else {
+                        Text("departures.not_found")
+                    }
+                }
+            } else {
+                ProgressView()
+                    .progressViewStyle(.circular)
             }
         }
         .onAppear {
             model.departuresProvider = departuresProvider
         }
+        .scrollBounceBehavior(.basedOnSize)
         .navigationTitle(model.stop.name)
         .navigationBarTitleDisplayMode(.inline)
-        .sheet(item: $model.vehicleDetail) { model in
-            VehicleDetail(model: model, displayMap: true, close: { self.model.vehicleDetail = nil })
+        .sheet(item: $model.vehicleDetail) { _ in
+            VehicleDetail(model: $model.vehicleDetail, displayMap: true, close: { self.model.vehicleDetail = nil })
         }
     }
     
     @ViewBuilder private func post(_ post: Post) -> some View {
-        if post.id == model.posts.first?.id {
+        if post.id == model.posts?.first?.id {
             Rectangle()
                 .foregroundStyle(Color(white: 0.8))
                 .frame(height: 0.5)
         }
         VStack(alignment: .leading, spacing: 4) {
-            SwiftUI.Text("Zastávka " + post.name)
+            SwiftUI.Text("departures.post.name.\(post.name)")
                 .font(.system(size: 16, weight: .semibold))
                 .padding(.bottom, 6)
             ForEach(Array(post.departures.enumerated()), id: \.offset) { _, departure in
@@ -166,7 +186,7 @@ struct Departures: View {
     }
     
     init(stop: Stop) {
-        self._model = .init(initialValue: .init(stop: stop))
+        self._model = .init(wrappedValue: .init(stop: stop))
     }
 }
 

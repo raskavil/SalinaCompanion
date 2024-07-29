@@ -24,7 +24,7 @@ struct MapFilter: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .bottom) {
-                SwiftUI.Text("Filtr vozidel")
+                SwiftUI.Text("map.filter")
                     .font(.title3)
                     .bold()
                 Spacer()
@@ -35,6 +35,7 @@ struct MapFilter: View {
                     VStack(alignment: .leading, spacing: 12) {
                         ForEach(types) { vehicleType in
                             HStack {
+                                Icon(vehicleType.icon)
                                 SwiftUI.Text(vehicleType.title)
                                     .font(.headline)
                                     .bold()
@@ -47,8 +48,8 @@ struct MapFilter: View {
                                         }
                                         
                                     }) {
-                                        SwiftUI.Text("Unselect all")
-                                            .font(.headline)
+                                        SwiftUI.Text("map.filter.unselect_all")
+                                            .font(.system(size: 14))
                                             .bold()
                                     }
                                 } else {
@@ -58,8 +59,8 @@ struct MapFilter: View {
                                             filteredAliases = filteredAliases.subtracting(Set(vehicles[vehicleType]?.map(\.id) ?? []))
                                         }
                                     }) {
-                                        SwiftUI.Text("Select all")
-                                            .font(.headline)
+                                        SwiftUI.Text("map.filter.select_all")
+                                            .font(.system(size: 14))
                                             .bold()
                                     }
                                 }
@@ -123,11 +124,11 @@ extension VehicleType {
     
     var title: String {
         return switch self {
-        case .boat: "Lodě"
-        case .tram: "Šaliny"
-        case .bus: "Autobusy"
-        case .trolleybus: "Trolejbusy"
-        case .train: "Vlaky"
+        case .boat: .init(localized: "vehicle.boat")
+        case .tram: .init(localized: "vehicle.tram")
+        case .bus: .init(localized: "vehicle.bus")
+        case .trolleybus: .init(localized: "vehicle.trolleybus")
+        case .train: .init(localized: "vehicle.train")
         }
     }
 }
