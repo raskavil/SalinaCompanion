@@ -74,8 +74,6 @@ struct MapFilter: View {
                     }
                 }
                 .scrollIndicators(.hidden)
-            } else {
-                
             }
             Spacer()
         }

@@ -10,28 +10,25 @@ struct Stops: View {
     @Environment(\.staticDataProvider) var staticDataProvider
     @State var term = ""
     @State private var isLoaded: Bool = false
-    
     @State private var localStops: [Stop] = []
     var filteredStops: [Stop] {
         term.isEmpty == false ? localStops.filter { $0.name.starts(with: term) } : localStops
     }
     
     var body: some View {
-        NavigationStack {
-            content
-                .navigationBarTitleDisplayMode(.large)
-                .navigationTitle("departures.title")
-        }
-        .task {
-            isLoaded = await staticDataProvider.isUpToDate
-            localStops = (
-                locationProvider.location.map { user in
-                    staticDataProvider.stops.sorted { lhs, rhs in
-                        lhs.position.location.distance(from: user) < rhs.position.location.distance(from: user)
-                    }
-                } ?? staticDataProvider.stops
-            ).filter { $0.lines.isEmpty == false }
-        }
+        content
+            .navigationBarTitleDisplayMode(.large)
+            .navigationTitle("departures.title")
+            .task {
+                isLoaded = await staticDataProvider.isUpToDate
+                localStops = (
+                    locationProvider.location.map { user in
+                        staticDataProvider.stops.sorted { lhs, rhs in
+                            lhs.position.location.distance(from: user) < rhs.position.location.distance(from: user)
+                        }
+                    } ?? staticDataProvider.stops
+                ).filter { $0.lines.isEmpty == false }
+            }
     }
     
     @ViewBuilder private var content: some View {

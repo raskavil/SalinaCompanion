@@ -9,6 +9,7 @@ struct VehiclesMap: View {
     @StateObject private var model: Model
     @Environment(\.dynamicDataProvider) private var dynamicDataProvider
     @Environment(\.permissionsProvider) private var permissionsProvider
+    @Environment(\.staticDataProvider) private var staticDataProvider
     
     @State private var blockVehicleSelection = false
     private let mapPosition: PassthroughSubject<MKMapRect, Never>
@@ -24,6 +25,7 @@ struct VehiclesMap: View {
             )
             .onAppear {
                 model.vehiclesProvider = dynamicDataProvider
+                model.filtersProvider = staticDataProvider
                 model.subscribe(to: permissionsProvider)
             }
             .sheet(isPresented: $model.filtersPresented) {
@@ -119,14 +121,23 @@ struct VehiclesMap: View {
         }
     }
     
+    private var locationIcon: Icon.Content {
+        guard permissionsProvider.features[.location] == .allowed else { return .system("location.slash") }
+        return .system(model.position.followsUserLocation ? "location.fill" : "location")
+    }
+    
     private var mapButtons: some View {
         VStack(spacing: 10) {
             Button(action: {
                 model.filtersPresented.toggle()
             }) {
-                Icon(.system("slider.horizontal.below.square.filled.and.square"))
-                    .padding(12)
-                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
+                Icon(.system(
+                    model.filteredLines.isEmpty
+                    ? "slider.horizontal.below.rectangle"
+                    : "slider.horizontal.below.square.filled.and.square"
+                ))
+                .padding(12)
+                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
             }
             Button(action: {
                 if permissionsProvider.features[.location] == .allowed {
@@ -135,7 +146,7 @@ struct VehiclesMap: View {
                     permissionsProvider.requestAuthorization(.location)
                 }
             }) {
-                Icon(.system(permissionsProvider.features[.location] == .allowed ? "location" : "location.slash"))
+                Icon(locationIcon)
                     .foregroundStyle(permissionsProvider.features[.location] == .allowed
                                      ? Color(uiColor: UIColor.tintColor)
                                      : .secondary)

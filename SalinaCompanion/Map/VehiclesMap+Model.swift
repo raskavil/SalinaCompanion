@@ -47,6 +47,7 @@ extension VehiclesMap {
             didSet {
                 if !filtersPresented {
                     updateVehicles()
+                    filtersProvider?.filteredLines = filteredLines
                 }
             }
         }

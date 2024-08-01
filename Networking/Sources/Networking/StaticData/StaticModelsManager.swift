@@ -62,8 +62,8 @@ public class StaticModelsManager: StaticModelsProviding {
     @Saved("stops") public var stops: [Stop] = []
     @Saved("aliases") public var aliases: [Alias] = []
     public var filteredLines: Set<Int> {
-        get { UserDefaults.standard.value(forKey: Self.filteredLinesKey) as? Set<Int> ?? [] }
-        set { UserDefaults.standard.setValue(newValue, forKey: Self.filteredLinesKey) }
+        get { Set(UserDefaults.standard.value(forKey: Self.filteredLinesKey) as? Array<Int> ?? []) }
+        set { UserDefaults.standard.setValue(Array(newValue), forKey: Self.filteredLinesKey) }
     }
     
     private static let filteredLinesKey = "SalinaCompanion.filteredLines"

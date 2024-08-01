@@ -51,6 +51,40 @@
         }
       }
     },
+    "departures.vehicle_not_found" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vozidlo nenalezeno"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vehicle not found"
+          }
+        }
+      }
+    },
+    "departures.vehicle_not_found.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pravděpodobně ještě nevyrazilo na hledanou trasu."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "It probably has not gotten on its route yet."
+          }
+        }
+      }
+    },
     "error.ok" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -10,17 +10,16 @@ struct Departures: View {
         @Published var connectionToLoad: (routeId: Int, lineId: Int)? {
             didSet {
                 task?.cancel()
-                task = .init(operation: { [weak self] in
+                guard let routeId = connectionToLoad?.routeId, let lineId = connectionToLoad?.lineId else { return }
+                task = Task { [weak self] in
                     do {
                         let vehicles = try await self?.departuresProvider?.vehicles
-                        if let vehicle = vehicles?.first(where: { 
-                            $0.routeId == self?.connectionToLoad?.routeId && $0.lineId == self?.connectionToLoad?.lineId
-                        }) {
-                            try Task.checkCancellation()
+                        try Task.checkCancellation()
+                        DispatchQueue.main.async { [weak self] in self?.connectionToLoad = nil }
+                        if let vehicle = vehicles?.first(where: { $0.routeId == routeId && $0.lineId == lineId }) {
                             DispatchQueue.main.async { [weak self] in
                                 self?.vehicleDetail = .loading(vehicle)
                             }
-                            self?.connectionToLoad = nil
                             Task { [weak self] in
                                 let route = try await self?.departuresProvider?.route(for: vehicle)
                                 if let route, route.vehicle.id == self?.vehicleDetail?.vehicle.id {
@@ -29,14 +28,19 @@ struct Departures: View {
                                     }
                                 }
                             }
+                        } else {
+                            DispatchQueue.main.async { [weak self] in
+                                self?.vehicleNotFoundError = true
+                            }
                         }
                     } catch {
                         print("Error loading")
                     }
-                })
+                }
             }
         }
         @Published var posts: [Post]?
+        @Published var vehicleNotFoundError = false
 
         let stop: Stop
         var departuresProvider: DynamicModelsProviding? {
@@ -100,14 +104,23 @@ struct Departures: View {
                         ForEach(posts, content: post)
                         Spacer()
                     } else {
-                        Text("departures.not_found")
+                        SwiftUI.Text("departures.not_found")
                     }
                 }
-            } else {
+            }
+        }
+        .overlay {
+            if model.posts == nil {
                 ProgressView()
                     .progressViewStyle(.circular)
             }
         }
+        .alert(
+            "departures.vehicle_not_found",
+            isPresented: $model.vehicleNotFoundError,
+            actions: { Button("error.ok", action: { model.vehicleNotFoundError = false }) },
+            message: { SwiftUI.Text("departures.vehicle_not_found.description") }
+        )
         .onAppear {
             model.departuresProvider = departuresProvider
         }

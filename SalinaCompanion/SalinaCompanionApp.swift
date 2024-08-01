@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftData
 import Networking
 import Models
 import Device
@@ -17,13 +16,15 @@ struct SalinaCompanionApp: App {
     var body: some Scene {
         WindowGroup {
             TabView {
+                NavigationStack {
+                    Stops()
+                }
+                .tabItem {
+                    Label("departures.title", systemImage: "list.bullet.rectangle")
+                }
                 vehicles
                     .tabItem {
                         Label("map.title", systemImage: "map")
-                    }
-                Stops()
-                    .tabItem {
-                        Label("departures.title", systemImage: "list.bullet.rectangle")
                     }
             }
             .overlay {
@@ -50,9 +51,6 @@ struct SalinaCompanionApp: App {
     }
     
     init() {
-//        Font.registerDesignFonts()
-//        UINavigationBar.appearance().largeTitleTextAttributes = UIFont(name: "SourceSans3-Bold", size: 34).map { [.font: $0]}
-//        UITabBarItem.appearance().setTitleTextAttributes(UIFont(name: "SourceSans3-Medium", size: 12).map { [.font: $0] }, for: [])
         staticDataProvider = StaticModelsManager()
         dynamicDataProvider = DynamicModelsManager(stopsAndAliasesProvider: staticDataProvider)
         permissionsProvider = PermissionsManager()
