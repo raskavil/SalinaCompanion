@@ -6,6 +6,8 @@ import SupportPackageViews
 
 struct VehiclesMap: View {
     
+    private static let maxVehicles = 50
+    
     @StateObject private var model: Model
     @Environment(\.dynamicDataProvider) private var dynamicDataProvider
     @Environment(\.permissionsProvider) private var permissionsProvider
@@ -16,6 +18,30 @@ struct VehiclesMap: View {
     
     var body: some View {
         content
+            .overlay {
+                if model.displayedVehicle != nil {
+                    GeometryReader { proxy in
+                        VehicleDetail(
+                            model: $model.displayedVehicle,
+                            close: {
+                                blockVehicleSelection = true
+                                withAnimation(.linear(duration: 0.25)) {
+                                    model.displayedVehicle = nil
+                                } completion: {
+                                    blockVehicleSelection = false
+                                }
+                            }
+                        )
+                            .background {
+                                UnevenRoundedRectangle(cornerRadii: .init(topLeading: 12, topTrailing: 12))
+                                    .foregroundStyle(Color.background)
+                            }
+                            .frame(height: proxy.size.height / 2)
+                            .offset(y: proxy.size.height / 2)
+                    }
+                    .transition(.move(edge: .bottom))
+                }
+            }
             .alert(
                 Text("error.something_went_wrong"),
                 isPresented: model.alertPresentedBiding,
@@ -50,7 +76,7 @@ struct VehiclesMap: View {
                             }
                     },
                     label: {
-                        if model.displayedVehicles.count <= 30 || vehicle.id == model.displayedVehicle?.vehicle.id {
+                        if model.displayedVehicles.count <= Self.maxVehicles || vehicle.id == model.displayedVehicle?.vehicle.id {
                             Text(vehicle.name)
                         }
                     }
@@ -77,37 +103,14 @@ struct VehiclesMap: View {
         .overlay(alignment: .bottomLeading) {
             mapButtons
         }
-        .overlay {
-            if model.displayedVehicle != nil {
-                GeometryReader { proxy in
-                    VehicleDetail(
-                        model: $model.displayedVehicle,
-                        close: {
-                            blockVehicleSelection = true
-                            withAnimation(.linear(duration: 0.25)) {
-                                model.displayedVehicle = nil
-                            } completion: {
-                                blockVehicleSelection = false
-                            }
-                        }
-                    )
-                        .background {
-                            UnevenRoundedRectangle(cornerRadii: .init(topLeading: 12, topTrailing: 12))
-                                .foregroundStyle(.white)
-                        }
-                        .frame(height: proxy.size.height / 2)
-                        .offset(y: proxy.size.height / 2)
-                }
-                .transition(.move(edge: .bottom))
-            }
-        }
         .overlay(alignment: .topTrailing) {
             if model.loading {
                 HStack(spacing: 4) {
                     ProgressView()
                     SwiftUI.Text("loading")
                         .bold()
-                        .font(.system(size: 13))
+                        .font(.system(size: 14))
+                        .foregroundStyle(.content)
                 }
                 .padding(8)
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
@@ -159,7 +162,7 @@ struct VehiclesMap: View {
     }
     
     @ViewBuilder private func annotation(for vehicle: Vehicle) -> some View {
-        if model.displayedVehicles.count > 30 && vehicle.id != model.displayedVehicle?.vehicle.id {
+        if model.displayedVehicles.count > Self.maxVehicles && vehicle.id != model.displayedVehicle?.vehicle.id {
             Circle()
                 .frame(width: 12, height: 12)
                 .foregroundStyle(vehicle.alias.backgroundColor)

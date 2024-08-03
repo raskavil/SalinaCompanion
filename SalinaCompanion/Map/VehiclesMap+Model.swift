@@ -153,7 +153,9 @@ extension VehiclesMap {
                         }
                     }
                 } catch {
-                    self?.numberOfErrors += 1
+                    DispatchQueue.main.async { [weak self] in
+                        self?.numberOfErrors += 1
+                    }
                 }
             }
         }

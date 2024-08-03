@@ -27,6 +27,7 @@ struct MapFilter: View {
                 SwiftUI.Text("map.filter")
                     .font(.title3)
                     .bold()
+                    .foregroundStyle(.content)
                 Spacer()
                 closeButton
             }
@@ -36,9 +37,11 @@ struct MapFilter: View {
                         ForEach(types) { vehicleType in
                             HStack {
                                 Icon(vehicleType.icon)
+                                    .foregroundStyle(.content)
                                 SwiftUI.Text(vehicleType.title)
                                     .font(.headline)
                                     .bold()
+                                    .foregroundStyle(.content)
                                 Spacer()
                                 if Set(vehicles[vehicleType]?.map(\.id) ?? []).intersection(filteredAliases).isEmpty {
                                     Button(action: {
@@ -106,13 +109,13 @@ struct MapFilter: View {
         Button(action: close) {
             Circle()
                 .frame(width: 30, height: 30)
-                .foregroundStyle(Color(white: 0.85))
+                .foregroundStyle(.control)
                 .overlay {
                     Image(systemName: "xmark")
                         .resizable()
                         .frame(width: 12, height: 12)
                         .bold()
-                        .foregroundStyle(Color(white: 0.45))
+                        .foregroundStyle(.content)
                 }
         }
     }

@@ -56,11 +56,11 @@ struct LoadingView: View {
             VStack(spacing: -49) {
                 if closed {
                     Knife(angle: .degrees(-47))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(Color.background)
                         .rotationEffect(.degrees(180))
                         .transition(.move(edge: .top))
                     Knife(angle: .degrees(-47))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(Color.background)
                         .transition(.move(edge: .bottom))
                 }
             }

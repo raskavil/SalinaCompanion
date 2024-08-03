@@ -20,6 +20,7 @@ struct Stops: View {
             .navigationBarTitleDisplayMode(.large)
             .navigationTitle("departures.title")
             .task {
+                guard localStops.isEmpty else { return }
                 isLoaded = await staticDataProvider.isUpToDate
                 localStops = (
                     locationProvider.location.map { user in
@@ -28,6 +29,9 @@ struct Stops: View {
                         }
                     } ?? staticDataProvider.stops
                 ).filter { $0.lines.isEmpty == false }
+            }
+            .background {
+                Color.background.ignoresSafeArea()
             }
     }
     
@@ -41,11 +45,11 @@ struct Stops: View {
                         } label: {
                             StopCard(stop: stop, aliases: staticDataProvider.aliases)
                         }
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.content)
                         if stop.id != filteredStops.last?.id {
                             Rectangle()
                                 .frame(height: 1)
-                                .foregroundStyle(Color(white: 0.8))
+                                .foregroundStyle(.separe)
                         }
                     }
                 }

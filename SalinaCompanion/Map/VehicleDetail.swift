@@ -19,6 +19,13 @@ struct VehicleDetail: View {
         var id: Int {
             vehicle.id
         }
+        
+        var route: VehicleRoute? {
+            if case .loaded(let vehicleRoute) = self {
+                return vehicleRoute
+            }
+            return nil
+        }
     }
     
     @Binding var model: Model?
@@ -31,6 +38,7 @@ struct VehicleDetail: View {
                 HStack(alignment: .bottom) {
                     SwiftUI.Text("vehicle_detail.title")
                         .font(.title3)
+                        .foregroundStyle(.content)
                         .bold()
                     Spacer()
                     closeButton
@@ -85,13 +93,13 @@ struct VehicleDetail: View {
         Button(action: close) {
             Circle()
                 .frame(width: 30, height: 30)
-                .foregroundStyle(Color(white: 0.85))
+                .foregroundStyle(.control)
                 .overlay {
                     Image(systemName: "xmark")
                         .resizable()
                         .frame(width: 12, height: 12)
                         .bold()
-                        .foregroundStyle(Color(white: 0.45))
+                        .foregroundStyle(.content)
                 }
         }
     }
@@ -103,7 +111,6 @@ struct VehicleDetail: View {
                 SwiftUI.Text(model.vehicle.name)
                     .bold()
                     .font(.subheadline)
-                
             }
             .foregroundStyle(model.vehicle.alias.contentColor)
             .padding(.horizontal, 8)
@@ -115,6 +122,7 @@ struct VehicleDetail: View {
                 .font(.subheadline)
                 .fontWeight(.medium)
                 .minimumScaleFactor(0.7)
+                .foregroundStyle(.content)
             Spacer()
             if model.vehicle.delay > 0 {
                 SwiftUI.Text("vehicle_detail.delay.\(model.vehicle.delay)")
@@ -139,11 +147,11 @@ struct VehicleDetail: View {
                         VStack(spacing: 22) {
                             ForEach(vehicleRoute.stops.filter { $0.isServed == false }, id: \.id) { stop in
                                 line(for: stop)
-                                    .foregroundStyle(.black)
+                                    .foregroundStyle(.content)
                             }
                             if let lastStop = vehicleRoute.stops.last, lastStop.isServed {
                                 line(for: lastStop)
-                                    .foregroundStyle(.black)
+                                    .foregroundStyle(.content)
                             }
                         }
                     }
@@ -151,7 +159,7 @@ struct VehicleDetail: View {
                         RoundedRectangle(cornerRadius: 8.0)
                             .frame(width: 16)
                             .frame(
-                                maxHeight: 16 + 40 * Double(vehicleRoute.stops.filter { $0.isServed == false }.count - 1),
+                                maxHeight: 16 + 40 * max(Double(vehicleRoute.stops.filter { $0.isServed == false }.count - 1), 0),
                                 alignment: .top
                             )
                             .padding(.leading, 7)
@@ -167,14 +175,14 @@ struct VehicleDetail: View {
                                 .padding(.leading, 16)
                         }
                         .padding(.leading, 7)
-                        .foregroundStyle(Color.white)
+                        .foregroundStyle(Color.background)
                     }
                     .overlay {
                         VStack {
-                            LinearGradient(colors: [.white, .clear], startPoint: .top, endPoint: .bottom)
+                            LinearGradient(colors: [.background, .clear], startPoint: .top, endPoint: .bottom)
                                 .frame(height: 2)
                             Spacer()
-                            LinearGradient(colors: [.white, .clear], startPoint: .bottom, endPoint: .top)
+                            LinearGradient(colors: [.background, .clear], startPoint: .bottom, endPoint: .top)
                                 .frame(height: 2)
                         }
                         .padding(.leading, 7 + 16)
@@ -227,6 +235,7 @@ struct VehicleDetail: View {
                     Circle()
                         .stroke(lineWidth: 2)
                         .frame(width: 10, height: 10)
+                        .foregroundStyle(stop.id == model?.route?.stops.first?.id ? Color.servedStop : .black)
                 }
                 .padding(.horizontal, 10)
             SwiftUI.Text(stop.name)

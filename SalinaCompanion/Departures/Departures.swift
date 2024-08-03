@@ -2,7 +2,127 @@ import SwiftUI
 import SupportPackageViews
 import Models
 
+// MARK: - View
 struct Departures: View {
+    
+    @Environment(\.dynamicDataProvider) var departuresProvider
+    @StateObject private var model: Model
+    
+    var body: some View {
+        ScrollView {
+            if let posts = model.posts, posts.isEmpty == false {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(posts, content: post)
+                    Spacer()
+                }
+            }
+        }
+        .overlay {
+            if model.posts?.isEmpty == true {
+                SwiftUI.Text("departures.not_found")
+                    .foregroundStyle(.content)
+            }
+        }
+        .overlay {
+            if model.posts == nil {
+                ProgressView()
+                    .progressViewStyle(.circular)
+            }
+        }
+        .alert(
+            "departures.vehicle_not_found",
+            isPresented: $model.vehicleNotFoundError,
+            actions: { Button("error.ok", action: { model.vehicleNotFoundError = false }) },
+            message: { SwiftUI.Text("departures.vehicle_not_found.description") }
+        )
+        .onAppear {
+            model.departuresProvider = departuresProvider
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .navigationTitle(model.stop.name)
+        .navigationBarTitleDisplayMode(.inline)
+        .sheet(item: $model.vehicleDetail) { _ in
+            VehicleDetail(model: $model.vehicleDetail, displayMap: true, close: { self.model.vehicleDetail = nil })
+                .background { Color.background.ignoresSafeArea() }
+        }
+        .background { Color.background.ignoresSafeArea() }
+    }
+    
+    @ViewBuilder private func post(_ post: Post) -> some View {
+        if post.id == model.posts?.first?.id {
+            Rectangle()
+                .foregroundStyle(.separe)
+                .frame(height: 0.5)
+        }
+        VStack(alignment: .leading, spacing: 4) {
+            SwiftUI.Text("departures.post.name.\(post.name)")
+                .font(.system(size: 16, weight: .semibold))
+                .padding(.bottom, 6)
+                .foregroundStyle(.content)
+            ForEach(Array(post.departures.enumerated()), id: \.offset) { _, departure in
+                self.departure(departure)
+            }
+        }
+        .padding(12)
+        Rectangle()
+            .foregroundStyle(.separe)
+            .frame(height: 0.5)
+    }
+    
+    private func departure(_ departure: Departure) -> some View {
+        HStack {
+            HStack(spacing: 4) {
+                Icon(departure.alias.vehicleType.icon, size: .small)
+                SwiftUI.Text(departure.alias.lineName)
+                    .font(.system(size: 14, weight: .bold))
+            }
+            .foregroundStyle(departure.alias.contentColor)
+            .padding(4)
+            .frame(minWidth: 45, minHeight: 30, alignment: .center)
+            .background {
+                RoundedRectangle(cornerRadius: 8)
+                    .foregroundStyle(departure.alias.backgroundColor)
+            }
+            .frame(minWidth: 55, alignment: .leading)
+            
+            SwiftUI.Text(departure.finalStopName)
+                .font(.system(size: 14, weight: .medium))
+                .minimumScaleFactor(0.7)
+                .lineLimit(1)
+                .foregroundStyle(.content)
+            Spacer()
+            
+            SwiftUI.Text(departure.time)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(.content)
+            
+            if model.connectionToLoad.map({ $0 == departure.dataForConnection }) ?? false {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .frame(width: 28)
+            } else {
+                Button(action: {
+                    model.connectionToLoad = departure.dataForConnection
+                }) {
+                    Circle()
+                        .frame(width: 28, height: 28)
+                        .foregroundStyle(.control)
+                        .overlay {
+                            Image(systemName: "location.circle")
+                                .foregroundStyle(departure.alias.backgroundColor)
+                        }
+                }
+            }
+        }
+    }
+    
+    init(stop: Stop) {
+        self._model = .init(wrappedValue: .init(stop: stop))
+    }
+}
+
+// MARK: - Model
+extension Departures {
     
     class Model: ObservableObject {
 
@@ -91,115 +211,6 @@ struct Departures: View {
             
             timer?.fire()
         }
-    }
-    
-    @Environment(\.dynamicDataProvider) var departuresProvider
-    @StateObject private var model: Model
-    
-    var body: some View {
-        ScrollView {
-            if let posts = model.posts {
-                VStack(alignment: .leading, spacing: 8) {
-                    if posts.isEmpty == false {
-                        ForEach(posts, content: post)
-                        Spacer()
-                    } else {
-                        SwiftUI.Text("departures.not_found")
-                    }
-                }
-            }
-        }
-        .overlay {
-            if model.posts == nil {
-                ProgressView()
-                    .progressViewStyle(.circular)
-            }
-        }
-        .alert(
-            "departures.vehicle_not_found",
-            isPresented: $model.vehicleNotFoundError,
-            actions: { Button("error.ok", action: { model.vehicleNotFoundError = false }) },
-            message: { SwiftUI.Text("departures.vehicle_not_found.description") }
-        )
-        .onAppear {
-            model.departuresProvider = departuresProvider
-        }
-        .scrollBounceBehavior(.basedOnSize)
-        .navigationTitle(model.stop.name)
-        .navigationBarTitleDisplayMode(.inline)
-        .sheet(item: $model.vehicleDetail) { _ in
-            VehicleDetail(model: $model.vehicleDetail, displayMap: true, close: { self.model.vehicleDetail = nil })
-        }
-    }
-    
-    @ViewBuilder private func post(_ post: Post) -> some View {
-        if post.id == model.posts?.first?.id {
-            Rectangle()
-                .foregroundStyle(Color(white: 0.8))
-                .frame(height: 0.5)
-        }
-        VStack(alignment: .leading, spacing: 4) {
-            SwiftUI.Text("departures.post.name.\(post.name)")
-                .font(.system(size: 16, weight: .semibold))
-                .padding(.bottom, 6)
-            ForEach(Array(post.departures.enumerated()), id: \.offset) { _, departure in
-                self.departure(departure)
-            }
-        }
-        .padding(12)
-        Rectangle()
-            .foregroundStyle(Color(white: 0.8))
-            .frame(height: 0.5)
-    }
-    
-    private func departure(_ departure: Departure) -> some View {
-        HStack {
-            HStack(spacing: 4) {
-                Icon(departure.alias.vehicleType.icon, size: .small)
-                    .foregroundStyle(departure.alias.contentColor)
-                SwiftUI.Text(departure.alias.lineName)
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundStyle(departure.alias.contentColor)
-            }
-            .padding(4)
-            .frame(minWidth: 45, minHeight: 30, alignment: .center)
-            .background {
-                RoundedRectangle(cornerRadius: 8)
-                    .foregroundStyle(departure.alias.backgroundColor)
-            }
-            .frame(minWidth: 55, alignment: .leading)
-            
-            SwiftUI.Text(departure.finalStopName)
-                .font(.system(size: 14, weight: .medium))
-                .minimumScaleFactor(0.7)
-                .lineLimit(1)
-            Spacer()
-            
-            SwiftUI.Text(departure.time)
-                .font(.system(size: 14, weight: .medium))
-            
-            if model.connectionToLoad.map({ $0 == departure.dataForConnection }) ?? false {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle())
-                    .frame(width: 28)
-            } else {
-                Button(action: {
-                    model.connectionToLoad = departure.dataForConnection
-                }) {
-                    Circle()
-                        .frame(width: 28, height: 28)
-                        .foregroundStyle(Color(white: 0.95))
-                        .overlay {
-                            Image(systemName: "location.circle")
-                                .foregroundStyle(departure.alias.backgroundColor)
-                        }
-                }
-            }
-        }
-    }
-    
-    init(stop: Stop) {
-        self._model = .init(wrappedValue: .init(stop: stop))
     }
 }
 
