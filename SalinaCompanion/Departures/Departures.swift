@@ -45,6 +45,7 @@ struct Departures: View {
             VehicleDetail(model: $model.vehicleDetail, displayMap: true, close: { self.model.vehicleDetail = nil })
                 .background { Color.background.ignoresSafeArea() }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background { Color.background.ignoresSafeArea() }
     }
     

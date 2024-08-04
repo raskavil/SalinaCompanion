@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C29EBF62C5FEE04009B3E3E /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C29EBF52C5FEE04009B3E3E /* Launch Screen.storyboard */; };
 		2C34C8772C3F024400A22F27 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 2C34C8762C3F024400A22F27 /* Networking */; };
 		2C34C87A2C3F030100A22F27 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 2C34C8792C3F030100A22F27 /* Networking */; };
 		2C40B41D2C53BBC70075F4DB /* VehicleMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C40B41C2C53BBC60075F4DB /* VehicleMarker.swift */; };
@@ -28,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C29EBF52C5FEE04009B3E3E /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		2C40B41C2C53BBC60075F4DB /* VehicleMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMarker.swift; sourceTree = "<group>"; };
 		2C62C47D2C3714AF004278A4 /* VehiclesMap+Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VehiclesMap+Model.swift"; sourceTree = "<group>"; };
 		2C7965122C57EA3C003E1897 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -42,8 +44,9 @@
 		2CDE90822B6CDF1C000AA67F /* VehiclesMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehiclesMap.swift; sourceTree = "<group>"; };
 		2CDE90902B6D94B5000AA67F /* Departures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Departures.swift; sourceTree = "<group>"; };
 		2CEBB3832C4FE8380037A28F /* MapFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFilter.swift; sourceTree = "<group>"; };
+		2CEC2CCD2C5FEA2A00D8B962 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = cs; path = cs.lproj/Info.plist; sourceTree = "<group>"; };
+		2CEC2CCF2C5FEA2E00D8B962 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Info.plist; sourceTree = "<group>"; };
 		2CFB30ED2C42B8F1005BC031 /* Device */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Device; sourceTree = "<group>"; };
-		2CFB30F12C453758005BC031 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2CFB30F22C454BF3005BC031 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		2CFB30F42C464FF9005BC031 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -88,13 +91,14 @@
 		2CB5AFFC2B6C0BDE004C1C64 /* SalinaCompanion */ = {
 			isa = PBXGroup;
 			children = (
-				2CFB30F12C453758005BC031 /* Info.plist */,
+				2CEC2CCE2C5FEA2A00D8B962 /* Info.plist */,
 				2CB5AFFD2B6C0BDE004C1C64 /* SalinaCompanionApp.swift */,
 				2CFB30F42C464FF9005BC031 /* LoadingView.swift */,
 				2CDE906B2B6C1CF5000AA67F /* Departures */,
 				2CDE906C2B6C1D04000AA67F /* Map */,
 				2CB5B0032B6C0BE0004C1C64 /* Assets.xcassets */,
 				2CB5B0052B6C0BE0004C1C64 /* SalinaCompanion.entitlements */,
+				2C29EBF52C5FEE04009B3E3E /* Launch Screen.storyboard */,
 				2CFB30F22C454BF3005BC031 /* Settings.bundle */,
 				2C7965122C57EA3C003E1897 /* Localizable.xcstrings */,
 			);
@@ -204,6 +208,7 @@
 			files = (
 				2CFB30F32C454BF4005BC031 /* Settings.bundle in Resources */,
 				2CB5B0042B6C0BE0004C1C64 /* Assets.xcassets in Resources */,
+				2C29EBF62C5FEE04009B3E3E /* Launch Screen.storyboard in Resources */,
 				2C7965132C57EA3C003E1897 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -228,6 +233,18 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		2CEC2CCE2C5FEA2A00D8B962 /* Info.plist */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2CEC2CCD2C5FEA2A00D8B962 /* cs */,
+				2CEC2CCF2C5FEA2E00D8B962 /* en */,
+			);
+			name = Info.plist;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		2CB5B0092B6C0BE0004C1C64 /* Debug */ = {
@@ -367,6 +384,7 @@
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -410,6 +428,7 @@
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;

@@ -50,9 +50,7 @@ struct VehiclesMap: View {
                 }
             )
             .onAppear {
-                model.vehiclesProvider = dynamicDataProvider
-                model.filtersProvider = staticDataProvider
-                model.subscribe(to: permissionsProvider)
+                model.setDependencies(dynamicDataProvider, staticDataProvider, permissionsProvider)
             }
             .sheet(isPresented: $model.filtersPresented) {
                 MapFilter(

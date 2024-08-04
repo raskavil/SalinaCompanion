@@ -48,7 +48,6 @@ struct LoadingView: View {
             }
             if shown {
                 ProgressView()
-                    .progressViewStyle(.circular)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

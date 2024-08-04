@@ -16,12 +16,10 @@ struct SalinaCompanionApp: App {
     var body: some Scene {
         WindowGroup {
             TabView {
-                NavigationStack {
-                    Stops()
-                }
-                .tabItem {
-                    Label("departures.title", systemImage: "list.bullet.rectangle")
-                }
+                Stops()
+                    .tabItem {
+                        Label("departures.title", systemImage: "list.bullet.rectangle")
+                    }
                 vehicles
                     .tabItem {
                         Label("map.title", systemImage: "map")
@@ -32,9 +30,11 @@ struct SalinaCompanionApp: App {
                     .ignoresSafeArea()
             }
             .task {
-                let value = await staticDataProvider.isUpToDate
-                DispatchQueue.main.async {
-                    staticDataReady = value
+                if staticDataReady == false {
+                    let value = await staticDataProvider.isUpToDate
+                    DispatchQueue.main.async {
+                        staticDataReady = value
+                    }
                 }
             }
         }

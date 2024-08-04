@@ -10,7 +10,7 @@ public class StaticModelsManager: StaticModelsProviding {
         get async {
             guard
                 let timestamp,
-                timestamp.date.timeIntervalSinceNow < Self.weekInterval,
+                timestamp.timeIntervalSinceNow < Self.weekInterval,
                 stops.isEmpty == false,
                 aliases.isEmpty == false
             else {
@@ -54,11 +54,14 @@ public class StaticModelsManager: StaticModelsProviding {
             return false
         }
         
-        timestamp = .init(date: .now)
+        timestamp = .now
         return true
     }
     
-    @Saved("timestamp") var timestamp: Timestamp? = nil
+    public var timestamp: Date? {
+        get { UserDefaults.standard.value(forKey: Self.timestampKey) as? Date }
+        set { UserDefaults.standard.setValue(newValue, forKey: Self.timestampKey) }
+    }
     @Saved("stops") public var stops: [Stop] = []
     @Saved("aliases") public var aliases: [Alias] = []
     public var filteredLines: Set<Int> {
@@ -67,12 +70,9 @@ public class StaticModelsManager: StaticModelsProviding {
     }
     
     private static let filteredLinesKey = "SalinaCompanion.filteredLines"
+    private static let timestampKey = "SalinaCompanion.staticDataTimestamp"
     
-    public init(timestamp: Date? = nil, stops: [Stop] = [], aliases: [Alias] = []) {
-        self.timestamp = timestamp.map(Timestamp.init(date:))
-        self.stops = stops
-        self.aliases = aliases
-    }
+    public init() {}
 }
 
 struct Timestamp: Codable {

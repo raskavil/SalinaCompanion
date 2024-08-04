@@ -81,18 +81,10 @@ extension VehiclesMap {
         private var mapPosition: MKMapRect?
         private var timer = Timer()
         private var cancellables: Set<AnyCancellable> = []
+        private var permissionCancellable: AnyCancellable?
         private var canUpdate = true
-        
-        var vehiclesProvider: DynamicModelsProviding? {
-            didSet {
-                updateVehicles()
-            }
-        }
-        var filtersProvider: StaticModelsProviding? {
-            didSet {
-                filteredLines = filtersProvider?.filteredLines ?? []
-            }
-        }
+        private var vehiclesProvider: DynamicModelsProviding?
+        private var filtersProvider: StaticModelsProviding?
         
         init(mapPosition: AnyPublisher<MKMapRect, Never>) {
             timer = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: true) { [weak self] _ in self?.updateVehicles() }
@@ -116,13 +108,28 @@ extension VehiclesMap {
                 .store(in: &cancellables)
         }
         
-        func subscribe(to provider: PermissionsProviding) {
-            provider.permissionsChanged
-                .receive(on: RunLoop.main)
-                .sink { [weak self] in
-                    self?.objectWillChange.send()
-                }
-                .store(in: &cancellables)
+        func setDependencies(
+            _ dynamicModelsProvider: DynamicModelsProviding,
+            _ staticModelsProvider: StaticModelsProviding,
+            _ permissionsProvider: PermissionsProviding
+        ) {
+            if filtersProvider != nil {
+                filtersProvider = staticModelsProvider
+                filteredLines = filtersProvider?.filteredLines ?? []
+            }
+            
+            if vehiclesProvider == nil {
+                vehiclesProvider = dynamicModelsProvider
+                updateVehicles()
+            }
+            
+            if permissionCancellable == nil {
+                permissionCancellable = permissionsProvider.permissionsChanged
+                    .receive(on: RunLoop.main)
+                    .sink { [weak self] in
+                        self?.objectWillChange.send()
+                    }
+            }
         }
         
         func focusUserLocation() {

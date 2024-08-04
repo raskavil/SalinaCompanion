@@ -16,23 +16,22 @@ struct Stops: View {
     }
     
     var body: some View {
-        content
-            .navigationBarTitleDisplayMode(.large)
-            .navigationTitle("departures.title")
-            .task {
-                guard localStops.isEmpty else { return }
-                isLoaded = await staticDataProvider.isUpToDate
-                localStops = (
-                    locationProvider.location.map { user in
-                        staticDataProvider.stops.sorted { lhs, rhs in
-                            lhs.position.location.distance(from: user) < rhs.position.location.distance(from: user)
-                        }
-                    } ?? staticDataProvider.stops
-                ).filter { $0.lines.isEmpty == false }
-            }
-            .background {
-                Color.background.ignoresSafeArea()
-            }
+        NavigationStack {
+            content
+                .navigationBarTitleDisplayMode(.large)
+                .navigationTitle("departures.title")
+                .task {
+                    guard localStops.isEmpty else { return }
+                    isLoaded = await staticDataProvider.isUpToDate
+                    localStops = (
+                        locationProvider.location.map { user in
+                            staticDataProvider.stops.sorted { lhs, rhs in
+                                lhs.position.location.distance(from: user) < rhs.position.location.distance(from: user)
+                            }
+                        } ?? staticDataProvider.stops
+                    ).filter { $0.lines.isEmpty == false }
+                }
+        }
     }
     
     @ViewBuilder private var content: some View {
@@ -56,9 +55,15 @@ struct Stops: View {
                 .disabled(staticDataProvider.stops.isEmpty)
                 .searchable(text: $term)
             }
+            .background {
+                Color.background.ignoresSafeArea()
+            }
         } else {
-            ProgressView()
-                .progressViewStyle(.circular)
+            Color.background.ignoresSafeArea()
+                .overlay {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                }
         }
     }
 }
