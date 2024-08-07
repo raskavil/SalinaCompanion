@@ -4,10 +4,10 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>PostWidgetExtension.xcscheme_^#shared#^_</key>
+		<key>PostDeparturesWidgetExtension.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>6</integer>
 		</dict>
 		<key>Promises (Playground) 1.xcscheme</key>
 		<dict>
@@ -44,6 +44,11 @@
 			<true/>
 		</dict>
 		<key>2CB5AFF92B6C0BDE004C1C64</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2CDFC1B82C639DA2009579B6</key>
 		<dict>
 			<key>primary</key>
 			<true/>

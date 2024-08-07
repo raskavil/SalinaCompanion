@@ -16,9 +16,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2C29EC1B2C614617009B3E3E"
-               BuildableName = "DeparturesWidgetExtension.appex"
-               BlueprintName = "DeparturesWidgetExtension"
+               BlueprintIdentifier = "2CDFC1B82C639DA2009579B6"
+               BuildableName = "PostDeparturesWidgetExtension.appex"
+               BlueprintName = "PostDeparturesWidgetExtension"
                ReferencedContainer = "container:SalinaCompanion.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -57,12 +57,8 @@
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "2">
-      <RemoteRunnable
-         runnableDebuggingMode = "1"
-         BundleIdentifier = "cz.raskavil.SalinaCompanion"
-         RemotePath = "/Users/raskavil/Library/Developer/CoreSimulator/Devices/6270DE2F-D432-4F52-8920-902EEB4D3D44/data/Containers/Bundle/Application/80EB9940-6D7A-4B76-99C0-DD879465D459/SalinaCompanion.app">
-      </RemoteRunnable>
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2CB5AFF92B6C0BDE004C1C64"
@@ -70,7 +66,24 @@
             BlueprintName = "SalinaCompanion"
             ReferencedContainer = "container:SalinaCompanion.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "_XCWidgetKind"
+            value = ""
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "_XCWidgetDefaultView"
+            value = "timeline"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "_XCWidgetFamily"
+            value = "systemMedium"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

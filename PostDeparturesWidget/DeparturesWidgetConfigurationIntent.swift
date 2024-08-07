@@ -6,10 +6,10 @@ import Networking
 struct DeparturesWidgetConfigurationIntent: WidgetConfigurationIntent {
     
     static let staticProvider: StaticModelsManager = .init()
-    static var title: LocalizedStringResource = "Configuration"
-    static var description = IntentDescription("This is an example widget.")
+    static var title: LocalizedStringResource = "widget.title"
+    static var description = IntentDescription("widget.description")
     
-    @Parameter(title: "Zastávka", optionsProvider: PostsProvider())
+    @Parameter(title: "stop", optionsProvider: PostsProvider())
     var postRepresentation: String?
     
     var post: PostRepresentation? {

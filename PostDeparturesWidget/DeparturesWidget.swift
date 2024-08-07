@@ -27,7 +27,7 @@ struct DeparturesModel: TimelineEntry {
     
     var model: Post {
         post ?? .init(
-            name: "vyberte zastávku v nastavení widgetu",
+            name: .init(localized: "stop.choose"),
             id: 0,
             stopId: 0,
             departures: Post.mock.departures,
@@ -36,7 +36,7 @@ struct DeparturesModel: TimelineEntry {
     }
     
     var stopName: String {
-        configuration.post?.stopName ?? "Imaginární zastávka"
+        configuration.post?.stopName ?? .init(localized: "stop.imaginary")
     }
 }
 
@@ -51,7 +51,12 @@ struct DeparturesWidgetView: View {
     var entry: DeparturesModel
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 2) {
+            
+            SwiftUI.Text("updated.\(Self.formatter.string(from: entry.date))")
+                .font(.system(size: 10))
+                .frame(maxWidth: .infinity)
+
             HStack {
                 Image(.tramIcon)
                     .resizable()
@@ -72,16 +77,11 @@ struct DeparturesWidgetView: View {
             if let departures = entry.model.departures, departures.isEmpty == false {
                 ForEach(Array(departures.first(4).enumerated()), id: \.offset) { departure($1) }
             } else {
-                SwiftUI.Text("Žádné odjezdy nenalezeny")
+                SwiftUI.Text("departures.not_found")
                     .font(.system(size: 12))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            
-            SwiftUI.Text("Aktualizováno: " + Self.formatter.string(from: entry.date))
-                .font(.system(size: 10))
-                .frame(maxWidth: .infinity)
         }
-        .padding(.top, 4)
         .frame(maxHeight: .infinity)
     }
     
