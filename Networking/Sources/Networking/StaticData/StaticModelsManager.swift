@@ -2,7 +2,65 @@ import Foundation
 import Models
 import SupportPackage
 
-public class StaticModelsManager: StaticModelsProviding {
+public final class StaticModelsManager: StaticModelsProviding {
+    
+    private static let group = "group.cz.raskavil.SalinaCompanion.staticData"
+    
+    // MARK: - UserDefaults values
+    private static let filteredLinesKey = "SalinaCompanion.filteredLines"
+    private static let timestampKey = "SalinaCompanion.staticDataTimestamp"
+    
+    public var timestamp: Date? {
+        get { UserDefaults(suiteName: Self.group)?.value(forKey: Self.timestampKey) as? Date }
+        set { UserDefaults(suiteName: Self.group)?.setValue(newValue, forKey: Self.timestampKey) }
+    }
+    
+    public var filteredLines: Set<Int> {
+        get { Set(UserDefaults(suiteName: Self.group)?.value(forKey: Self.filteredLinesKey) as? Array<Int> ?? []) }
+        set { UserDefaults(suiteName: Self.group)?.setValue(Array(newValue), forKey: Self.filteredLinesKey) }
+    }
+    
+    // MARK: - File values
+    
+    @propertyWrapper
+    public struct SavedInFile<Value: Codable> {
+        
+        public enum Path: String {
+            case stops = "downloadedStops"
+            case aliases = "downloadedAliases"
+            case posts = "downloadedPosts"
+            
+            var fileName: String { rawValue + ".json" }
+        }
+        
+        public var wrappedValue: Value {
+            didSet {
+                FileManager.default
+                    .containerURL(forSecurityApplicationGroupIdentifier: StaticModelsManager.group)
+                    .map { $0.appendingPathComponent(path.fileName) }
+                    .map { try? JSONEncoder().encode(wrappedValue).write(to: $0) }
+            }
+        }
+        
+        private let path: Path
+        
+        init(wrappedValue defaultValue: Value, _ path: Path) {
+            self.path = path
+            self.wrappedValue = FileManager.default
+                .containerURL(forSecurityApplicationGroupIdentifier: StaticModelsManager.group)
+                .map { $0.appendingPathComponent(path.fileName) }
+                .flatMap { FileManager.default.contents(atPath: $0.path) }
+                .flatMap { try? JSONDecoder().decode(Value.self, from: $0) } ?? defaultValue
+        }
+
+    }
+
+    @SavedInFile(.stops) public var stops: [Stop] = []
+    @SavedInFile(.aliases) public var aliases: [Alias] = []
+    @SavedInFile(.posts) public var posts: [Int: [Post]] = [:]
+    
+    // MARK: Init, integrity and load functions
+    public init() {}
     
     private static let weekInterval = 60.0 * 60 * 24 * 7
     
@@ -12,11 +70,12 @@ public class StaticModelsManager: StaticModelsProviding {
                 let timestamp,
                 timestamp.timeIntervalSinceNow < Self.weekInterval,
                 stops.isEmpty == false,
-                aliases.isEmpty == false
+                aliases.isEmpty == false,
+                posts.isEmpty == false
             else {
                 return await reloadData()
             }
-            
+
             return true
         }
     }
@@ -50,31 +109,26 @@ public class StaticModelsManager: StaticModelsProviding {
             return false
         }
         
-        guard stops.isEmpty == false, aliases.isEmpty == false else {
+        do {
+            let posts = try await PostsRequest.send { response in
+                Post(
+                    name: response.Name,
+                    id: response.ID,
+                    stopId: response.StopID,
+                    departures: nil,
+                    lines: response.LineList.components(separatedBy: ",")
+                )
+            }
+            self.posts = .init(grouping: posts, by: \.stopId)
+        } catch {
+            return false
+        }
+        
+        guard stops.isEmpty == false, aliases.isEmpty == false, posts.isEmpty == false else {
             return false
         }
         
         timestamp = .now
         return true
     }
-    
-    public var timestamp: Date? {
-        get { UserDefaults.standard.value(forKey: Self.timestampKey) as? Date }
-        set { UserDefaults.standard.setValue(newValue, forKey: Self.timestampKey) }
-    }
-    @Saved("stops") public var stops: [Stop] = []
-    @Saved("aliases") public var aliases: [Alias] = []
-    public var filteredLines: Set<Int> {
-        get { Set(UserDefaults.standard.value(forKey: Self.filteredLinesKey) as? Array<Int> ?? []) }
-        set { UserDefaults.standard.setValue(Array(newValue), forKey: Self.filteredLinesKey) }
-    }
-    
-    private static let filteredLinesKey = "SalinaCompanion.filteredLines"
-    private static let timestampKey = "SalinaCompanion.staticDataTimestamp"
-    
-    public init() {}
-}
-
-struct Timestamp: Codable {
-    let date: Date
 }

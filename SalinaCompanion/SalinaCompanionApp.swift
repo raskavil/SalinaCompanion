@@ -24,11 +24,12 @@ struct SalinaCompanionApp: App {
     private let permissionsProvider: PermissionsProviding & LocationProviding
     
     @State var staticDataReady = false
+    @State var displayedStop: Stop?
 
     var body: some Scene {
         WindowGroup {
             TabView {
-                Stops()
+                Stops(deeplinkStop: $displayedStop)
                     .tabItem {
                         Label("departures.title", systemImage: "list.bullet.rectangle")
                     }
@@ -47,6 +48,19 @@ struct SalinaCompanionApp: App {
                     DispatchQueue.main.async {
                         staticDataReady = value
                     }
+                }
+            }
+            .onOpenURL { url in
+                Task {
+                    guard 
+                        await staticDataProvider.isUpToDate,
+                        let range = url.absoluteString.range(of: "widget://")
+                    else { return }
+                    
+                    var stopId = url.absoluteString
+                    stopId.removeSubrange(range)
+                    
+                    displayedStop = staticDataProvider.stops.first(where: { $0.id == Int(stopId) })
                 }
             }
         }

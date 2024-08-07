@@ -64,12 +64,13 @@ public class DynamicModelsManager: DynamicModelsProviding {
         )
     }
     
-    public func departures(for stop: Stop) async throws -> [Post] {
+    public func departures(for stopId: Int) async throws -> [Post] {
         let aliases = stopsAndAliasesProvider.aliases
-        return try await DeparturesRequest(stopId: stop.id).send { post in
+        return try await DeparturesRequest(stopId: stopId).send { post in
             Post(
                 name: post.Name,
                 id: post.PostID,
+                stopId: stopId,
                 departures: post.Departures.compactMap { departure in
                     guard let value = departure.value, let alias = aliases.first(where: { $0.id == value.LineId }) else {
                         return nil
@@ -81,9 +82,14 @@ public class DynamicModelsManager: DynamicModelsProviding {
                         finalStopName: value.FinalStop,
                         time: value.TimeMark
                     )
-                }
+                },
+                lines: nil
             )
         }
+    }
+    
+    public func departures(for stop: Stop) async throws -> [Post] {
+        try await departures(for: stop.id)
     }
     
     public init(stopsAndAliasesProvider: StaticModelsProviding) {

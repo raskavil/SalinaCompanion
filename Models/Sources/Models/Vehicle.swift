@@ -1,6 +1,7 @@
 import Foundation
 import CoreLocation
 import SwiftUI
+import SupportPackageViews
 
 public struct Vehicle: Codable {
     public let id: Int
@@ -49,6 +50,18 @@ public enum VehicleType: Codable, Identifiable, Hashable {
     case bus, trolleybus, train, tram, boat
     
     public var id: Self { self }
+}
+
+public extension VehicleType {
+    
+    var icon: Icon.Content {
+        switch self {
+        case .bus, .trolleybus: return .system("bus")
+        case .tram:             return .system("tram.fill")
+        case .train:            return .system("tram")
+        case .boat:             return .system("ferry.fill")
+        }
+    }
 }
 
 public struct VehicleStop: Codable {

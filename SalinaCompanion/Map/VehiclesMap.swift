@@ -81,18 +81,24 @@ struct VehiclesMap: View {
                 )
             }
             if case .loaded(let vehicleRoute) = model.displayedVehicle {
-                MapPolyline(coordinates: vehicleRoute.stops.filter(\.isServed).flatMap(\.path))
-                    .stroke(vehicleRoute.vehicle.alias.backgroundColor.opacity(0.5), style: .init(
-                        lineWidth: 5,
-                        lineCap: .round,
-                        lineJoin: .round
-                    ))
-                MapPolyline(coordinates: vehicleRoute.stops.filter { $0.isServed == false }.flatMap(\.path))
-                    .stroke(vehicleRoute.vehicle.alias.backgroundColor, style: .init(
-                        lineWidth: 5,
-                        lineCap: .round,
-                        lineJoin: .round
-                    ))
+                MapPolyline(
+                    coordinates:
+                        vehicleRoute.stops.filter(\.isServed).flatMap(\.path)
+                        + [vehicleRoute.stops.filter { $0.isServed == false }.first?.location].compactMap { $0 }
+                )
+                .stroke(vehicleRoute.vehicle.alias.backgroundColor.opacity(0.5), style: .init(
+                    lineWidth: 5,
+                    lineCap: .round,
+                    lineJoin: .round
+                ))
+                MapPolyline(
+                    coordinates: vehicleRoute.stops.filter { $0.isServed == false }.flatMap(\.path)
+                )
+                .stroke(vehicleRoute.vehicle.alias.backgroundColor, style: .init(
+                    lineWidth: 5,
+                    lineCap: .round,
+                    lineJoin: .round
+                ))
             }
         }
         .onMapCameraChange { context in

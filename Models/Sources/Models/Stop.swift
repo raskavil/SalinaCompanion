@@ -1,7 +1,7 @@
 import Foundation
 import CoreLocation
 
-public struct Stop: Codable, Identifiable {
+public struct Stop: Codable, Identifiable, Hashable {
     public let id: Int
     public let zone: Int
     public let name: String
@@ -35,5 +35,16 @@ extension CLLocationCoordinate2D: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(latitude, forKey: .latitude)
         try container.encode(longitude, forKey: .longitude)
+    }
+}
+
+extension CLLocationCoordinate2D: Hashable {
+    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+        lhs.longitude == rhs.longitude && lhs.latitude == rhs.latitude
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(longitude)
+        hasher.combine(latitude)
     }
 }

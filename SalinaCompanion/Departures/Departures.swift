@@ -60,8 +60,10 @@ struct Departures: View {
                 .font(.system(size: 16, weight: .semibold))
                 .padding(.bottom, 6)
                 .foregroundStyle(.content)
-            ForEach(Array(post.departures.enumerated()), id: \.offset) { _, departure in
-                self.departure(departure)
+            if let departures = post.departures {
+                ForEach(Array(departures.enumerated()), id: \.offset) { _, departure in
+                    self.departure(departure)
+                }
             }
         }
         .padding(12)

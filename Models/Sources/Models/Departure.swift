@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Departure {
+public struct Departure: Codable {
     public let lineId: Int
     public let alias: Alias
     public let routeId: Int

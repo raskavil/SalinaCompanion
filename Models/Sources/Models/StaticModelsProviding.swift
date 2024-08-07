@@ -5,6 +5,7 @@ public protocol StaticModelsProviding {
     var isUpToDate: Bool { get async }
     var stops: [Stop] { get }
     var aliases: [Alias] { get }
+    var posts: [Int: [Post]] { get }
     var filteredLines: Set<Int> { get set }
 }
 
@@ -21,6 +22,7 @@ private struct StaticDataProviderMock: StaticModelsProviding {
     var isUpToDate: Bool { true }
     var stops: [Stop] { [] }
     var aliases: [Alias] { [] }
+    var posts: [Int: [Post]] { [:] }
     var filteredLines: Set<Int> = []
 }
 

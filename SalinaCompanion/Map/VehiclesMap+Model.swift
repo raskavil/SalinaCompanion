@@ -113,7 +113,7 @@ extension VehiclesMap {
             _ staticModelsProvider: StaticModelsProviding,
             _ permissionsProvider: PermissionsProviding
         ) {
-            if filtersProvider != nil {
+            if filtersProvider == nil {
                 filtersProvider = staticModelsProvider
                 filteredLines = filtersProvider?.filteredLines ?? []
             }

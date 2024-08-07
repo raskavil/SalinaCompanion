@@ -5,6 +5,7 @@ public protocol DynamicModelsProviding {
     var vehicles: [Vehicle] { get async throws }
     func route(for vehicle: Vehicle) async throws -> VehicleRoute
     func departures(for stop: Stop) async throws -> [Post]
+    func departures(for stopId: Int) async throws -> [Post]
 }
 
 public extension EnvironmentValues {
@@ -22,6 +23,9 @@ private struct DynamicDataProviderMock: DynamicModelsProviding {
         .mock
     }
     func departures(for stop: Stop) async throws -> [Post] {
+        []
+    }
+    func departures(for stopId: Int) async throws -> [Post] {
         []
     }
 }

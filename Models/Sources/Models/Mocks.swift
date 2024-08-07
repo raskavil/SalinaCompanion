@@ -20,6 +20,32 @@ public extension Vehicle {
     }
 }
 
+public extension Stop {
+    
+    static var mock: Self {
+        .init(id: 1032, zone: 100, name: "Hlavní nádraží", position: .init(latitude: 0, longitude: 0), lines: [])
+    }
+}
+
+public extension Alias {
+    
+    static var mock: Self {
+        .init(id: 64, lineName: "64", contentColorHex: "#FFFFFF", backgroundColorHex: "#AF37B5")
+    }
+}
+
+public extension Post {
+    
+    static var mock: Self {
+        .init(name: "kolej 3", id: 1505, stopId: 1032, departures: [
+            .init(lineId: 64, alias: .mock, routeId: 1064, finalStopName: "Chrlice, smyčka", time: "**"),
+            .init(lineId: 64, alias: .mock, routeId: 1065, finalStopName: "Chrlice, smyčka", time: "15 min"),
+            .init(lineId: 64, alias: .mock, routeId: 1066, finalStopName: "Chrlice, smyčka", time: "21:59"),
+            .init(lineId: 64, alias: .mock, routeId: 1067, finalStopName: "Chrlice, smyčka", time: "22:14")
+        ], lines: nil)
+    }
+}
+
 public extension VehicleRoute {
     
     static var mock: Self {

@@ -61,18 +61,24 @@ struct VehicleDetail: View {
                             label: {}
                         )
                         if case .loaded(let vehicleRoute) = model {
-                            MapPolyline(coordinates: vehicleRoute.stops.filter(\.isServed).flatMap(\.path))
-                                .stroke(vehicleRoute.vehicle.alias.backgroundColor.opacity(0.5), style: .init(
-                                    lineWidth: 5,
-                                    lineCap: .round,
-                                    lineJoin: .round
-                                ))
-                            MapPolyline(coordinates: vehicleRoute.stops.filter { $0.isServed == false }.flatMap(\.path))
-                                .stroke(vehicleRoute.vehicle.alias.backgroundColor, style: .init(
-                                    lineWidth: 5,
-                                    lineCap: .round,
-                                    lineJoin: .round
-                                ))
+                            MapPolyline(
+                                coordinates: 
+                                    vehicleRoute.stops.filter(\.isServed).flatMap(\.path)
+                                    + [vehicleRoute.stops.filter { $0.isServed == false }.first?.location].compactMap { $0 }
+                            )
+                            .stroke(vehicleRoute.vehicle.alias.backgroundColor.opacity(0.5), style: .init(
+                                lineWidth: 5,
+                                lineCap: .round,
+                                lineJoin: .round
+                            ))
+                            MapPolyline(
+                                coordinates: vehicleRoute.stops.filter { $0.isServed == false }.flatMap(\.path)
+                            )
+                            .stroke(vehicleRoute.vehicle.alias.backgroundColor, style: .init(
+                                lineWidth: 5,
+                                lineCap: .round,
+                                lineJoin: .round
+                            ))
                         }
                     }
                     .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -145,7 +151,7 @@ struct VehicleDetail: View {
                     
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(spacing: 22) {
-                            ForEach(vehicleRoute.stops.filter { $0.isServed == false }, id: \.id) { stop in
+                            ForEach(vehicleRoute.stops.filter { $0.isServed == false }, id: \.forEachId) { stop in
                                 line(for: stop)
                                     .foregroundStyle(.content)
                             }
@@ -264,15 +270,10 @@ extension Vehicle {
     }
 }
 
-extension VehicleType {
+extension VehicleStop {
     
-    var icon: Icon.Content {
-        switch self {
-        case .bus, .trolleybus: return .system("bus")
-        case .tram:             return .system("tram.fill")
-        case .train:            return .system("tram")
-        case .boat:             return .system("ferry.fill")
-        }
+    public var forEachId: String {
+        "stopId:\(self.id)|time:\(time)"
     }
 }
 

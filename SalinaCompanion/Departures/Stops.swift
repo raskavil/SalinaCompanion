@@ -11,6 +11,7 @@ struct Stops: View {
     @State var term = ""
     @State private var isLoaded: Bool = false
     @State private var localStops: [Stop] = []
+    @Binding private var deeplinkStop: Stop?
     var filteredStops: [Stop] {
         term.isEmpty == false ? localStops.filter { $0.name.starts(with: term) } : localStops
     }
@@ -31,6 +32,7 @@ struct Stops: View {
                         } ?? staticDataProvider.stops
                     ).filter { $0.lines.isEmpty == false }
                 }
+                .navigationDestination(item: $deeplinkStop, destination: Departures.init(stop:))
         }
     }
     
@@ -65,6 +67,10 @@ struct Stops: View {
                         .progressViewStyle(.circular)
                 }
         }
+    }
+    
+    init(deeplinkStop: Binding<Stop?> = .constant(nil)) {
+        self._deeplinkStop = deeplinkStop
     }
 }
 
