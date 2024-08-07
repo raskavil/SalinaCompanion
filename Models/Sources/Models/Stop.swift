@@ -36,6 +36,10 @@ extension CLLocationCoordinate2D: Codable {
         try container.encode(latitude, forKey: .latitude)
         try container.encode(longitude, forKey: .longitude)
     }
+
+    public var location: CLLocation {
+        .init(latitude: latitude, longitude: longitude)
+    }
 }
 
 extension CLLocationCoordinate2D: Hashable {

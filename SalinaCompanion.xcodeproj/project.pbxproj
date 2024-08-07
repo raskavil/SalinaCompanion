@@ -18,6 +18,9 @@
 		2C62C47E2C3714AF004278A4 /* VehiclesMap+Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C62C47D2C3714AF004278A4 /* VehiclesMap+Model.swift */; };
 		2C7965132C57EA3C003E1897 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2C7965122C57EA3C003E1897 /* Localizable.xcstrings */; };
 		2C94147C2C63BF290098899B /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C94147B2C63BF290098899B /* LoadingView.swift */; };
+		2C94147E2C63E8CC0098899B /* Device in Frameworks */ = {isa = PBXBuildFile; productRef = 2C94147D2C63E8CC0098899B /* Device */; };
+		2C9414802C63E8CC0098899B /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = 2C94147F2C63E8CC0098899B /* Models */; };
+		2C9414822C63E8CC0098899B /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 2C9414812C63E8CC0098899B /* Networking */; };
 		2C99CD112C3EA6DE00EAAA74 /* SupportPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 2C99CD102C3EA6DE00EAAA74 /* SupportPackage */; };
 		2C99CD132C3EA6DE00EAAA74 /* SupportPackageViews in Frameworks */ = {isa = PBXBuildFile; productRef = 2C99CD122C3EA6DE00EAAA74 /* SupportPackageViews */; };
 		2CB1E0452C373D62003A19B2 /* VehicleDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB1E0442C373D62003A19B2 /* VehicleDetail.swift */; };
@@ -39,7 +42,7 @@
 		2CDFC1D82C639E6D009579B6 /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = 2CDFC1D72C639E6D009579B6 /* Models */; };
 		2CDFC1DA2C639E6D009579B6 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 2CDFC1D92C639E6D009579B6 /* Networking */; };
 		2CDFC1E22C63B4C0009579B6 /* SalinapkaWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDFC1E12C63B4C0009579B6 /* SalinapkaWatch.swift */; };
-		2CDFC1E42C63B4C0009579B6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDFC1E32C63B4C0009579B6 /* ContentView.swift */; };
+		2CDFC1E42C63B4C0009579B6 /* Stops.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDFC1E32C63B4C0009579B6 /* Stops.swift */; };
 		2CDFC1E62C63B4C3009579B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CDFC1E52C63B4C3009579B6 /* Assets.xcassets */; };
 		2CDFC1E92C63B4C3009579B6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CDFC1E82C63B4C3009579B6 /* Preview Assets.xcassets */; };
 		2CDFC1EC2C63B4C3009579B6 /* SalinapkaWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2CDFC1DF2C63B4C0009579B6 /* SalinapkaWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -121,7 +124,7 @@
 		2CDFC1D62C639E17009579B6 /* PostDeparturesWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PostDeparturesWidgetExtension.entitlements; sourceTree = "<group>"; };
 		2CDFC1DF2C63B4C0009579B6 /* SalinapkaWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SalinapkaWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CDFC1E12C63B4C0009579B6 /* SalinapkaWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalinapkaWatch.swift; sourceTree = "<group>"; };
-		2CDFC1E32C63B4C0009579B6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2CDFC1E32C63B4C0009579B6 /* Stops.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stops.swift; sourceTree = "<group>"; };
 		2CDFC1E52C63B4C3009579B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2CDFC1E82C63B4C3009579B6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2CDFC1F12C63BBBD009579B6 /* SalinapkaWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SalinapkaWatch.entitlements; sourceTree = "<group>"; };
@@ -165,6 +168,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C9414822C63E8CC0098899B /* Networking in Frameworks */,
+				2C9414802C63E8CC0098899B /* Models in Frameworks */,
+				2C94147E2C63E8CC0098899B /* Device in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,7 +270,7 @@
 				2CDFC1F12C63BBBD009579B6 /* SalinapkaWatch.entitlements */,
 				2CDFC1E12C63B4C0009579B6 /* SalinapkaWatch.swift */,
 				2C94147B2C63BF290098899B /* LoadingView.swift */,
-				2CDFC1E32C63B4C0009579B6 /* ContentView.swift */,
+				2CDFC1E32C63B4C0009579B6 /* Stops.swift */,
 				2CDFC1E52C63B4C3009579B6 /* Assets.xcassets */,
 				2CDFC1E72C63B4C3009579B6 /* Preview Content */,
 			);
@@ -348,6 +354,11 @@
 			dependencies = (
 			);
 			name = SalinapkaWatch;
+			packageProductDependencies = (
+				2C94147D2C63E8CC0098899B /* Device */,
+				2C94147F2C63E8CC0098899B /* Models */,
+				2C9414812C63E8CC0098899B /* Networking */,
+			);
 			productName = "WatchApp Watch App";
 			productReference = 2CDFC1DF2C63B4C0009579B6 /* SalinapkaWatch.app */;
 			productType = "com.apple.product-type.application";
@@ -466,7 +477,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CDFC1E42C63B4C0009579B6 /* ContentView.swift in Sources */,
+				2CDFC1E42C63B4C0009579B6 /* Stops.swift in Sources */,
 				2CDFC1E22C63B4C0009579B6 /* SalinapkaWatch.swift in Sources */,
 				2C94147C2C63BF290098899B /* LoadingView.swift in Sources */,
 			);
@@ -932,6 +943,18 @@
 			productName = Networking;
 		};
 		2C34C8792C3F030100A22F27 /* Networking */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Networking;
+		};
+		2C94147D2C63E8CC0098899B /* Device */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Device;
+		};
+		2C94147F2C63E8CC0098899B /* Models */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Models;
+		};
+		2C9414812C63E8CC0098899B /* Networking */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Networking;
 		};

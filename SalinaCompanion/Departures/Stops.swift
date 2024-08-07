@@ -129,13 +129,6 @@ extension Array {
     }
 }
 
-extension CLLocationCoordinate2D {
-    
-    var location: CLLocation {
-        .init(latitude: latitude, longitude: longitude)
-    }
-}
-
 import Networking
 
 struct StationPreview: PreviewProvider {
