@@ -6,6 +6,7 @@ public protocol StaticModelsProviding {
     var stops: [Stop] { get }
     var aliases: [Alias] { get }
     var posts: [Int: [Post]] { get }
+    var favoriteStops: Set<Int> { get set }
     var filteredLines: Set<Int> { get set }
 }
 
@@ -23,6 +24,7 @@ private struct StaticDataProviderMock: StaticModelsProviding {
     var stops: [Stop] { [] }
     var aliases: [Alias] { [] }
     var posts: [Int: [Post]] { [:] }
+    var favoriteStops: Set<Int> = []
     var filteredLines: Set<Int> = []
 }
 

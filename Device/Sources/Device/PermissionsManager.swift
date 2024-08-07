@@ -39,6 +39,9 @@ public class PermissionsManager: NSObject, PermissionsProviding, CLLocationManag
     
     private func requestLocationAuthorization() {
         guard features[.location] == .notDetermined else {
+            #if os(watchOS)
+            return
+            #else
             Task(priority: .high) {
                 guard let urlGeneral = await URL(string: UIApplication.openSettingsURLString) else {
                     return
@@ -47,6 +50,7 @@ public class PermissionsManager: NSObject, PermissionsProviding, CLLocationManag
                 
             }
             return
+            #endif
         }
         locationManager.requestWhenInUseAuthorization()
     }

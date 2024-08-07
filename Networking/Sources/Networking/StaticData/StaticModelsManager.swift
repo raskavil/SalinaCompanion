@@ -9,6 +9,7 @@ public final class StaticModelsManager: StaticModelsProviding {
     // MARK: - UserDefaults values
     private static let filteredLinesKey = "SalinaCompanion.filteredLines"
     private static let timestampKey = "SalinaCompanion.staticDataTimestamp"
+    private static let favoriteStopsKey = "SalinaCompanion.staticDataTimestamp"
     
     public var timestamp: Date? {
         get { UserDefaults(suiteName: Self.group)?.value(forKey: Self.timestampKey) as? Date }
@@ -18,6 +19,11 @@ public final class StaticModelsManager: StaticModelsProviding {
     public var filteredLines: Set<Int> {
         get { Set(UserDefaults(suiteName: Self.group)?.value(forKey: Self.filteredLinesKey) as? Array<Int> ?? []) }
         set { UserDefaults(suiteName: Self.group)?.setValue(Array(newValue), forKey: Self.filteredLinesKey) }
+    }
+    
+    public var favoriteStops: Set<Int> {
+        get { Set(UserDefaults(suiteName: Self.group)?.value(forKey: Self.favoriteStopsKey) as? Array<Int> ?? []) }
+        set { UserDefaults(suiteName: Self.group)?.setValue(Array(newValue), forKey: Self.favoriteStopsKey) }
     }
     
     // MARK: - File values

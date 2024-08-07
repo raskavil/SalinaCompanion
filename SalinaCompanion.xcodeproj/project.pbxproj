@@ -17,6 +17,7 @@
 		2C40B41D2C53BBC70075F4DB /* VehicleMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C40B41C2C53BBC60075F4DB /* VehicleMarker.swift */; };
 		2C62C47E2C3714AF004278A4 /* VehiclesMap+Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C62C47D2C3714AF004278A4 /* VehiclesMap+Model.swift */; };
 		2C7965132C57EA3C003E1897 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2C7965122C57EA3C003E1897 /* Localizable.xcstrings */; };
+		2C94147C2C63BF290098899B /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C94147B2C63BF290098899B /* LoadingView.swift */; };
 		2C99CD112C3EA6DE00EAAA74 /* SupportPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 2C99CD102C3EA6DE00EAAA74 /* SupportPackage */; };
 		2C99CD132C3EA6DE00EAAA74 /* SupportPackageViews in Frameworks */ = {isa = PBXBuildFile; productRef = 2C99CD122C3EA6DE00EAAA74 /* SupportPackageViews */; };
 		2CB1E0452C373D62003A19B2 /* VehicleDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB1E0442C373D62003A19B2 /* VehicleDetail.swift */; };
@@ -37,6 +38,11 @@
 		2CDFC1D52C639DF8009579B6 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2CDFC1B22C639906009579B6 /* Localizable.xcstrings */; };
 		2CDFC1D82C639E6D009579B6 /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = 2CDFC1D72C639E6D009579B6 /* Models */; };
 		2CDFC1DA2C639E6D009579B6 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 2CDFC1D92C639E6D009579B6 /* Networking */; };
+		2CDFC1E22C63B4C0009579B6 /* SalinapkaWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDFC1E12C63B4C0009579B6 /* SalinapkaWatch.swift */; };
+		2CDFC1E42C63B4C0009579B6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDFC1E32C63B4C0009579B6 /* ContentView.swift */; };
+		2CDFC1E62C63B4C3009579B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CDFC1E52C63B4C3009579B6 /* Assets.xcassets */; };
+		2CDFC1E92C63B4C3009579B6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CDFC1E82C63B4C3009579B6 /* Preview Assets.xcassets */; };
+		2CDFC1EC2C63B4C3009579B6 /* SalinapkaWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2CDFC1DF2C63B4C0009579B6 /* SalinapkaWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2CEBB3842C4FE8380037A28F /* MapFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEBB3832C4FE8380037A28F /* MapFilter.swift */; };
 		2CFB30F02C441C21005BC031 /* Device in Frameworks */ = {isa = PBXBuildFile; productRef = 2CFB30EF2C441C21005BC031 /* Device */; };
 		2CFB30F32C454BF4005BC031 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2CFB30F22C454BF3005BC031 /* Settings.bundle */; };
@@ -51,6 +57,13 @@
 			remoteGlobalIDString = 2CDFC1B82C639DA2009579B6;
 			remoteInfo = PostDeparturesWidgetExtension;
 		};
+		2CDFC1EA2C63B4C3009579B6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2CB5AFF22B6C0BDE004C1C64 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2CDFC1DE2C63B4C0009579B6;
+			remoteInfo = "WatchApp Watch App";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -63,6 +76,17 @@
 				2CDFC1C82C639DA9009579B6 /* PostDeparturesWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2CDFC1F02C63B4C3009579B6 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				2CDFC1EC2C63B4C3009579B6 /* SalinapkaWatch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -80,6 +104,7 @@
 		2C62C47D2C3714AF004278A4 /* VehiclesMap+Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VehiclesMap+Model.swift"; sourceTree = "<group>"; };
 		2C7965122C57EA3C003E1897 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		2C8741202C638F8B0093E7D1 /* DeparturesWidgetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeparturesWidgetProvider.swift; sourceTree = "<group>"; };
+		2C94147B2C63BF290098899B /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		2C99CD0E2C3E920800EAAA74 /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Networking; sourceTree = "<group>"; };
 		2CB1E0442C373D62003A19B2 /* VehicleDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleDetail.swift; sourceTree = "<group>"; };
 		2CB1E0462C37E872003A19B2 /* Models */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Models; sourceTree = "<group>"; };
@@ -94,6 +119,12 @@
 		2CDFC1B92C639DA2009579B6 /* PostDeparturesWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PostDeparturesWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CDFC1C52C639DA9009579B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2CDFC1D62C639E17009579B6 /* PostDeparturesWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PostDeparturesWidgetExtension.entitlements; sourceTree = "<group>"; };
+		2CDFC1DF2C63B4C0009579B6 /* SalinapkaWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SalinapkaWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2CDFC1E12C63B4C0009579B6 /* SalinapkaWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalinapkaWatch.swift; sourceTree = "<group>"; };
+		2CDFC1E32C63B4C0009579B6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2CDFC1E52C63B4C3009579B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2CDFC1E82C63B4C3009579B6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2CDFC1F12C63BBBD009579B6 /* SalinapkaWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SalinapkaWatch.entitlements; sourceTree = "<group>"; };
 		2CEBB3832C4FE8380037A28F /* MapFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFilter.swift; sourceTree = "<group>"; };
 		2CEC2CCD2C5FEA2A00D8B962 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = cs; path = cs.lproj/Info.plist; sourceTree = "<group>"; };
 		2CEC2CCF2C5FEA2E00D8B962 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Info.plist; sourceTree = "<group>"; };
@@ -130,6 +161,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2CDFC1DC2C63B4C0009579B6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -142,6 +180,7 @@
 				2CB1E0462C37E872003A19B2 /* Models */,
 				2CB5AFFC2B6C0BDE004C1C64 /* SalinaCompanion */,
 				2CDFC1BC2C639DA2009579B6 /* PostDeparturesWidget */,
+				2CDFC1E02C63B4C0009579B6 /* SalinapkaWatch */,
 				2CB5AFFB2B6C0BDE004C1C64 /* Products */,
 				2CDE90652B6C13EE000AA67F /* Frameworks */,
 			);
@@ -152,6 +191,7 @@
 			children = (
 				2CB5AFFA2B6C0BDE004C1C64 /* SalinaCompanion.app */,
 				2CDFC1B92C639DA2009579B6 /* PostDeparturesWidgetExtension.appex */,
+				2CDFC1DF2C63B4C0009579B6 /* SalinapkaWatch.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -218,6 +258,27 @@
 			path = PostDeparturesWidget;
 			sourceTree = "<group>";
 		};
+		2CDFC1E02C63B4C0009579B6 /* SalinapkaWatch */ = {
+			isa = PBXGroup;
+			children = (
+				2CDFC1F12C63BBBD009579B6 /* SalinapkaWatch.entitlements */,
+				2CDFC1E12C63B4C0009579B6 /* SalinapkaWatch.swift */,
+				2C94147B2C63BF290098899B /* LoadingView.swift */,
+				2CDFC1E32C63B4C0009579B6 /* ContentView.swift */,
+				2CDFC1E52C63B4C3009579B6 /* Assets.xcassets */,
+				2CDFC1E72C63B4C3009579B6 /* Preview Content */,
+			);
+			path = SalinapkaWatch;
+			sourceTree = "<group>";
+		};
+		2CDFC1E72C63B4C3009579B6 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				2CDFC1E82C63B4C3009579B6 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -229,11 +290,13 @@
 				2CB5AFF72B6C0BDE004C1C64 /* Frameworks */,
 				2CB5AFF82B6C0BDE004C1C64 /* Resources */,
 				2C29EC142C613129009B3E3E /* Embed Foundation Extensions */,
+				2CDFC1F02C63B4C3009579B6 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				2CDFC1C72C639DA9009579B6 /* PBXTargetDependency */,
+				2CDFC1EB2C63B4C3009579B6 /* PBXTargetDependency */,
 			);
 			name = SalinaCompanion;
 			packageProductDependencies = (
@@ -272,6 +335,23 @@
 			productReference = 2CDFC1B92C639DA2009579B6 /* PostDeparturesWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		2CDFC1DE2C63B4C0009579B6 /* SalinapkaWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2CDFC1ED2C63B4C3009579B6 /* Build configuration list for PBXNativeTarget "SalinapkaWatch" */;
+			buildPhases = (
+				2CDFC1DB2C63B4C0009579B6 /* Sources */,
+				2CDFC1DC2C63B4C0009579B6 /* Frameworks */,
+				2CDFC1DD2C63B4C0009579B6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SalinapkaWatch;
+			productName = "WatchApp Watch App";
+			productReference = 2CDFC1DF2C63B4C0009579B6 /* SalinapkaWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -286,6 +366,9 @@
 						CreatedOnToolsVersion = 15.2;
 					};
 					2CDFC1B82C639DA2009579B6 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					2CDFC1DE2C63B4C0009579B6 = {
 						CreatedOnToolsVersion = 15.4;
 					};
 				};
@@ -313,6 +396,7 @@
 			targets = (
 				2CB5AFF92B6C0BDE004C1C64 /* SalinaCompanion */,
 				2CDFC1B82C639DA2009579B6 /* PostDeparturesWidgetExtension */,
+				2CDFC1DE2C63B4C0009579B6 /* SalinapkaWatch */,
 			);
 		};
 /* End PBXProject section */
@@ -336,6 +420,15 @@
 			files = (
 				2CDFC1D52C639DF8009579B6 /* Localizable.xcstrings in Resources */,
 				2CDFC1D02C639DF3009579B6 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2CDFC1DD2C63B4C0009579B6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2CDFC1E92C63B4C3009579B6 /* Preview Assets.xcassets in Resources */,
+				2CDFC1E62C63B4C3009579B6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,6 +462,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2CDFC1DB2C63B4C0009579B6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2CDFC1E42C63B4C0009579B6 /* ContentView.swift in Sources */,
+				2CDFC1E22C63B4C0009579B6 /* SalinapkaWatch.swift in Sources */,
+				2C94147C2C63BF290098899B /* LoadingView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -376,6 +479,11 @@
 			isa = PBXTargetDependency;
 			target = 2CDFC1B82C639DA2009579B6 /* PostDeparturesWidgetExtension */;
 			targetProxy = 2CDFC1C62C639DA9009579B6 /* PBXContainerItemProxy */;
+		};
+		2CDFC1EB2C63B4C3009579B6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2CDFC1DE2C63B4C0009579B6 /* SalinapkaWatch */;
+			targetProxy = 2CDFC1EA2C63B4C3009579B6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -607,7 +715,7 @@
 				DEVELOPMENT_TEAM = 57C78B97UA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PostDeparturesWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = PostDeparturesWidget;
+				INFOPLIST_KEY_CFBundleDisplayName = "Šalinapka Widget";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -641,7 +749,7 @@
 				DEVELOPMENT_TEAM = 57C78B97UA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PostDeparturesWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = PostDeparturesWidget;
+				INFOPLIST_KEY_CFBundleDisplayName = "Šalinapka Widget";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -662,6 +770,69 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2CDFC1EE2C63B4C3009579B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SalinapkaWatch/SalinapkaWatch.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2024080701;
+				DEVELOPMENT_ASSET_PATHS = "\"SalinapkaWatch/Preview Content\"";
+				DEVELOPMENT_TEAM = 57C78B97UA;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Šalinapka";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = cz.raskavil.SalinaCompanion;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = cz.raskavil.SalinaCompanion.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.5;
+			};
+			name = Debug;
+		};
+		2CDFC1EF2C63B4C3009579B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SalinapkaWatch/SalinapkaWatch.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2024080701;
+				DEVELOPMENT_ASSET_PATHS = "\"SalinapkaWatch/Preview Content\"";
+				DEVELOPMENT_TEAM = 57C78B97UA;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Šalinapka";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = cz.raskavil.SalinaCompanion;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = cz.raskavil.SalinaCompanion.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 10.5;
 			};
 			name = Release;
 		};
@@ -691,6 +862,15 @@
 			buildConfigurations = (
 				2CDFC1CA2C639DA9009579B6 /* Debug */,
 				2CDFC1CB2C639DA9009579B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2CDFC1ED2C63B4C3009579B6 /* Build configuration list for PBXNativeTarget "SalinapkaWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2CDFC1EE2C63B4C3009579B6 /* Debug */,
+				2CDFC1EF2C63B4C3009579B6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
