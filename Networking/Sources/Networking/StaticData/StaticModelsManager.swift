@@ -9,7 +9,7 @@ public final class StaticModelsManager: StaticModelsProviding {
     // MARK: - UserDefaults values
     private static let filteredLinesKey = "SalinaCompanion.filteredLines"
     private static let timestampKey = "SalinaCompanion.staticDataTimestamp"
-    private static let favoriteStopsKey = "SalinaCompanion.staticDataTimestamp"
+    private static let favoriteStopsKey = "SalinaCompanion.favoriteStops"
     
     public var timestamp: Date? {
         get { UserDefaults(suiteName: Self.group)?.value(forKey: Self.timestampKey) as? Date }
@@ -17,13 +17,11 @@ public final class StaticModelsManager: StaticModelsProviding {
     }
     
     public var filteredLines: Set<Int> {
-        get { Set(UserDefaults(suiteName: Self.group)?.value(forKey: Self.filteredLinesKey) as? Array<Int> ?? []) }
-        set { UserDefaults(suiteName: Self.group)?.setValue(Array(newValue), forKey: Self.filteredLinesKey) }
+        didSet { UserDefaults(suiteName: Self.group)?.setValue(Array(filteredLines), forKey: Self.filteredLinesKey) }
     }
     
     public var favoriteStops: Set<Int> {
-        get { Set(UserDefaults(suiteName: Self.group)?.value(forKey: Self.favoriteStopsKey) as? Array<Int> ?? []) }
-        set { UserDefaults(suiteName: Self.group)?.setValue(Array(newValue), forKey: Self.favoriteStopsKey) }
+        didSet { UserDefaults(suiteName: Self.group)?.setValue(Array(favoriteStops), forKey: Self.favoriteStopsKey) }
     }
     
     // MARK: - File values
@@ -66,7 +64,10 @@ public final class StaticModelsManager: StaticModelsProviding {
     @SavedInFile(.posts) public var posts: [Int: [Post]] = [:]
     
     // MARK: Init, integrity and load functions
-    public init() {}
+    public init() {
+        self.filteredLines = Set(UserDefaults(suiteName: Self.group)?.value(forKey: Self.filteredLinesKey) as? Array<Int> ?? [])
+        self.favoriteStops = Set(UserDefaults(suiteName: Self.group)?.value(forKey: Self.favoriteStopsKey) as? Array<Int> ?? [])
+    }
     
     private static let weekInterval = 60.0 * 60 * 24 * 7
     
@@ -136,5 +137,13 @@ public final class StaticModelsManager: StaticModelsProviding {
         
         timestamp = .now
         return true
+    }
+    
+    public func toggleFavorite(_ stopId: Int) {
+        if favoriteStops.contains(stopId) {
+            favoriteStops.remove(stopId)
+        } else {
+            favoriteStops.insert(stopId)
+        }
     }
 }

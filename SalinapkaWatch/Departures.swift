@@ -2,19 +2,16 @@ import SwiftUI
 import SupportPackageViews
 import Models
 
-// MARK: - View
 struct Departures: View {
     
-    @Environment(\.staticDataProvider) var staticDataProvider
     @Environment(\.dynamicDataProvider) var departuresProvider
     @StateObject private var model: Model
-    @State private var isFavorite = false
     
     var body: some View {
         ScrollView {
             if let posts = model.posts, posts.isEmpty == false {
                 VStack(alignment: .leading, spacing: 8) {
-                    ForEach(posts, content: post)
+                    ForEach(posts.first(4), content: post)
                     Spacer()
                 }
             }
@@ -22,7 +19,6 @@ struct Departures: View {
         .overlay {
             if model.posts?.isEmpty == true {
                 SwiftUI.Text("departures.not_found")
-                    .foregroundStyle(.content)
             }
         }
         .overlay {
@@ -39,95 +35,77 @@ struct Departures: View {
         )
         .onAppear {
             model.departuresProvider = departuresProvider
-            isFavorite = staticDataProvider.favoriteStops.contains(model.stop.id)
         }
         .scrollBounceBehavior(.basedOnSize)
         .navigationTitle(model.stop.name)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button(action: {
-                    staticDataProvider.toggleFavorite(model.stop.id)
-                    isFavorite.toggle()
-                }) {
-                    Icon(.system(isFavorite ? "star.fill" : "star"))
-                }
+        .navigationDestination(
+            isPresented: .init(
+                get: { model.vehicleRoute != nil },
+                set: { if !$0 { model.vehicleRoute = nil } }
+            ),
+            destination: {
+                VehicleMap(vehicleRoute: $model.vehicleRoute)
             }
-        }
-        .sheet(item: $model.vehicleDetail) { _ in
-            VehicleDetail(model: $model.vehicleDetail, displayMap: true, close: { self.model.vehicleDetail = nil })
-                .background { Color.background.ignoresSafeArea() }
-        }
+        )
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background { Color.background.ignoresSafeArea() }
+        .background(.background)
     }
     
     @ViewBuilder private func post(_ post: Post) -> some View {
         if post.id == model.posts?.first?.id {
             Rectangle()
-                .foregroundStyle(.separe)
+                .foregroundStyle(.white)
                 .frame(height: 0.5)
         }
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 0) {
             SwiftUI.Text("departures.post.name.\(post.name)")
                 .font(.system(size: 16, weight: .semibold))
                 .padding(.bottom, 6)
-                .foregroundStyle(.content)
             if let departures = post.departures {
                 ForEach(Array(departures.enumerated()), id: \.offset) { _, departure in
                     self.departure(departure)
                 }
             }
         }
-        .padding(12)
+        .padding(4)
         Rectangle()
-            .foregroundStyle(.separe)
+            .foregroundStyle(.white)
             .frame(height: 0.5)
     }
     
     private func departure(_ departure: Departure) -> some View {
-        HStack {
-            HStack(spacing: 4) {
-                Icon(departure.alias.vehicleType.icon, size: .small)
+        HStack(spacing: 4) {
+            if model.connectionToLoad.map({ $0 == departure.dataForConnection }) ?? false {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .frame(width: 22)
+                    .frame(minWidth: 30, minHeight: 22, alignment: .center)
+            } else {
                 SwiftUI.Text(departure.alias.lineName)
-                    .font(.system(size: 14, weight: .bold))
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(departure.alias.contentColor)
+                    .padding(2)
+                .frame(minWidth: 30, minHeight: 22, alignment: .center)
+                .background {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(departure.alias.backgroundColor)
+                }
             }
-            .foregroundStyle(departure.alias.contentColor)
-            .padding(4)
-            .frame(minWidth: 45, minHeight: 30, alignment: .center)
-            .background {
-                RoundedRectangle(cornerRadius: 8)
-                    .foregroundStyle(departure.alias.backgroundColor)
-            }
-            .frame(minWidth: 55, alignment: .leading)
             
             SwiftUI.Text(departure.finalStopName)
                 .font(.system(size: 14, weight: .medium))
                 .minimumScaleFactor(0.7)
                 .lineLimit(1)
-                .foregroundStyle(.content)
             Spacer()
             
             SwiftUI.Text(departure.time)
                 .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(.content)
-            
-            if model.connectionToLoad.map({ $0 == departure.dataForConnection }) ?? false {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle())
-                    .frame(width: 28)
-            } else {
-                Button(action: {
-                    model.connectionToLoad = departure.dataForConnection
-                }) {
-                    Circle()
-                        .frame(width: 28, height: 28)
-                        .foregroundStyle(.control)
-                        .overlay {
-                            Image(systemName: "location.circle")
-                                .foregroundStyle(departure.alias.backgroundColor)
-                        }
-                }
+        }
+        .padding(.vertical, 2)
+        .onTapGesture {
+            if model.connectionToLoad == nil {
+                model.connectionToLoad = departure.dataForConnection
             }
         }
     }
@@ -142,7 +120,7 @@ extension Departures {
     
     class Model: ObservableObject {
 
-        @Published var vehicleDetail: VehicleDetail.Model?
+        @Published var vehicleRoute: VehicleRoute?
         @Published var connectionToLoad: (routeId: Int, lineId: Int)? {
             didSet {
                 task?.cancel()
@@ -153,15 +131,11 @@ extension Departures {
                         try Task.checkCancellation()
                         DispatchQueue.main.async { [weak self] in self?.connectionToLoad = nil }
                         if let vehicle = vehicles?.first(where: { $0.routeId == routeId && $0.lineId == lineId }) {
-                            DispatchQueue.main.async { [weak self] in
-                                self?.vehicleDetail = .loading(vehicle)
-                            }
                             Task { [weak self] in
                                 let route = try await self?.departuresProvider?.route(for: vehicle)
-                                if let route, route.vehicle.id == self?.vehicleDetail?.vehicle.id {
-                                    DispatchQueue.main.async { [weak self] in
-                                        self?.vehicleDetail = .loaded(route)
-                                    }
+                                try Task.checkCancellation()
+                                DispatchQueue.main.async { [weak self] in
+                                    self?.vehicleRoute = route
                                 }
                             }
                         } else {
@@ -205,20 +179,17 @@ extension Departures {
                     }
                 }
                 
-                if let vehicleDetail = self?.vehicleDetail {
+                if let vehicleRoute = self?.vehicleRoute {
                     Task { [weak self] in
                         let vehicles = try await departuresProvider.vehicles
+                        guard vehicleRoute.vehicle.id == self?.vehicleRoute?.vehicle.id else { return }
                         if let vehicle = vehicles.first(where: {
-                            $0.id == vehicleDetail.vehicle.id && $0.routeId == vehicleDetail.vehicle.routeId
+                            $0.id == vehicleRoute.vehicle.id && $0.routeId == vehicleRoute.vehicle.routeId
                         }) {
-                            if case .loading = vehicleDetail {
-                                DispatchQueue.main.async { [weak self] in
-                                    self?.vehicleDetail = .loading(vehicle)
-                                }
-                            }
                             let route = try await departuresProvider.route(for: vehicle)
+                            guard vehicleRoute.vehicle.id == self?.vehicleRoute?.vehicle.id else { return }
                             DispatchQueue.main.async { [weak self] in
-                                self?.vehicleDetail = .loaded(route)
+                                self?.vehicleRoute = route
                             }
                         }
                     }

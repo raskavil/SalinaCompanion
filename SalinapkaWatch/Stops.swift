@@ -9,8 +9,8 @@ struct Stops: View {
         
         var description: String {
             return switch self {
-                case .nearest:  "Nejbližší"
-                case .favorite: "Oblíbené"
+                case .nearest:  .init(localized: "stops.nearest")
+                case .favorite: .init(localized: "stops.favorite")
             }
         }
     }
@@ -18,41 +18,39 @@ struct Stops: View {
     @Environment(\.staticDataProvider) var staticDataProvider
     @Environment(\.locationProvider) var locationProvider
     
-    @State var selectedMode: Mode = .favorite
+    @State var selectedMode: Mode = .nearest
     @State var nearestStops: [Stop] = []
     @State var favoriteStops: [Stop] = []
     
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
-                Text("Zastávky")
-                    .font(.system(.title))
-                SegmentedControl(
-                    selectedOption: $selectedMode,
-                    availableOptions: [.favorite, .nearest]
-                )
+                if favoriteStops.isEmpty == false {
+                    SegmentedControl(
+                        selectedOption: $selectedMode,
+                        availableOptions: [.nearest, .favorite]
+                    )
+                }
                 switch selectedMode {
                 case .nearest:
                     if nearestStops.isEmpty {
-                        Text("Poloha nezjištěna")
-                            .frame(maxHeight: .infinity)
+                        Text("location.not_found")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                     } else {
                         List(nearestStops) { stop in
                             NavigationLink(stop.name) {
-                                Text("\(stop.id)")
-                                    .navigationTitle(stop.name)
+                                Departures(stop: stop)
                             }
                         }
                     }
                 case .favorite:
                     if favoriteStops.isEmpty {
-                        Text("Oblíbené zastávky jsou prázdné")
-                            .frame(maxHeight: .infinity)
+                        Text("stops.favorite_empty")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                     } else {
                         List(favoriteStops) { stop in
                             NavigationLink(stop.name) {
-                                Text("\(stop.id)")
-                                    .navigationTitle(stop.name)
+                                Departures(stop: stop)
                             }
                         }
                     }
@@ -69,9 +67,13 @@ struct Stops: View {
                     )
                 }
                 if favoriteStops.isEmpty {
-                    favoriteStops = staticDataProvider.stops
+                    favoriteStops = staticDataProvider.stops.filter { stop in
+                        staticDataProvider.favoriteStops.contains(stop.id)
+                    }
                 }
             }
+            .navigationTitle("stops.title")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

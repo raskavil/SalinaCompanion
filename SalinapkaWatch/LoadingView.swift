@@ -98,7 +98,7 @@ struct LoadingScreenPreviews: PreviewProvider {
                         .ignoresSafeArea()
                 }
                 .overlay {
-                    Button("Hide") {
+                    Button("Hide" + "") {
                         loadingHidden.toggle()
                     }
                 }

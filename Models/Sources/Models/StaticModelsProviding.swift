@@ -8,6 +8,7 @@ public protocol StaticModelsProviding {
     var posts: [Int: [Post]] { get }
     var favoriteStops: Set<Int> { get set }
     var filteredLines: Set<Int> { get set }
+    func toggleFavorite(_ stopId: Int)
 }
 
 public extension EnvironmentValues {
@@ -26,6 +27,7 @@ private struct StaticDataProviderMock: StaticModelsProviding {
     var posts: [Int: [Post]] { [:] }
     var favoriteStops: Set<Int> = []
     var filteredLines: Set<Int> = []
+    func toggleFavorite(_ stopId: Int) {}
 }
 
 private struct StaticDataProviderKey: EnvironmentKey {

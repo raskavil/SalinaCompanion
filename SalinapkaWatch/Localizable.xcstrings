@@ -17,101 +17,146 @@
         }
       }
     },
-    "stop" : {
-      "extractionState" : "manual",
+    "departures.post.name.%@" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zastávka"
+            "value" : "Zastávka %@"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stop"
+            "value" : "Post %@"
           }
         }
       }
     },
-    "stop.choose" : {
+    "departures.vehicle_not_found" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "vyberte z oblíbených zastávek v nastavení widgetu"
+            "value" : "Vozidlo nenalezeno"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "choose from the favorite stops in the widget settings"
+            "value" : "Vehicle not found"
           }
         }
       }
     },
-    "stop.imaginary" : {
+    "departures.vehicle_not_found.description" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Imaginární zastávka"
+            "value" : "Pravděpodobně ještě nevyrazilo na hledanou trasu."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Example stop"
+            "value" : "It probably has not gotten on its route yet."
           }
         }
       }
     },
-    "updated.%@" : {
+    "error.ok" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aktualizováno: %@"
+            "value" : "OK"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Updated: %@"
+            "value" : "OK"
           }
         }
       }
     },
-    "widget.description" : {
-      "extractionState" : "manual",
+    "location.not_found" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tento widget umožňuje zobrazovat odjezdy."
+            "value" : "Pozice nenalezena."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This widget enabled you to display departures."
+            "value" : "Location not found."
           }
         }
       }
     },
-    "widget.title" : {
-      "extractionState" : "manual",
+    "stops.favorite" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Výběr zastávky"
+            "value" : "Oblíbené"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stop selection"
+            "value" : "Favorite"
+          }
+        }
+      }
+    },
+    "stops.favorite_empty" : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oblíbené zastávky jsou prázdné."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Favorite stops are empty."
+          }
+        }
+      }
+    },
+    "stops.nearest" : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nejblížší"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nearest"
+          }
+        }
+      }
+    },
+    "stops.title" : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zastávky"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stops"
           }
         }
       }

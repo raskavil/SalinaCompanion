@@ -50,6 +50,7 @@ struct DeparturesWidgetConfigurationIntent: WidgetConfigurationIntent {
                 return .init(
                     sections: DeparturesWidgetConfigurationIntent.staticProvider.stops
                         .filter { $0.zone == 100 || $0.zone == 101 }
+                        .filter { DeparturesWidgetConfigurationIntent.staticProvider.favoriteStops.contains($0.id) }
                         .sorted { $0.name < $1.name }
                         .compactMap { stop in
                             DeparturesWidgetConfigurationIntent.staticProvider.posts[stop.id].map { posts in

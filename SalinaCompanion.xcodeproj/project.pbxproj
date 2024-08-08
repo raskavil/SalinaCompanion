@@ -50,6 +50,9 @@
 		2CFB30F02C441C21005BC031 /* Device in Frameworks */ = {isa = PBXBuildFile; productRef = 2CFB30EF2C441C21005BC031 /* Device */; };
 		2CFB30F32C454BF4005BC031 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2CFB30F22C454BF3005BC031 /* Settings.bundle */; };
 		2CFB30F52C464FF9005BC031 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFB30F42C464FF9005BC031 /* LoadingView.swift */; };
+		2CFFB64E2C64C11E002C09FB /* Departures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFFB64D2C64C11E002C09FB /* Departures.swift */; };
+		2CFFB6502C64C649002C09FB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2CFFB64F2C64C649002C09FB /* Localizable.xcstrings */; };
+		2CFFB6522C64CA1E002C09FB /* VehicleMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFFB6512C64CA1E002C09FB /* VehicleMap.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -134,6 +137,9 @@
 		2CFB30ED2C42B8F1005BC031 /* Device */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Device; sourceTree = "<group>"; };
 		2CFB30F22C454BF3005BC031 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		2CFB30F42C464FF9005BC031 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		2CFFB64D2C64C11E002C09FB /* Departures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Departures.swift; sourceTree = "<group>"; };
+		2CFFB64F2C64C649002C09FB /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		2CFFB6512C64CA1E002C09FB /* VehicleMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMap.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,6 +277,9 @@
 				2CDFC1E12C63B4C0009579B6 /* SalinapkaWatch.swift */,
 				2C94147B2C63BF290098899B /* LoadingView.swift */,
 				2CDFC1E32C63B4C0009579B6 /* Stops.swift */,
+				2CFFB64D2C64C11E002C09FB /* Departures.swift */,
+				2CFFB6512C64CA1E002C09FB /* VehicleMap.swift */,
+				2CFFB64F2C64C649002C09FB /* Localizable.xcstrings */,
 				2CDFC1E52C63B4C3009579B6 /* Assets.xcassets */,
 				2CDFC1E72C63B4C3009579B6 /* Preview Content */,
 			);
@@ -440,6 +449,7 @@
 			files = (
 				2CDFC1E92C63B4C3009579B6 /* Preview Assets.xcassets in Resources */,
 				2CDFC1E62C63B4C3009579B6 /* Assets.xcassets in Resources */,
+				2CFFB6502C64C649002C09FB /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -477,8 +487,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CFFB6522C64CA1E002C09FB /* VehicleMap.swift in Sources */,
 				2CDFC1E42C63B4C0009579B6 /* Stops.swift in Sources */,
 				2CDFC1E22C63B4C0009579B6 /* SalinapkaWatch.swift in Sources */,
+				2CFFB64E2C64C11E002C09FB /* Departures.swift in Sources */,
 				2C94147C2C63BF290098899B /* LoadingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -799,6 +811,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Šalinapka";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = cz.raskavil.SalinaCompanion;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -811,7 +824,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 10.5;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Debug;
 		};
@@ -830,6 +843,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Šalinapka";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = cz.raskavil.SalinaCompanion;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -843,7 +857,7 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				VALIDATE_PRODUCT = YES;
-				WATCHOS_DEPLOYMENT_TARGET = 10.5;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Release;
 		};
