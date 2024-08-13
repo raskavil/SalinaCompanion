@@ -4,7 +4,29 @@ import SupportPackage
 
 public final class StaticModelsManager: StaticModelsProviding {
     
-    private static let group = "group.cz.raskavil.SalinaCompanion.staticData"
+    public enum SaveMode {
+        case appGroup
+        case local
+        
+        private static let group = "group.cz.raskavil.SalinaCompanion.staticData"
+        
+        var userDefaults: UserDefaults? {
+            switch self {
+            case .appGroup: return UserDefaults(suiteName: Self.group)
+            case .local:    return UserDefaults.standard
+            }
+        }
+        
+        var directoryUrl: URL? {
+            switch self {
+            case .appGroup: return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Self.group)
+            case .local:    return try? FileManager.default.url(
+                for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false
+            )
+            }
+        }
+    }
+    
     
     // MARK: - UserDefaults values
     private static let filteredLinesKey = "SalinaCompanion.filteredLines"
@@ -12,16 +34,16 @@ public final class StaticModelsManager: StaticModelsProviding {
     private static let favoriteStopsKey = "SalinaCompanion.favoriteStops"
     
     public var timestamp: Date? {
-        get { UserDefaults(suiteName: Self.group)?.value(forKey: Self.timestampKey) as? Date }
-        set { UserDefaults(suiteName: Self.group)?.setValue(newValue, forKey: Self.timestampKey) }
+        get { saveMode.userDefaults?.value(forKey: Self.timestampKey) as? Date }
+        set { saveMode.userDefaults?.setValue(newValue, forKey: Self.timestampKey) }
     }
     
     public var filteredLines: Set<Int> {
-        didSet { UserDefaults(suiteName: Self.group)?.setValue(Array(filteredLines), forKey: Self.filteredLinesKey) }
+        didSet { saveMode.userDefaults?.setValue(Array(filteredLines), forKey: Self.filteredLinesKey) }
     }
     
     public var favoriteStops: Set<Int> {
-        didSet { UserDefaults(suiteName: Self.group)?.setValue(Array(favoriteStops), forKey: Self.favoriteStopsKey) }
+        didSet { saveMode.userDefaults?.setValue(Array(favoriteStops), forKey: Self.favoriteStopsKey) }
     }
     
     // MARK: - File values
@@ -39,19 +61,19 @@ public final class StaticModelsManager: StaticModelsProviding {
         
         public var wrappedValue: Value {
             didSet {
-                FileManager.default
-                    .containerURL(forSecurityApplicationGroupIdentifier: StaticModelsManager.group)
+                directoryUrl
                     .map { $0.appendingPathComponent(path.fileName) }
                     .map { try? JSONEncoder().encode(wrappedValue).write(to: $0) }
             }
         }
         
         private let path: Path
+        private let directoryUrl: URL?
         
-        init(wrappedValue defaultValue: Value, _ path: Path) {
+        init(wrappedValue defaultValue: Value, _ path: Path, directoryUrl: URL?) {
             self.path = path
-            self.wrappedValue = FileManager.default
-                .containerURL(forSecurityApplicationGroupIdentifier: StaticModelsManager.group)
+            self.directoryUrl = directoryUrl
+            self.wrappedValue = directoryUrl
                 .map { $0.appendingPathComponent(path.fileName) }
                 .flatMap { FileManager.default.contents(atPath: $0.path) }
                 .flatMap { try? JSONDecoder().decode(Value.self, from: $0) } ?? defaultValue
@@ -59,14 +81,20 @@ public final class StaticModelsManager: StaticModelsProviding {
 
     }
 
-    @SavedInFile(.stops) public var stops: [Stop] = []
-    @SavedInFile(.aliases) public var aliases: [Alias] = []
-    @SavedInFile(.posts) public var posts: [Int: [Post]] = [:]
+    @SavedInFile public var stops: [Stop]
+    @SavedInFile public var aliases: [Alias]
+    @SavedInFile public var posts: [Int: [Post]]
+    
+    private let saveMode: SaveMode
     
     // MARK: Init, integrity and load functions
-    public init() {
-        self.filteredLines = Set(UserDefaults(suiteName: Self.group)?.value(forKey: Self.filteredLinesKey) as? Array<Int> ?? [])
-        self.favoriteStops = Set(UserDefaults(suiteName: Self.group)?.value(forKey: Self.favoriteStopsKey) as? Array<Int> ?? [])
+    public init(saveMode: SaveMode = .appGroup) {
+        self.saveMode = saveMode
+        self._stops = .init(wrappedValue: [], .stops, directoryUrl: saveMode.directoryUrl)
+        self._aliases = .init(wrappedValue: [], .aliases, directoryUrl: saveMode.directoryUrl)
+        self._posts = .init(wrappedValue: [:], .posts, directoryUrl: saveMode.directoryUrl)
+        self.filteredLines = Set(saveMode.userDefaults?.value(forKey: Self.filteredLinesKey) as? Array<Int> ?? [])
+        self.favoriteStops = Set(saveMode.userDefaults?.value(forKey: Self.favoriteStopsKey) as? Array<Int> ?? [])
     }
     
     private static let weekInterval = 60.0 * 60 * 24 * 7

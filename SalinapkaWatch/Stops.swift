@@ -58,22 +58,32 @@ struct Stops: View {
                 }
             }
             .task {
-                guard await staticDataProvider.isUpToDate else { return }
-                if nearestStops.isEmpty, let user = locationProvider.location {
-                    nearestStops = Array(
-                        staticDataProvider.stops.sorted { lhs, rhs in
-                            lhs.position.location.distance(from: user) < rhs.position.location.distance(from: user)
-                        }.first(10)
-                    )
+                if nearestStops.isEmpty || favoriteStops.isEmpty, await staticDataProvider.isUpToDate {
+                    update()
                 }
-                if favoriteStops.isEmpty {
-                    favoriteStops = staticDataProvider.stops.filter { stop in
-                        staticDataProvider.favoriteStops.contains(stop.id)
-                    }
+            }
+            .onAppear {
+                if nearestStops.isEmpty || favoriteStops.isEmpty {
+                    update()
                 }
             }
             .navigationTitle("stops.title")
             .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+    
+    func update() {
+        if nearestStops.isEmpty, let user = locationProvider.location {
+            nearestStops = Array(
+                staticDataProvider.stops.sorted { lhs, rhs in
+                    lhs.position.location.distance(from: user) < rhs.position.location.distance(from: user)
+                }.first(10)
+            )
+        }
+        if favoriteStops.isEmpty {
+            favoriteStops = staticDataProvider.stops.filter { stop in
+                staticDataProvider.favoriteStops.contains(stop.id)
+            }
         }
     }
 }

@@ -15,10 +15,6 @@ struct WatchApp: App {
     var body: some Scene {
         WindowGroup {
             Stops()
-                .overlay {
-                    LoadingView(isHidden: $staticDataReady)
-                        .ignoresSafeArea()
-                }
                 .task {
                     if staticDataReady == false {
                         let value = await staticDataProvider.isUpToDate
@@ -27,6 +23,10 @@ struct WatchApp: App {
                         }
                     }
                 }
+                .overlay {
+                    LoadingView(isHidden: $staticDataReady)
+                        .ignoresSafeArea()
+                }
         }
         .environment(\.dynamicDataProvider, dynamicDataProvider)
         .environment(\.staticDataProvider, staticDataProvider)
@@ -34,7 +34,7 @@ struct WatchApp: App {
     }
     
     init() {
-        staticDataProvider = StaticModelsManager()
+        staticDataProvider = StaticModelsManager(saveMode: .local)
         dynamicDataProvider = DynamicModelsManager(stopsAndAliasesProvider: staticDataProvider)
         locationProvider = PermissionsManager()
         

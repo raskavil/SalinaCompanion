@@ -15,6 +15,7 @@
 		2C34C8772C3F024400A22F27 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 2C34C8762C3F024400A22F27 /* Networking */; };
 		2C34C87A2C3F030100A22F27 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = 2C34C8792C3F030100A22F27 /* Networking */; };
 		2C40B41D2C53BBC70075F4DB /* VehicleMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C40B41C2C53BBC60075F4DB /* VehicleMarker.swift */; };
+		2C447F452C6BCF15000C3020 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C447F432C6BCF15000C3020 /* InfoPlist.strings */; };
 		2C62C47E2C3714AF004278A4 /* VehiclesMap+Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C62C47D2C3714AF004278A4 /* VehiclesMap+Model.swift */; };
 		2C7965132C57EA3C003E1897 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2C7965122C57EA3C003E1897 /* Localizable.xcstrings */; };
 		2C94147C2C63BF290098899B /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C94147B2C63BF290098899B /* LoadingView.swift */; };
@@ -44,7 +45,6 @@
 		2CDFC1E22C63B4C0009579B6 /* SalinapkaWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDFC1E12C63B4C0009579B6 /* SalinapkaWatch.swift */; };
 		2CDFC1E42C63B4C0009579B6 /* Stops.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDFC1E32C63B4C0009579B6 /* Stops.swift */; };
 		2CDFC1E62C63B4C3009579B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CDFC1E52C63B4C3009579B6 /* Assets.xcassets */; };
-		2CDFC1E92C63B4C3009579B6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CDFC1E82C63B4C3009579B6 /* Preview Assets.xcassets */; };
 		2CDFC1EC2C63B4C3009579B6 /* SalinapkaWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2CDFC1DF2C63B4C0009579B6 /* SalinapkaWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2CEBB3842C4FE8380037A28F /* MapFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEBB3832C4FE8380037A28F /* MapFilter.swift */; };
 		2CFB30F02C441C21005BC031 /* Device in Frameworks */ = {isa = PBXBuildFile; productRef = 2CFB30EF2C441C21005BC031 /* Device */; };
@@ -105,8 +105,10 @@
 		2C29EC202C614617009B3E3E /* DeparturesWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeparturesWidgetBundle.swift; sourceTree = "<group>"; };
 		2C29EC222C614617009B3E3E /* DeparturesWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeparturesWidget.swift; sourceTree = "<group>"; };
 		2C29EC242C614617009B3E3E /* DeparturesWidgetConfigurationIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeparturesWidgetConfigurationIntent.swift; sourceTree = "<group>"; };
-		2C29EC262C614619009B3E3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../DeparturesWidget/Assets.xcassets; sourceTree = "<group>"; };
+		2C29EC262C614619009B3E3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2C40B41C2C53BBC60075F4DB /* VehicleMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMarker.swift; sourceTree = "<group>"; };
+		2C447F442C6BCF15000C3020 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		2C447F462C6BCF1A000C3020 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2C62C47D2C3714AF004278A4 /* VehiclesMap+Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VehiclesMap+Model.swift"; sourceTree = "<group>"; };
 		2C7965122C57EA3C003E1897 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		2C8741202C638F8B0093E7D1 /* DeparturesWidgetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeparturesWidgetProvider.swift; sourceTree = "<group>"; };
@@ -129,11 +131,7 @@
 		2CDFC1E12C63B4C0009579B6 /* SalinapkaWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalinapkaWatch.swift; sourceTree = "<group>"; };
 		2CDFC1E32C63B4C0009579B6 /* Stops.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stops.swift; sourceTree = "<group>"; };
 		2CDFC1E52C63B4C3009579B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		2CDFC1E82C63B4C3009579B6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		2CDFC1F12C63BBBD009579B6 /* SalinapkaWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SalinapkaWatch.entitlements; sourceTree = "<group>"; };
 		2CEBB3832C4FE8380037A28F /* MapFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFilter.swift; sourceTree = "<group>"; };
-		2CEC2CCD2C5FEA2A00D8B962 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = cs; path = cs.lproj/Info.plist; sourceTree = "<group>"; };
-		2CEC2CCF2C5FEA2E00D8B962 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/Info.plist; sourceTree = "<group>"; };
 		2CFB30ED2C42B8F1005BC031 /* Device */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Device; sourceTree = "<group>"; };
 		2CFB30F22C454BF3005BC031 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		2CFB30F42C464FF9005BC031 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -186,7 +184,6 @@
 		2CB5AFF12B6C0BDE004C1C64 = {
 			isa = PBXGroup;
 			children = (
-				2CDFC1D62C639E17009579B6 /* PostDeparturesWidgetExtension.entitlements */,
 				2CFB30ED2C42B8F1005BC031 /* Device */,
 				2C99CD0E2C3E920800EAAA74 /* Networking */,
 				2CB1E0462C37E872003A19B2 /* Models */,
@@ -212,7 +209,7 @@
 			isa = PBXGroup;
 			children = (
 				2C29EBFE2C60067E009B3E3E /* GoogleService-Info.plist */,
-				2CEC2CCE2C5FEA2A00D8B962 /* Info.plist */,
+				2C447F432C6BCF15000C3020 /* InfoPlist.strings */,
 				2CB5AFFD2B6C0BDE004C1C64 /* SalinaCompanionApp.swift */,
 				2CFB30F42C464FF9005BC031 /* LoadingView.swift */,
 				2CDE906B2B6C1CF5000AA67F /* Departures */,
@@ -259,6 +256,7 @@
 		2CDFC1BC2C639DA2009579B6 /* PostDeparturesWidget */ = {
 			isa = PBXGroup;
 			children = (
+				2CDFC1D62C639E17009579B6 /* PostDeparturesWidgetExtension.entitlements */,
 				2C29EC202C614617009B3E3E /* DeparturesWidgetBundle.swift */,
 				2C29EC222C614617009B3E3E /* DeparturesWidget.swift */,
 				2C8741202C638F8B0093E7D1 /* DeparturesWidgetProvider.swift */,
@@ -273,7 +271,6 @@
 		2CDFC1E02C63B4C0009579B6 /* SalinapkaWatch */ = {
 			isa = PBXGroup;
 			children = (
-				2CDFC1F12C63BBBD009579B6 /* SalinapkaWatch.entitlements */,
 				2CDFC1E12C63B4C0009579B6 /* SalinapkaWatch.swift */,
 				2C94147B2C63BF290098899B /* LoadingView.swift */,
 				2CDFC1E32C63B4C0009579B6 /* Stops.swift */,
@@ -281,17 +278,8 @@
 				2CFFB6512C64CA1E002C09FB /* VehicleMap.swift */,
 				2CFFB64F2C64C649002C09FB /* Localizable.xcstrings */,
 				2CDFC1E52C63B4C3009579B6 /* Assets.xcassets */,
-				2CDFC1E72C63B4C3009579B6 /* Preview Content */,
 			);
 			path = SalinapkaWatch;
-			sourceTree = "<group>";
-		};
-		2CDFC1E72C63B4C3009579B6 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				2CDFC1E82C63B4C3009579B6 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -427,6 +415,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2CFB30F32C454BF4005BC031 /* Settings.bundle in Resources */,
+				2C447F452C6BCF15000C3020 /* InfoPlist.strings in Resources */,
 				2CB5B0042B6C0BE0004C1C64 /* Assets.xcassets in Resources */,
 				2C29EBFF2C60067E009B3E3E /* GoogleService-Info.plist in Resources */,
 				2C29EBF62C5FEE04009B3E3E /* Launch Screen.storyboard in Resources */,
@@ -447,7 +436,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CDFC1E92C63B4C3009579B6 /* Preview Assets.xcassets in Resources */,
 				2CDFC1E62C63B4C3009579B6 /* Assets.xcassets in Resources */,
 				2CFFB6502C64C649002C09FB /* Localizable.xcstrings in Resources */,
 			);
@@ -511,13 +499,13 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		2CEC2CCE2C5FEA2A00D8B962 /* Info.plist */ = {
+		2C447F432C6BCF15000C3020 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				2CEC2CCD2C5FEA2A00D8B962 /* cs */,
-				2CEC2CCF2C5FEA2E00D8B962 /* en */,
+				2C447F442C6BCF15000C3020 /* en */,
+				2C447F462C6BCF1A000C3020 /* cs */,
 			);
-			name = Info.plist;
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -557,6 +545,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 2024080801;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -618,6 +607,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 2024080801;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -645,7 +635,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SalinaCompanion/SalinaCompanion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024080701;
+				CURRENT_PROJECT_VERSION = 2024080802;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 57C78B97UA;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -654,7 +644,7 @@
 				INFOPLIST_FILE = SalinaCompanion/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Šalinapka";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Poloha je nutná pro nastavení pozice uživatele na mapě.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location is needed to determine the user position on the map.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -690,7 +680,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SalinaCompanion/SalinaCompanion.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024080701;
+				CURRENT_PROJECT_VERSION = 2024080802;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 57C78B97UA;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -699,7 +689,7 @@
 				INFOPLIST_FILE = SalinaCompanion/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Šalinapka";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Poloha je nutná pro nastavení pozice uživatele na mapě.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location is needed to determine the user position on the map.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -732,9 +722,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = PostDeparturesWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PostDeparturesWidget/PostDeparturesWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024080701;
+				CURRENT_PROJECT_VERSION = 2024080802;
 				DEVELOPMENT_TEAM = 57C78B97UA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PostDeparturesWidget/Info.plist;
@@ -766,9 +756,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = PostDeparturesWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PostDeparturesWidget/PostDeparturesWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024080701;
+				CURRENT_PROJECT_VERSION = 2024080802;
 				DEVELOPMENT_TEAM = 57C78B97UA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PostDeparturesWidget/Info.plist;
@@ -801,9 +791,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = SalinapkaWatch/SalinapkaWatch.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024080701;
+				CURRENT_PROJECT_VERSION = 2024080802;
 				DEVELOPMENT_ASSET_PATHS = "\"SalinapkaWatch/Preview Content\"";
 				DEVELOPMENT_TEAM = 57C78B97UA;
 				ENABLE_PREVIEWS = YES;
@@ -833,9 +823,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = SalinapkaWatch/SalinapkaWatch.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024080701;
+				CURRENT_PROJECT_VERSION = 2024080802;
 				DEVELOPMENT_ASSET_PATHS = "\"SalinapkaWatch/Preview Content\"";
 				DEVELOPMENT_TEAM = 57C78B97UA;
 				ENABLE_PREVIEWS = YES;
