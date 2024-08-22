@@ -16,7 +16,7 @@ struct DeparturesWidget: Widget {
                 .containerBackground(.widgetBackground, for: .widget)
                 .widgetURL(entry.configuration.post.flatMap { URL(string: "widget://\($0.stopId)") })
         }
-        .supportedFamilies([.systemMedium])
+        .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
 
@@ -47,32 +47,52 @@ struct DeparturesWidgetView: View {
         formatter.dateFormat = "HH:mm"
         return formatter
     }
-    
+     
+    @Environment(\.widgetFamily) var family
     var entry: DeparturesModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             
             SwiftUI.Text("updated.\(Self.formatter.string(from: entry.date))")
-                .font(.system(size: 10))
+                .font(.system(size: 11))
                 .frame(maxWidth: .infinity)
+                .bold()
 
-            HStack {
-                Image(.tramIcon)
-                    .resizable()
-                    .frame(width: 40, height: 40)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .shadow(radius: 1)
+            HStack(spacing: 0) {
+                if family != .systemSmall {
+                    Image(.tramIcon)
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .shadow(radius: 1)
+                        .padding(.trailing, 12)
+                }
+                
                 VStack(alignment: .leading, spacing: 4) {
-                    SwiftUI.Text(entry.stopName)
-                        .font(.system(size: 14, weight: .semibold))
+                    HStack(spacing: 4) {
+                        if family == .systemSmall {
+                            Image(.tramIcon)
+                                .resizable()
+                                .frame(width: 14, height: 14)
+                                .clipShape(RoundedRectangle(cornerRadius: 4))
+                                .shadow(radius: 1)
+                        }
+                        SwiftUI.Text(entry.stopName)
+                            .font(.system(size: 14, weight: .semibold))
+                            .minimumScaleFactor(0.7)
+                            .scaledToFill()
+                    }
+                    
                     SwiftUI.Text(entry.model.name)
                         .font(.system(size: 14))
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
                 }
-                Spacer()
+                
+                Spacer(minLength: 0)
             }
+            .padding(.bottom, 2)
             
             if let departures = entry.model.departures, departures.isEmpty == false {
                 ForEach(Array(departures.first(4).enumerated()), id: \.offset) { departure($1) }
@@ -99,13 +119,15 @@ struct DeparturesWidgetView: View {
                 RoundedRectangle(cornerRadius: 8)
                     .foregroundStyle(departure.alias.backgroundColor)
             }
-            .frame(minWidth: 45, minHeight: 20, alignment: .leading)
+            .frame(minWidth: 44, minHeight: 20, alignment: .leading)
             
-            SwiftUI.Text(departure.finalStopName)
-                .font(.system(size: 14, weight: .medium))
-                .minimumScaleFactor(0.7)
-                .lineLimit(1)
-                .foregroundStyle(.content)
+            if family != .systemSmall {
+                SwiftUI.Text(departure.finalStopName)
+                    .font(.system(size: 14, weight: .medium))
+                    .minimumScaleFactor(0.7)
+                    .lineLimit(1)
+                    .foregroundStyle(.content)
+            }
             Spacer()
             
             SwiftUI.Text(departure.time)

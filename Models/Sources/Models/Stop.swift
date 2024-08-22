@@ -7,6 +7,7 @@ public struct Stop: Codable, Identifiable, Hashable {
     public let name: String
     public let position: CLLocationCoordinate2D
     public let lines: [String]
+    public let searchTerm: String
     
     public init(id: Int, zone: Int, name: String, position: CLLocationCoordinate2D, lines: [String]) {
         self.id = id
@@ -14,6 +15,7 @@ public struct Stop: Codable, Identifiable, Hashable {
         self.name = name
         self.position = position
         self.lines = lines
+        self.searchTerm = name.forSearching
     }
 }
 
@@ -50,5 +52,15 @@ extension CLLocationCoordinate2D: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(longitude)
         hasher.combine(latitude)
+    }
+}
+
+extension String {
+    
+    /// https://stackoverflow.com/questions/29521951/how-to-remove-diacritics-from-a-string-in-swift
+    public var forSearching: String {
+        let simple = folding(options: [.diacriticInsensitive, .widthInsensitive, .caseInsensitive], locale: nil)
+        let nonAlphaNumeric = CharacterSet.alphanumerics.inverted
+        return simple.components(separatedBy: nonAlphaNumeric).joined(separator: "")
     }
 }

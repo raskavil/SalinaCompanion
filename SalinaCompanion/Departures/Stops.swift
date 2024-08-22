@@ -6,14 +6,21 @@ import MapKit
 
 struct Stops: View {
     
-    @Environment(\.locationProvider) var locationProvider
-    @Environment(\.staticDataProvider) var staticDataProvider
-    @State var term = ""
+    @Environment(\.locationProvider) private var locationProvider
+    @Environment(\.staticDataProvider) private var staticDataProvider
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var term = ""
     @State private var isLoaded: Bool = false
     @State private var localStops: [Stop] = []
+    @State private var location: CLLocation?
     @Binding private var deeplinkStop: Stop?
-    var filteredStops: [Stop] {
-        term.isEmpty == false ? localStops.filter { $0.name.starts(with: term) } : localStops
+    private var filteredStops: [Stop] {
+        guard term.isEmpty == false else { return localStops }
+        let searchTerm = term.forSearching
+        return localStops.filter { $0.searchTerm.contains(searchTerm) }
+    }
+    private var locationDistance: CLLocationDistance? {
+        locationProvider.location.flatMap { current in location.map { $0.distance(from: current ) } }
     }
     
     var body: some View {
@@ -21,16 +28,13 @@ struct Stops: View {
             content
                 .navigationBarTitleDisplayMode(.large)
                 .navigationTitle("departures.title")
-                .task {
-                    guard localStops.isEmpty else { return }
-                    isLoaded = await staticDataProvider.isUpToDate
-                    localStops = (
-                        locationProvider.location.map { user in
-                            staticDataProvider.stops.sorted { lhs, rhs in
-                                lhs.position.location.distance(from: user) < rhs.position.location.distance(from: user)
-                            }
-                        } ?? staticDataProvider.stops
-                    ).filter { $0.lines.isEmpty == false }
+                .onAppear() {
+                    update()
+                }
+                .onChange(of: scenePhase) {
+                    if case .active = scenePhase {
+                        update()
+                    }
                 }
                 .navigationDestination(item: $deeplinkStop, destination: Departures.init(stop:))
         }
@@ -66,6 +70,25 @@ struct Stops: View {
                     ProgressView()
                         .progressViewStyle(.circular)
                 }
+        }
+    }
+    
+    private func update() {
+        guard
+            localStops.isEmpty
+            || location == nil && locationProvider.location != nil
+            || locationDistance.map({ $0 > 500 }) == true
+        else { return }
+        Task {
+            isLoaded = await staticDataProvider.isUpToDate
+            location = locationProvider.location
+            localStops = (
+                locationProvider.location.map { user in
+                    staticDataProvider.stops.sorted { lhs, rhs in
+                        lhs.position.location.distance(from: user) < rhs.position.location.distance(from: user)
+                    }
+                } ?? staticDataProvider.stops
+            ).filter { $0.lines.isEmpty == false }
         }
     }
     

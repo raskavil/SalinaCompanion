@@ -17,10 +17,16 @@ struct Stops: View {
     
     @Environment(\.staticDataProvider) var staticDataProvider
     @Environment(\.locationProvider) var locationProvider
+    @Environment(\.scenePhase) var scenePhase
     
+    @State var location: CLLocation?
     @State var selectedMode: Mode = .nearest
     @State var nearestStops: [Stop] = []
     @State var favoriteStops: [Stop] = []
+    
+    private var locationDistance: CLLocationDistance? {
+        locationProvider.location.flatMap { current in location.map { $0.distance(from: current ) } }
+    }
     
     var body: some View {
         NavigationStack {
@@ -57,14 +63,12 @@ struct Stops: View {
                     
                 }
             }
-            .task {
-                if nearestStops.isEmpty || favoriteStops.isEmpty, await staticDataProvider.isUpToDate {
-                    update()
-                }
-            }
-            .onAppear {
-                if nearestStops.isEmpty || favoriteStops.isEmpty {
-                    update()
+            .onChange(of: scenePhase) {
+                if case .active = scenePhase {
+                    Task {
+                        guard await staticDataProvider.isUpToDate else { return }
+                        update()
+                    }
                 }
             }
             .navigationTitle("stops.title")
