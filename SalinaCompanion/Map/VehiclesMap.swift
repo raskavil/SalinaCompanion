@@ -8,7 +8,7 @@ struct VehiclesMap: View {
     
     private static let maxVehicles = 50
     
-    @StateObject private var model: Model
+    @State private var model: Model
     @Environment(\.dynamicDataProvider) private var dynamicDataProvider
     @Environment(\.permissionsProvider) private var permissionsProvider
     @Environment(\.staticDataProvider) private var staticDataProvider

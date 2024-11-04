@@ -6,18 +6,19 @@ import Device
 
 extension VehiclesMap {
     
-    class Model: ObservableObject {
+    @Observable
+    class Model {
         
-        @Published var displayedVehicles: [Vehicle] = [] {
+        var displayedVehicles: [Vehicle] = [] {
             didSet {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     self.loading = false
                 }
             }
         }
-        @Published var loading = true
-        @Published var numberOfErrors: Int = 0
-        @Published var displayedVehicle: VehicleDetail.Model? {
+        var loading = true
+        var numberOfErrors: Int = 0
+        var displayedVehicle: VehicleDetail.Model? {
             didSet {
                 if case .loading(let vehicle) = displayedVehicle {
                     guard let vehiclesProvider else { return }
@@ -39,11 +40,11 @@ extension VehiclesMap {
                 }
             }
         }
-        @Published var position: MapCameraPosition = .userLocation(
+        var position: MapCameraPosition = .userLocation(
             fallback: .region(.init(center: .brno, span: .init(latitudeDelta: 0.03, longitudeDelta: 0.03)))
         )
         
-        @Published var filtersPresented = false {
+        var filtersPresented = false {
             didSet {
                 if !filtersPresented {
                     updateVehicles()
@@ -51,7 +52,7 @@ extension VehiclesMap {
                 }
             }
         }
-        @Published var filteredLines: Set<Int> = []
+        var filteredLines: Set<Int> = []
 
         var filtersData: [VehicleType: [Alias]] {
             let filteredVehicles = vehicles.map(\.alias).uniqueValues(equationFunction: { $0.id == $1.id })
@@ -127,7 +128,7 @@ extension VehiclesMap {
                 permissionCancellable = permissionsProvider.permissionsChanged
                     .receive(on: RunLoop.main)
                     .sink { [weak self] in
-                        self?.objectWillChange.send()
+                        // self?.objectWillChange.send()
                     }
             }
         }
