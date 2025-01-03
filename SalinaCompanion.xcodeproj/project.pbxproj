@@ -48,11 +48,11 @@
 		2CDFC1EC2C63B4C3009579B6 /* SalinapkaWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2CDFC1DF2C63B4C0009579B6 /* SalinapkaWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2CEBB3842C4FE8380037A28F /* MapFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEBB3832C4FE8380037A28F /* MapFilter.swift */; };
 		2CFB30F02C441C21005BC031 /* Device in Frameworks */ = {isa = PBXBuildFile; productRef = 2CFB30EF2C441C21005BC031 /* Device */; };
-		2CFB30F32C454BF4005BC031 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2CFB30F22C454BF3005BC031 /* Settings.bundle */; };
 		2CFB30F52C464FF9005BC031 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFB30F42C464FF9005BC031 /* LoadingView.swift */; };
 		2CFFB64E2C64C11E002C09FB /* Departures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFFB64D2C64C11E002C09FB /* Departures.swift */; };
 		2CFFB6502C64C649002C09FB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2CFFB64F2C64C649002C09FB /* Localizable.xcstrings */; };
 		2CFFB6522C64CA1E002C09FB /* VehicleMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFFB6512C64CA1E002C09FB /* VehicleMap.swift */; };
+		D3C29B422D17265A00914A95 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D3C29B412D17265A00914A95 /* Settings.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,11 +133,11 @@
 		2CDFC1E52C63B4C3009579B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2CEBB3832C4FE8380037A28F /* MapFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFilter.swift; sourceTree = "<group>"; };
 		2CFB30ED2C42B8F1005BC031 /* Device */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Device; sourceTree = "<group>"; };
-		2CFB30F22C454BF3005BC031 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		2CFB30F42C464FF9005BC031 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		2CFFB64D2C64C11E002C09FB /* Departures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Departures.swift; sourceTree = "<group>"; };
 		2CFFB64F2C64C649002C09FB /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		2CFFB6512C64CA1E002C09FB /* VehicleMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMap.swift; sourceTree = "<group>"; };
+		D3C29B412D17265A00914A95 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,7 +217,7 @@
 				2CB5B0032B6C0BE0004C1C64 /* Assets.xcassets */,
 				2CB5B0052B6C0BE0004C1C64 /* SalinaCompanion.entitlements */,
 				2C29EBF52C5FEE04009B3E3E /* Launch Screen.storyboard */,
-				2CFB30F22C454BF3005BC031 /* Settings.bundle */,
+				D3C29B412D17265A00914A95 /* Settings.bundle */,
 				2C7965122C57EA3C003E1897 /* Localizable.xcstrings */,
 			);
 			path = SalinaCompanion;
@@ -414,12 +414,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CFB30F32C454BF4005BC031 /* Settings.bundle in Resources */,
 				2C447F452C6BCF15000C3020 /* InfoPlist.strings in Resources */,
 				2CB5B0042B6C0BE0004C1C64 /* Assets.xcassets in Resources */,
 				2C29EBFF2C60067E009B3E3E /* GoogleService-Info.plist in Resources */,
 				2C29EBF62C5FEE04009B3E3E /* Launch Screen.storyboard in Resources */,
 				2C7965132C57EA3C003E1897 /* Localizable.xcstrings in Resources */,
+				D3C29B422D17265A00914A95 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

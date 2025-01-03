@@ -8,7 +8,7 @@ public extension Vehicle {
             name: "38",
             position: .init(latitude: 49.198277, longitude: 16.573307),
             bearing: 135,
-            alias: .init(id: 12, lineName: "38", contentColorHex: "#FFFFFF", backgroundColorHex: "#AF37B5"),
+            alias: .init(id: "12", lineName: "38", contentColorHex: "#FFFFFF", backgroundColorHex: "#AF37B5"),
             isActive: true,
             delay: 3,
             lastStopId: 0,
@@ -23,21 +23,21 @@ public extension Vehicle {
 public extension Stop {
     
     static var mock: Self {
-        .init(id: 1032, zone: 100, name: "Hlavní nádraží", position: .init(latitude: 0, longitude: 0), lines: [])
+        .init(id: "1032", zone: 100, name: "Hlavní nádraží", position: .init(latitude: 0, longitude: 0), lines: [])
     }
 }
 
 public extension Alias {
     
     static var mock: Self {
-        .init(id: 64, lineName: "64", contentColorHex: "#FFFFFF", backgroundColorHex: "#AF37B5")
+        .init(id: "12", lineName: "64", contentColorHex: "#FFFFFF", backgroundColorHex: "#AF37B5")
     }
 }
 
 public extension Post {
     
     static var mock: Self {
-        .init(name: "kolej 3", id: 1505, stopId: 1032, departures: [
+        .init(name: "kolej 3", id: "1412", stopId: "12", departures: [
             .init(lineId: 64, alias: .mock, routeId: 1064, finalStopName: "Chrlice, smyčka", time: "**"),
             .init(lineId: 64, alias: .mock, routeId: 1065, finalStopName: "Chrlice, smyčka", time: "15 min"),
             .init(lineId: 64, alias: .mock, routeId: 1066, finalStopName: "Chrlice, smyčka", time: "21:59"),

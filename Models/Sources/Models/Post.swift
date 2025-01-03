@@ -1,12 +1,12 @@
 
 public struct Post: Identifiable, Codable {
     public let name: String
-    public let id: Int
-    public let stopId: Int
+    public let id: String
+    public let stopId: String
     public let departures: [Departure]?
     public let lines: [String]?
     
-    public init(name: String, id: Int, stopId: Int, departures: [Departure]?, lines: [String]?) {
+    public init(name: String, id: String, stopId: String, departures: [Departure]?, lines: [String]?) {
         self.name = name
         self.id = id
         self.stopId = stopId

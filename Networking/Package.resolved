@@ -1,0 +1,33 @@
+{
+  "originHash" : "9a39f2191531ebe1c5c5e2b124c6b270952ac4a92211e53523e0794991c04fe5",
+  "pins" : [
+    {
+      "identity" : "supportpackage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/raskavil/SupportPackage",
+      "state" : {
+        "branch" : "main",
+        "revision" : "f8b0dd89162cae1dd5d926d4ee80efe01965809c"
+      }
+    },
+    {
+      "identity" : "swift-protobuf",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-protobuf.git",
+      "state" : {
+        "revision" : "ebc7251dd5b37f627c93698e4374084d98409633",
+        "version" : "1.28.2"
+      }
+    },
+    {
+      "identity" : "zipfoundation",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/weichsel/ZIPFoundation.git",
+      "state" : {
+        "revision" : "02b6abe5f6eef7e3cbd5f247c5cc24e246efcfe0",
+        "version" : "0.9.19"
+      }
+    }
+  ],
+  "version" : 3
+}

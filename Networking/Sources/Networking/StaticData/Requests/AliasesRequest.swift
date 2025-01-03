@@ -1,5 +1,6 @@
 import Foundation
 import SupportPackage
+import Models
 
 enum AliasesRequest {
     
@@ -22,5 +23,20 @@ enum AliasesRequest {
     struct AliasesResponse: Decodable {
         let LineAliases: [FailableDecodable<AliasResponse>]
     }
-    
+
+    static func decode(from csv: String) -> [Alias] {
+        csv
+            .split(separator: "\n")
+            .dropFirst()
+            .compactMap { line in
+                let separatedValues = line.split(separator: ",").map { String($0) }
+                guard separatedValues.count == 7 else { return nil}
+                return .init(
+                    id: separatedValues[0],
+                    lineName: separatedValues[2],
+                    contentColorHex: separatedValues[6],
+                    backgroundColorHex: separatedValues[5]
+                )
+            }
+    }
 }

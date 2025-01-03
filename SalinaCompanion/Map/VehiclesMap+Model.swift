@@ -52,7 +52,7 @@ extension VehiclesMap {
                 }
             }
         }
-        var filteredLines: Set<Int> = []
+        var filteredLines: Set<String> = []
 
         var filtersData: [VehicleType: [Alias]] {
             let filteredVehicles = vehicles.map(\.alias).uniqueValues(equationFunction: { $0.id == $1.id })

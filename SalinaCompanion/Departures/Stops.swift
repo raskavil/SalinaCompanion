@@ -119,7 +119,7 @@ struct StopCard: View {
                 }
                 VCollection(horizontalSpacing: 4, verticalSpacing: 4) {
                     ForEach(stop.lines, id: \.self) { line in
-                        if let lineId = Int(line), let alias = aliases.first(where: { $0.id == lineId }) {
+                        if let alias = aliases.first(where: { $0.id == line }) {
                             HStack(spacing: 4) {
                                 Icon(alias.vehicleType.icon, size: .small)
                                     .foregroundStyle(alias.contentColor)
@@ -161,6 +161,6 @@ struct StationPreview: PreviewProvider {
     static var previews: some View {
         Stops()
             .environment(\.staticDataProvider, modelsManager)
-            .environment(\.dynamicDataProvider, DynamicModelsManager(stopsAndAliasesProvider: modelsManager))
+            .environment(\.dynamicDataProvider, DynamicModelsManager(staticModelsManager: modelsManager))
     }
 }

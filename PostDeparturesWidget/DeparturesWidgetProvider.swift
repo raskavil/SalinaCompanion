@@ -7,7 +7,7 @@ struct DeparturesWidgetProvider: AppIntentTimelineProvider {
     typealias Configuration = DeparturesWidgetConfigurationIntent
     
     static var dynamicProvider: DynamicModelsManager {
-        .init(stopsAndAliasesProvider: Configuration.staticProvider)
+        .init(staticModelsManager: Configuration.staticProvider)
     }
 
     func placeholder(in context: Context) -> DeparturesModel {

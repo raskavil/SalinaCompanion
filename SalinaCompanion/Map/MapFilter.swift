@@ -5,7 +5,7 @@ import SupportPackageViews
 struct MapFilter: View {
     
     let vehicles: [VehicleType: [Alias]]?
-    @Binding var filteredAliases: Set<Int>
+    @Binding var filteredAliases: Set<String>
     let close: () -> Void
 
     @State private var impactFeedback = false
@@ -138,13 +138,13 @@ import Networking
 
 struct MapFilterPreviews: PreviewProvider {
     
-    static var stopsAndAliasesProvider: StaticModelsProviding = StaticModelsManager()
+    static var stopsAndAliasesProvider = StaticModelsManager()
     
     static var previews: some View {
         Color.red.sheet(isPresented: .constant(true)) {
             MapFilter(vehicles: [:], filteredAliases: .constant([]), close: {})
                 .environment(\.staticDataProvider, stopsAndAliasesProvider)
-                .environment(\.dynamicDataProvider, DynamicModelsManager(stopsAndAliasesProvider: stopsAndAliasesProvider))
+                .environment(\.dynamicDataProvider, DynamicModelsManager(staticModelsManager: stopsAndAliasesProvider))
                 .presentationDetents([.medium])
         }
     }

@@ -34,8 +34,9 @@ struct WatchApp: App {
     }
     
     init() {
-        staticDataProvider = StaticModelsManager(saveMode: .local)
-        dynamicDataProvider = DynamicModelsManager(stopsAndAliasesProvider: staticDataProvider)
+        let staticModelsManager = StaticModelsManager(saveMode: .local)
+        staticDataProvider = staticModelsManager
+        dynamicDataProvider = DynamicModelsManager(staticModelsManager: staticModelsManager)
         locationProvider = PermissionsManager()
         
         if locationProvider.features[.location] == .notDetermined {

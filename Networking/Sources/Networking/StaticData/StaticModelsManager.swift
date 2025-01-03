@@ -1,6 +1,7 @@
 import Foundation
 import Models
 import SupportPackage
+import ZIPFoundation
 
 public final class StaticModelsManager: StaticModelsProviding {
     
@@ -38,11 +39,11 @@ public final class StaticModelsManager: StaticModelsProviding {
         set { saveMode.userDefaults?.setValue(newValue, forKey: Self.timestampKey) }
     }
     
-    public var filteredLines: Set<Int> {
+    public var filteredLines: Set<String> {
         didSet { saveMode.userDefaults?.setValue(Array(filteredLines), forKey: Self.filteredLinesKey) }
     }
     
-    public var favoriteStops: Set<Int> {
+    public var favoriteStops: Set<String> {
         didSet { saveMode.userDefaults?.setValue(Array(favoriteStops), forKey: Self.favoriteStopsKey) }
     }
     
@@ -55,7 +56,8 @@ public final class StaticModelsManager: StaticModelsProviding {
             case stops = "downloadedStops"
             case aliases = "downloadedAliases"
             case posts = "downloadedPosts"
-            
+            case trips = "downloadedTrips"
+
             var fileName: String { rawValue + ".json" }
         }
         
@@ -83,8 +85,9 @@ public final class StaticModelsManager: StaticModelsProviding {
 
     @SavedInFile public var stops: [Stop]
     @SavedInFile public var aliases: [Alias]
-    @SavedInFile public var posts: [Int: [Post]]
-    
+    @SavedInFile public var posts: [String: [Post]]
+    @SavedInFile var trips: [Trip]
+
     private let saveMode: SaveMode
     
     // MARK: Init, integrity and load functions
@@ -93,8 +96,9 @@ public final class StaticModelsManager: StaticModelsProviding {
         self._stops = .init(wrappedValue: [], .stops, directoryUrl: saveMode.directoryUrl)
         self._aliases = .init(wrappedValue: [], .aliases, directoryUrl: saveMode.directoryUrl)
         self._posts = .init(wrappedValue: [:], .posts, directoryUrl: saveMode.directoryUrl)
-        self.filteredLines = Set(saveMode.userDefaults?.value(forKey: Self.filteredLinesKey) as? Array<Int> ?? [])
-        self.favoriteStops = Set(saveMode.userDefaults?.value(forKey: Self.favoriteStopsKey) as? Array<Int> ?? [])
+        self._trips = .init(wrappedValue: [], .trips, directoryUrl: saveMode.directoryUrl)
+        self.filteredLines = Set(saveMode.userDefaults?.value(forKey: Self.filteredLinesKey) as? Array<String> ?? [])
+        self.favoriteStops = Set(saveMode.userDefaults?.value(forKey: Self.favoriteStopsKey) as? Array<String> ?? [])
     }
     
     private static let weekInterval = 60.0 * 60 * 24 * 7
@@ -117,49 +121,90 @@ public final class StaticModelsManager: StaticModelsProviding {
     
     @discardableResult
     func reloadData() async -> Bool {
+
+        let archive: Archive
+
         do {
-            stops = try await StopsRequest.send({ response -> Stop? in
-                Stop(
-                    id: response.StopID,
-                    zone: response.Zone,
-                    name: response.Name,
-                    position: .init(latitude: response.Latitude, longitude: response.Longitude),
-                    lines: response.LineList.components(separatedBy: ",")
-                )
-            })
+            let zipFile = try await URLSession.shared.data(from: .init(string: "https://kordis-jmk.cz/gtfs/gtfs.zip")!)
+            archive = try Archive(data: zipFile.0, accessMode: .read)
+        } catch {
+            return false
+        }
+
+        guard
+            let stopsEntry = archive["stops.txt"],
+            let tripsEntry = archive["trips.txt"],
+            let aliasesEntry = archive["routes.txt"]
+        else { return false }
+
+        do {
+            let values: ([Stop], [String: [Post]]) = try await withCheckedThrowingContinuation { continuation in
+                do {
+                    let progress = Progress()
+                    var extractedData = Data()
+                    _ = try archive.extract(stopsEntry, progress: progress) { data in
+                        extractedData.append(data)
+                        guard progress.totalUnitCount == progress.completedUnitCount else { return }
+                        guard let csv = String(data: extractedData, encoding: .utf8) else {
+                            continuation.resume(throwing: NSError())
+                            return
+                        }
+                        let stops = StopsRequest.decode(from: csv)
+                        let posts = Dictionary<String, [Post]>(grouping: PostsRequest.decode(from: csv), by: \.stopId)
+                        continuation.resume(returning: (stops, posts))
+                    }
+                }
+                catch { continuation.resume(throwing: error) }
+            }
+            stops = values.0
+            posts = values.1
         } catch {
             return false
         }
         
         do {
-            aliases = try await AliasesRequest.send { response in
-                Alias(
-                    id: response.LineId,
-                    lineName: response.LineName,
-                    contentColorHex: response.TextColor,
-                    backgroundColorHex: response.Color
-                )
+            trips = try await withCheckedThrowingContinuation { continuation in
+                do {
+                    let progress = Progress()
+                    var extractedData = Data()
+                    _ = try archive.extract(tripsEntry) { data in
+                        extractedData.append(data)
+                        guard progress.totalUnitCount == progress.completedUnitCount else { return }
+                        guard let csv = String(data: extractedData, encoding: .utf8) else {
+                            continuation.resume(throwing: NSError())
+                            return
+                        }
+                        continuation.resume(returning: .init(csv: csv))
+                    }
+                }
+                catch { continuation.resume(throwing: error) }
             }
         } catch {
             return false
         }
-        
+
         do {
-            let posts = try await PostsRequest.send { response in
-                Post(
-                    name: response.Name,
-                    id: response.ID,
-                    stopId: response.StopID,
-                    departures: nil,
-                    lines: response.LineList.components(separatedBy: ",")
-                )
+            aliases = try await withCheckedThrowingContinuation { continuation in
+                do {
+                    let progress = Progress()
+                    var extractedData = Data()
+                    _ = try archive.extract(aliasesEntry) { data in
+                        extractedData.append(data)
+                        guard progress.totalUnitCount == progress.completedUnitCount else { return }
+                        guard let csv = String(data: extractedData, encoding: .utf8) else {
+                            continuation.resume(throwing: NSError())
+                            return
+                        }
+                        continuation.resume(returning: AliasesRequest.decode(from: csv))
+                    }
+                }
+                catch { continuation.resume(throwing: error) }
             }
-            self.posts = .init(grouping: posts, by: \.stopId)
         } catch {
             return false
         }
-        
-        guard stops.isEmpty == false, aliases.isEmpty == false, posts.isEmpty == false else {
+
+        guard stops.isEmpty == false, aliases.isEmpty == false, posts.isEmpty == false, trips.isEmpty == false else {
             return false
         }
         
@@ -167,7 +212,7 @@ public final class StaticModelsManager: StaticModelsProviding {
         return true
     }
     
-    public func toggleFavorite(_ stopId: Int) {
+    public func toggleFavorite(_ stopId: String) {
         if favoriteStops.contains(stopId) {
             favoriteStops.remove(stopId)
         } else {

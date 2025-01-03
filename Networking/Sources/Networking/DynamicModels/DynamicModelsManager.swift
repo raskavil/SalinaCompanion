@@ -3,12 +3,37 @@ import Models
 
 public class DynamicModelsManager: DynamicModelsProviding {
     
-    private let stopsAndAliasesProvider: StaticModelsProviding
+    private let staticModelsManager: StaticModelsManager
 
     public var vehicles: [Vehicle] {
         get async throws {
-            let aliases = stopsAndAliasesProvider.aliases
-            let vehicles = try await MapRequest.send { vehicle in
+
+            let urlRequest = URLRequest(url: .init(string: "https://kordis-jmk.cz/gtfs/gtfsReal.dat")!)
+
+            let response = try TransitRealtime_FeedMessage(serializedBytes: Data())
+
+            /* let values = response.entity.compactMap { entity -> Vehicle? in
+                guard entity.hasVehicle else { return nil }
+                return .init(
+                    id: Int(entity.vehicle.vehicle.id) ?? 1,
+                    name: entity.vehicle.trip.routeID,
+                    position: .init(
+                        latitude: Double(entity.vehicle.position.latitude),
+                        longitude: Double(entity.vehicle.position.longitude)
+                    ),
+                    bearing: Int(entity.vehicle.position.bearing) ?? 0,
+                    alias: .init(id: 1, lineName: "1", contentColorHex: "#000000", backgroundColorHex: "#FFFFFF"),
+                    isActive: true,
+                    delay: Int(entity.tripUpdate.delay),
+                    lastStopId: Int(entity.vehicle.stopID) ?? 0,
+                    finalStopName: entity.vehicle.trip.routeID,
+                    lineId: Int(entity.vehicle.stopID) ?? 0,
+                    routeId: Int(entity.vehicle.stopID) ?? 0,
+                    serviceId: Int(entity.vehicle.trip.directionID)
+                )
+            } */
+            return []
+            /* let vehicles = try await MapRequest.send { vehicle in
                 Vehicle(
                     id: vehicle.ID,
                     name: vehicle.LineName,
@@ -25,13 +50,13 @@ public class DynamicModelsManager: DynamicModelsProviding {
                     serviceId: vehicle.ServiceId
                 )
             }
-            return vehicles
+            return vehicles */
         }
     }
     
     public func route(for vehicle: Vehicle) async throws -> VehicleRoute {
-        let stops = stopsAndAliasesProvider.stops
-        
+        /* let stops = staticModelsManager.stops
+
         let (route, times) = (
             try await RouteRequest(vehicle: vehicle).send { $0 },
             try await ServiceInfoRequest(vehicle: vehicle).send { $0 }
@@ -61,11 +86,13 @@ public class DynamicModelsManager: DynamicModelsProviding {
         return .init(
             vehicle: vehicle,
             stops: vehicleStops
-        )
+        ) */
+        throw NSError()
     }
     
-    public func departures(for stopId: Int) async throws -> [Post] {
-        let aliases = stopsAndAliasesProvider.aliases
+    public func departures(for stopId: String) async throws -> [Post] {
+        []
+        /* let aliases = staticModelsManager.aliases
         return try await DeparturesRequest(stopId: stopId).send { post in
             Post(
                 name: post.Name,
@@ -85,14 +112,14 @@ public class DynamicModelsManager: DynamicModelsProviding {
                 },
                 lines: nil
             )
-        }
+        } */
     }
     
     public func departures(for stop: Stop) async throws -> [Post] {
         try await departures(for: stop.id)
     }
     
-    public init(stopsAndAliasesProvider: StaticModelsProviding) {
-        self.stopsAndAliasesProvider = stopsAndAliasesProvider
+    public init(staticModelsManager: StaticModelsManager) {
+        self.staticModelsManager = staticModelsManager
     }
 }

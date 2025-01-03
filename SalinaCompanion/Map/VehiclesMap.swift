@@ -194,13 +194,13 @@ import Networking
 
 struct MapPreviews: PreviewProvider {
     
-    static var stopsAndAliasesProvider: StaticModelsProviding = StaticModelsManager()
+    static var stopsAndAliasesProvider = StaticModelsManager()
     
     static var previews: some View {
         VehiclesMap()
             .task {
                 _ = await stopsAndAliasesProvider.isUpToDate
             }
-            .environment(\.dynamicDataProvider, DynamicModelsManager(stopsAndAliasesProvider: stopsAndAliasesProvider))
+            .environment(\.dynamicDataProvider, DynamicModelsManager(staticModelsManager: stopsAndAliasesProvider))
     }
 }

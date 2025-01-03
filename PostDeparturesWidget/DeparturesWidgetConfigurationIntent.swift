@@ -19,10 +19,10 @@ struct DeparturesWidgetConfigurationIntent: WidgetConfigurationIntent {
     struct PostRepresentation: Codable {
 
         let stopName: String
-        let stopId: Int
+        let stopId: String
         let postName: String
-        let postId: Int
-        
+        let postId: String
+
         var json: String? {
             try? String(data: JSONEncoder().encode(self), encoding: .utf8)
         }
@@ -35,7 +35,7 @@ struct DeparturesWidgetConfigurationIntent: WidgetConfigurationIntent {
             self = value
         }
         
-        init(stopName: String, stopId: Int, postName: String, postId: Int) {
+        init(stopName: String, stopId: String, postName: String, postId: String) {
             self.stopName = stopName
             self.stopId = stopId
             self.postName = postName

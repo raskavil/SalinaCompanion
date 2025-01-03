@@ -11,14 +11,18 @@ let package = Package(
     ], 
     dependencies: [
         .package(path: "../Models"),
-        .package(url: "https://github.com/raskavil/SupportPackage", branch: "main")
+        .package(url: "https://github.com/raskavil/SupportPackage", branch: "main"),
+        .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.27.0"),
+        .package(url: "https://github.com/weichsel/ZIPFoundation.git", from: "0.9.0"),
     ],
     targets: [
         .target(
             name: "Networking",
             dependencies: [
                 "Models",
-                "SupportPackage"
+                "SupportPackage",
+                .product(name: "SwiftProtobuf", package: "swift-protobuf"),
+                "ZIPFoundation"
             ]
         )
     ]

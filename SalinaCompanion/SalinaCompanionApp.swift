@@ -60,7 +60,7 @@ struct SalinaCompanionApp: App {
                     var stopId = url.absoluteString
                     stopId.removeSubrange(range)
                     
-                    displayedStop = staticDataProvider.stops.first(where: { $0.id == Int(stopId) })
+                    displayedStop = staticDataProvider.stops.first(where: { $0.id == stopId })
                 }
             }
         }
@@ -77,8 +77,9 @@ struct SalinaCompanionApp: App {
     }
     
     init() {
-        staticDataProvider = StaticModelsManager()
-        dynamicDataProvider = DynamicModelsManager(stopsAndAliasesProvider: staticDataProvider)
+        let staticModelsManager = StaticModelsManager()
+        staticDataProvider = staticModelsManager
+        dynamicDataProvider = DynamicModelsManager(staticModelsManager: staticModelsManager)
         permissionsProvider = PermissionsManager()
         
         if permissionsProvider.features[.location] == .notDetermined {

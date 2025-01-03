@@ -2,14 +2,14 @@ import Foundation
 import CoreLocation
 
 public struct Stop: Codable, Identifiable, Hashable {
-    public let id: Int
+    public let id: String
     public let zone: Int
     public let name: String
     public let position: CLLocationCoordinate2D
     public let lines: [String]
     public let searchTerm: String
     
-    public init(id: Int, zone: Int, name: String, position: CLLocationCoordinate2D, lines: [String]) {
+    public init(id: String, zone: Int, name: String, position: CLLocationCoordinate2D, lines: [String]) {
         self.id = id
         self.zone = zone
         self.name = name

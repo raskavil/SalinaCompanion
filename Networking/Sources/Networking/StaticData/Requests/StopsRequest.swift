@@ -1,5 +1,6 @@
 import Foundation
 import SupportPackage
+import Models
 
 enum StopsRequest {
     
@@ -22,5 +23,26 @@ enum StopsRequest {
     struct StopsResponse: Decodable {
         let Stops: [FailableDecodable<StopResponse>]
     }
-    
+
+    static func decode(from csv: String) -> [Stop] {
+        csv
+            .split(separator: "\n")
+            .dropFirst()
+            .compactMap { line in
+                let separatedValues = line.split(separator: ",").map { String($0) }
+                guard separatedValues.count == 9,
+                      let zone = Int(separatedValues[4]),
+                      let latitude = Double(separatedValues[2]),
+                      let longitude = Double(separatedValues[3]),
+                      separatedValues[6].isEmpty
+                else { return nil }
+                return .init(
+                    id: separatedValues[0].replacing("\"", with: ""),
+                    zone: zone,
+                    name: separatedValues[1].replacing("\"", with: ""),
+                    position: .init(latitude: latitude, longitude: longitude),
+                    lines: []
+                )
+            }
+    }
 }

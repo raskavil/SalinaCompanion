@@ -222,7 +222,7 @@ struct DeparturesPreviews: PreviewProvider {
                     NavigationStack {
                         Departures(
                             stop: .init(
-                                id: 1146,
+                                id: "12412",
                                 zone: 101,
                                 name: "Chrlice, nádraží",
                                 position: .init(),
@@ -243,7 +243,7 @@ struct DeparturesPreviews: PreviewProvider {
     static var previews: some View {
         LoadingWrapper()
             .environment(\.staticDataProvider, staticDataProvider)
-            .environment(\.dynamicDataProvider, DynamicModelsManager(stopsAndAliasesProvider: staticDataProvider))
+            .environment(\.dynamicDataProvider, DynamicModelsManager(staticModelsManager: staticDataProvider))
     }
     
 }

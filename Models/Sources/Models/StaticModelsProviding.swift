@@ -5,10 +5,10 @@ public protocol StaticModelsProviding {
     var isUpToDate: Bool { get async }
     var stops: [Stop] { get }
     var aliases: [Alias] { get }
-    var posts: [Int: [Post]] { get }
-    var favoriteStops: Set<Int> { get set }
-    var filteredLines: Set<Int> { get set }
-    func toggleFavorite(_ stopId: Int)
+    var posts: [String: [Post]] { get }
+    var favoriteStops: Set<String> { get set }
+    var filteredLines: Set<String> { get set }
+    func toggleFavorite(_ stopId: String)
 }
 
 public extension EnvironmentValues {
@@ -24,10 +24,10 @@ private struct StaticDataProviderMock: StaticModelsProviding {
     var isUpToDate: Bool { true }
     var stops: [Stop] { [] }
     var aliases: [Alias] { [] }
-    var posts: [Int: [Post]] { [:] }
-    var favoriteStops: Set<Int> = []
-    var filteredLines: Set<Int> = []
-    func toggleFavorite(_ stopId: Int) {}
+    var posts: [String: [Post]] { [:] }
+    var favoriteStops: Set<String> = []
+    var filteredLines: Set<String> = []
+    func toggleFavorite(_ stopId: String) {}
 }
 
 private struct StaticDataProviderKey: EnvironmentKey {

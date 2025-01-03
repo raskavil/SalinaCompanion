@@ -28,8 +28,8 @@ struct DeparturesModel: TimelineEntry {
     var model: Post {
         post ?? .init(
             name: .init(localized: "stop.choose"),
-            id: 0,
-            stopId: 0,
+            id: "0",
+            stopId: "0",
             departures: Post.mock.departures,
             lines: nil
         )

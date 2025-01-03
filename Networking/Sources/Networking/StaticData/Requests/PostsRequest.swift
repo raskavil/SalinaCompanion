@@ -1,5 +1,6 @@
 import Foundation
 import SupportPackage
+import Models
 
 enum PostsRequest {
     
@@ -23,5 +24,27 @@ enum PostsRequest {
     
     struct AliasesResponse: Decodable {
         let Posts: [FailableDecodable<PostResponse>]
+    }
+
+    static func decode(from csv: String) -> [Post] {
+        csv
+            .split(separator: "\n")
+            .dropFirst()
+            .compactMap { line in
+                let separatedValues = line.split(separator: ",").map { String($0) }
+                guard separatedValues.count == 9,
+                      let zone = Int(separatedValues[4]),
+                      let latitude = Double(separatedValues[2]),
+                      let longitude = Double(separatedValues[3]),
+                      !separatedValues[6].isEmpty
+                else { return nil }
+                return .init(
+                    name: separatedValues[1].replacing("\"", with: ""),
+                    id: separatedValues[0].replacing("\"", with: ""),
+                    stopId: separatedValues[6],
+                    departures: nil,
+                    lines: nil
+                )
+            }
     }
 }
