@@ -26,7 +26,8 @@ enum StopsRequest {
 
     static func decode(from csv: String) -> [Stop] {
         csv
-            .split(separator: "\n")
+            .replacing("\"", with: "")
+            .split(separator: "\r\n")
             .dropFirst()
             .compactMap { line in
                 let separatedValues = line.split(separator: ",").map { String($0) }

@@ -122,84 +122,26 @@ public final class StaticModelsManager: StaticModelsProviding {
     @discardableResult
     func reloadData() async -> Bool {
 
-        let archive: Archive
-
         do {
-            let zipFile = try await URLSession.shared.data(from: .init(string: "https://kordis-jmk.cz/gtfs/gtfs.zip")!)
-            archive = try Archive(data: zipFile.0, accessMode: .read)
-        } catch {
-            return false
-        }
-
-        guard
-            let stopsEntry = archive["stops.txt"],
-            let tripsEntry = archive["trips.txt"],
-            let aliasesEntry = archive["routes.txt"]
-        else { return false }
-
-        do {
-            let values: ([Stop], [String: [Post]]) = try await withCheckedThrowingContinuation { continuation in
-                do {
-                    let progress = Progress()
-                    var extractedData = Data()
-                    _ = try archive.extract(stopsEntry, progress: progress) { data in
-                        extractedData.append(data)
-                        guard progress.totalUnitCount == progress.completedUnitCount else { return }
-                        guard let csv = String(data: extractedData, encoding: .utf8) else {
-                            continuation.resume(throwing: NSError())
-                            return
-                        }
-                        let stops = StopsRequest.decode(from: csv)
-                        let posts = Dictionary<String, [Post]>(grouping: PostsRequest.decode(from: csv), by: \.stopId)
-                        continuation.resume(returning: (stops, posts))
-                    }
-                }
-                catch { continuation.resume(throwing: error) }
+            let url = FileManager.default.temporaryDirectory.appending(path: "Salinappka")
+            if FileManager.default.fileExists(atPath: url.path()) {
+                try? FileManager.default.removeItem(at: url)
             }
-            stops = values.0
-            posts = values.1
-        } catch {
-            return false
-        }
-        
-        do {
-            trips = try await withCheckedThrowingContinuation { continuation in
-                do {
-                    let progress = Progress()
-                    var extractedData = Data()
-                    _ = try archive.extract(tripsEntry) { data in
-                        extractedData.append(data)
-                        guard progress.totalUnitCount == progress.completedUnitCount else { return }
-                        guard let csv = String(data: extractedData, encoding: .utf8) else {
-                            continuation.resume(throwing: NSError())
-                            return
-                        }
-                        continuation.resume(returning: .init(csv: csv))
-                    }
-                }
-                catch { continuation.resume(throwing: error) }
-            }
-        } catch {
-            return false
-        }
+            try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+            let data = try await URLSession.shared.data(from: .init(string: "https://kordis-jmk.cz/gtfs/gtfs.zip")!)
+            FileManager.default.createFile(atPath: url.appending(path: "gtfs.zip").path(), contents: data.0)
+            try FileManager.default.unzipItem(at: url.appending(path: "gtfs.zip"), to: url)
 
-        do {
-            aliases = try await withCheckedThrowingContinuation { continuation in
-                do {
-                    let progress = Progress()
-                    var extractedData = Data()
-                    _ = try archive.extract(aliasesEntry) { data in
-                        extractedData.append(data)
-                        guard progress.totalUnitCount == progress.completedUnitCount else { return }
-                        guard let csv = String(data: extractedData, encoding: .utf8) else {
-                            continuation.resume(throwing: NSError())
-                            return
-                        }
-                        continuation.resume(returning: AliasesRequest.decode(from: csv))
-                    }
-                }
-                catch { continuation.resume(throwing: error) }
-            }
+            let stopsCSV = try String(contentsOf: url.appending(path: "stops.txt"), encoding: .utf8)
+            let tripsCSV = try String(contentsOf: url.appending(path: "trips.txt"), encoding: .utf8)
+            let routesCSV = try String(contentsOf: url.appending(path: "routes.txt"), encoding: .utf8)
+
+            stops = StopsRequest.decode(from: stopsCSV)
+            posts = Dictionary<String, [Post]>(grouping: PostsRequest.decode(from: stopsCSV), by: \.stopId)
+            trips = .init(csv: tripsCSV)
+            aliases = AliasesRequest.decode(from: routesCSV)
+
+            try? FileManager.default.removeItem(at: url)
         } catch {
             return false
         }
