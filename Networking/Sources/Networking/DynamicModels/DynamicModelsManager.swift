@@ -9,7 +9,6 @@ public class DynamicModelsManager: DynamicModelsProviding {
         get async throws {
 
             let urlRequest = URLRequest(url: .init(string: "https://kordis-jmk.cz/gtfs/gtfsReal.dat")!)
-
             let response = try TransitRealtime_FeedMessage(serializedBytes: Data())
 
             /* let values = response.entity.compactMap { entity -> Vehicle? in

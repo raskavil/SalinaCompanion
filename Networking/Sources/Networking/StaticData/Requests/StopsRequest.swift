@@ -30,17 +30,19 @@ enum StopsRequest {
             .split(separator: "\r\n")
             .dropFirst()
             .compactMap { line in
-                let separatedValues = line.split(separator: ",").map { String($0) }
-                guard separatedValues.count == 9,
-                      let zone = Int(separatedValues[4]),
+                var separatedValues = line.split(separator: ",").map { String($0) }
+                while Int(separatedValues[4]) == nil {
+                    separatedValues[1] += separatedValues.remove(at: 2)
+                }
+                guard let zone = Int(separatedValues[4]),
                       let latitude = Double(separatedValues[2]),
                       let longitude = Double(separatedValues[3]),
-                      separatedValues[6].isEmpty
+                      separatedValues.count == 7
                 else { return nil }
                 return .init(
-                    id: separatedValues[0].replacing("\"", with: ""),
+                    id: separatedValues[0],
                     zone: zone,
-                    name: separatedValues[1].replacing("\"", with: ""),
+                    name: separatedValues[1],
                     position: .init(latitude: latitude, longitude: longitude),
                     lines: []
                 )

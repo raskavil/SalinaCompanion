@@ -3,6 +3,10 @@ import Models
 import SupportPackage
 import ZIPFoundation
 
+@globalActor actor StaticDataLoader: GlobalActor {
+    static let shared = StaticDataLoader()
+}
+
 public final class StaticModelsManager: StaticModelsProviding {
     
     public enum SaveMode {
@@ -102,7 +106,8 @@ public final class StaticModelsManager: StaticModelsProviding {
     }
     
     private static let weekInterval = 60.0 * 60 * 24 * 7
-    
+
+    @StaticDataLoader
     public var isUpToDate: Bool {
         get async {
             guard
@@ -118,10 +123,10 @@ public final class StaticModelsManager: StaticModelsProviding {
             return true
         }
     }
-    
-    @discardableResult
-    func reloadData() async -> Bool {
 
+    @discardableResult
+    @StaticDataLoader
+    func reloadData() async -> Bool {
         do {
             let url = FileManager.default.temporaryDirectory.appending(path: "Salinappka")
             if FileManager.default.fileExists(atPath: url.path()) {

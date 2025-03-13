@@ -9,13 +9,12 @@ extension Array<Trip> {
 
     init(csv: String) {
         self = csv
-            .split(separator: "\n")
+            .replacingOccurrences(of: "\"", with: "")
+            .split(separator: "\r\n")
             .dropFirst()
             .compactMap { line in
                 let separatedValues = line.split(separator: ",").map { String($0) }
-                guard separatedValues.count == 9,
-                      let tripID = Int(separatedValues[2])
-                else { return nil }
+                guard separatedValues.count >= 8, let tripID = Int(separatedValues[2]) else { return nil }
                 return .init(
                     routeID: separatedValues[0],
                     finalStop: separatedValues[3],

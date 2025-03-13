@@ -26,15 +26,16 @@ enum AliasesRequest {
 
     static func decode(from csv: String) -> [Alias] {
         csv
-            .split(separator: "\n")
+            .replacing("\"", with: "")
+            .split(separator: "\r\n")
             .dropFirst()
             .compactMap { line in
                 let separatedValues = line.split(separator: ",").map { String($0) }
-                guard separatedValues.count == 7 else { return nil}
+                guard separatedValues.count >= 6 else { return nil }
                 return .init(
                     id: separatedValues[0],
                     lineName: separatedValues[2],
-                    contentColorHex: separatedValues[6],
+                    contentColorHex: separatedValues.count > 6 ? separatedValues[6] : "000000",
                     backgroundColorHex: separatedValues[5]
                 )
             }

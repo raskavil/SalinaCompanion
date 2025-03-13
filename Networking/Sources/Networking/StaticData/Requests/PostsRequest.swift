@@ -28,19 +28,18 @@ enum PostsRequest {
 
     static func decode(from csv: String) -> [Post] {
         csv
-            .split(separator: "\n")
+            .replacing("\"", with: "")
+            .split(separator: "\r\n")
             .dropFirst()
             .compactMap { line in
-                let separatedValues = line.split(separator: ",").map { String($0) }
-                guard separatedValues.count == 9,
-                      let zone = Int(separatedValues[4]),
-                      let latitude = Double(separatedValues[2]),
-                      let longitude = Double(separatedValues[3]),
-                      !separatedValues[6].isEmpty
-                else { return nil }
+                var separatedValues = line.split(separator: ",").map { String($0) }
+                while Int(separatedValues[4]) == nil {
+                    separatedValues[1] += separatedValues.remove(at: 2)
+                }
+                guard separatedValues.count >= 7 else { return nil }
                 return .init(
-                    name: separatedValues[1].replacing("\"", with: ""),
-                    id: separatedValues[0].replacing("\"", with: ""),
+                    name: separatedValues[1],
+                    id: separatedValues[0],
                     stopId: separatedValues[6],
                     departures: nil,
                     lines: nil
