@@ -8,16 +8,11 @@ let package = Package(
     platforms: [.iOS(.v16)],
     products: [
         .library(name: "Device", targets: ["Device"]),
+        .library(name: "DeviceImplementation", targets: ["DeviceImplementation"])
     ],
-    dependencies: [
-        .package(url: "https://github.com/raskavil/SupportPackage", branch: "main")
-    ],
+    dependencies: [],
     targets: [
-        .target(
-            name: "Device",
-            dependencies: [
-                "SupportPackage"
-            ]
-        )
+        .target(name: "Device"),
+        .target(name: "DeviceImplementation",)
     ]
 )
